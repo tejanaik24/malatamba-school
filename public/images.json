@@ -1,0 +1,77 @@
+[
+  {
+    "section": "hero-slide-1",
+    "url": "https://images.unsplash.com/photo-1756885375569-f04400d99cee?w=1920&q=80",
+    "alt": "Indian school students attending a lecture in a classroom with teacher"
+  },
+  {
+    "section": "hero-slide-2",
+    "url": "https://images.unsplash.com/photo-1764645362980-08d8704fd102?w=1920&q=80",
+    "alt": "School building exterior surrounded by greenery under blue sky"
+  },
+  {
+    "section": "hero-slide-3",
+    "url": "https://images.unsplash.com/photo-1777489689168-497290f235d5?w=1920&q=80",
+    "alt": "Children playing soccer outdoors in a sunny park"
+  },
+  {
+    "section": "features-teacher",
+    "url": "https://images.unsplash.com/photo-1758270704925-fa59d93119c1?w=1920&q=80",
+    "alt": "Teacher lecturing students in a classroom setting"
+  },
+  {
+    "section": "features-science-lab",
+    "url": "https://images.unsplash.com/photo-1758685734030-a31d96462eec?w=1920&q=80",
+    "alt": "Teacher and student conducting science experiment with test tubes in classroom"
+  },
+  {
+    "section": "features-computer-lab",
+    "url": "https://images.unsplash.com/photo-1719159381981-1327b22aff9b?w=1920&q=80",
+    "alt": "Indian school students working on computers in computer lab, Chennai"
+  },
+  {
+    "section": "features-library",
+    "url": "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=1920&q=80",
+    "alt": "School library with bookshelves and reading area"
+  },
+  {
+    "section": "features-school-bus",
+    "url": "https://images.unsplash.com/photo-1602248406547-bda7af9fb7e9?w=1920&q=80",
+    "alt": "Yellow school bus on road during daytime"
+  },
+  {
+    "section": "features-sports",
+    "url": "https://images.unsplash.com/photo-1746937107789-895b1d2f5c3a?w=1920&q=80",
+    "alt": "Students in school uniform walking near a sports field and playground"
+  },
+  {
+    "section": "about-principal",
+    "url": "https://images.unsplash.com/photo-1544717302-de2939b7ef71?w=1920&q=80",
+    "alt": "Formal portrait of a school principal or teacher smiling at camera"
+  },
+  {
+    "section": "about-assembly",
+    "url": "https://images.unsplash.com/photo-1491438590914-bc09fca24177?w=1920&q=80",
+    "alt": "School assembly with students gathered together outdoors"
+  },
+  {
+    "section": "gallery-students",
+    "url": "https://images.unsplash.com/photo-1759143101324-d375443f1955?w=1920&q=80",
+    "alt": "Children in school uniforms smiling in a classroom"
+  },
+  {
+    "section": "gallery-annual-day",
+    "url": "https://images.unsplash.com/photo-1743329572562-79844608fd2a?w=1920&q=80",
+    "alt": "Students having a celebration event in the school courtyard"
+  },
+  {
+    "section": "gallery-science-fair",
+    "url": "https://images.unsplash.com/photo-1758685734034-54e1da4ac7c2?w=1920&q=80",
+    "alt": "Professor and student conducting science experiment in laboratory"
+  },
+  {
+    "section": "video-thumbnail",
+    "url": "https://images.unsplash.com/photo-1573894998033-c0cef4ed722b?w=1920&q=80",
+    "alt": "Students in classroom engaging with teacher during lesson"
+  }
+]
