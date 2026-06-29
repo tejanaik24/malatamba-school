@@ -210,22 +210,22 @@ export default function WalkerScroll() {
           trigger: containerRef.current,
           pin: true,
           start: "top top",
-          end: "+=400vh",
+          end: "+=450vh",
           scrub: 1.8,
           invalidateOnRefresh: true,
           anticipatePin: 1,
           onUpdate: (self) => {
             const p = self.progress;
             // Bug 4: corrected thresholds
-            if (p >= 0.22 && !valsAnimRef.current) {
+            if (p >= 0.28 && p < 0.55 && !valsAnimRef.current) {
               valsAnimRef.current = true;
               valuesEntrance.play();
             }
-            if (p >= 0.48 && !missAnimRef.current) {
+            if (p >= 0.55 && p < 0.78 && !missAnimRef.current) {
               missAnimRef.current = true;
               missionEntrance.play();
             }
-            if (p >= 0.72 && !highAnimRef.current) {
+            if (p >= 0.78 && !highAnimRef.current) {
               highAnimRef.current = true;
               highlightsEntrance.play();
             }
@@ -304,7 +304,7 @@ export default function WalkerScroll() {
 
   return (
     // Bug 2: height 500vh (was 600vh)
-    <div ref={containerRef} className="relative" style={{ height: "500vh" }}>
+    <div ref={containerRef} className="relative" style={{ height: "550vh" }}>
       {/* Smooth scroll: will-change on flex container */}
       <div className="sticky top-0 left-0 w-full h-screen overflow-hidden flex" style={{ willChange: "transform" }}>
 
@@ -405,7 +405,7 @@ export default function WalkerScroll() {
           className="walk-panel w-screen h-screen shrink-0 bg-white flex items-center justify-center overflow-hidden"
           style={{ transform: "translateZ(0)" }}
         >
-          <div className="w-full max-w-7xl mx-auto px-6 sm:px-12 lg:px-16 pt-0">
+          <div className="w-full max-w-7xl mx-auto px-6 sm:px-12 lg:px-16 pt-0 overflow-hidden">
             <h2 className="vp-title text-primary text-6xl sm:text-7xl font-bold leading-none" style={{ opacity: 0 }}>
               WE VALUE
             </h2>
@@ -414,7 +414,7 @@ export default function WalkerScroll() {
               <div className="values-connector absolute left-0 right-12 h-px bg-primary/10 origin-left" style={{ transform: "scaleX(0)" }} />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 items-start max-h-screen">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 items-start w-full">
               {values.map((v, i) => (
                 <ValueCard key={v.num} v={v} index={i} hoveredIndex={hoveredIndex} setHoveredIndex={setHoveredIndex} />
               ))}
