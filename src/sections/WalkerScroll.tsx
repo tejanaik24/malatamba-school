@@ -164,7 +164,6 @@ export default function WalkerScroll() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [activeHero, setActiveHero] = useState(0);
 
-  // Animation-once guards
   const valsAnimRef = useRef(false);
   const missAnimRef = useRef(false);
   const highAnimRef = useRef(false);
@@ -176,36 +175,34 @@ export default function WalkerScroll() {
 
       const totalPanels = panels.length;
 
-      // --- Paused entrance timelines (triggered by main scroll progress) ---
-
-      // Values panel entrance (panel index 1)
+      // Values panel entrance
       const valuesEntrance = gsap.timeline({ paused: true });
       valuesEntrance
-        .fromTo(panels[1].querySelector('.vp-title'), { x: -40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power2.out" }, 0)
-        .fromTo(panels[1].querySelectorAll('.vp-card'), { y: 60, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.12, duration: 0.5, ease: "power2.out" }, 0.2)
-        .fromTo(panels[1].querySelectorAll('.vp-img-reveal'), { scaleY: 1 }, { scaleY: 0, stagger: 0.12, duration: 0.7, ease: "power2.out", transformOrigin: "top center" }, 0.2)
-        .to(panels[1].querySelector('.values-connector'), { scaleX: 1, duration: 1.5, ease: "power3.out", transformOrigin: "left center" }, 0.3);
+        .fromTo(panels[1].querySelector('.vp-title'), { x: -40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power2.out", overwrite: true }, 0)
+        .fromTo(panels[1].querySelectorAll('.vp-card'), { y: 60, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.12, duration: 0.5, ease: "power2.out", overwrite: true }, 0.2)
+        .fromTo(panels[1].querySelectorAll('.vp-img-reveal'), { scaleY: 1 }, { scaleY: 0, stagger: 0.12, duration: 0.7, ease: "power2.out", transformOrigin: "top center", overwrite: true }, 0.2)
+        .to(panels[1].querySelector('.values-connector'), { scaleX: 1, duration: 1.5, ease: "power3.out", transformOrigin: "left center", overwrite: true }, 0.3);
 
-      // Mission panel entrance (panel index 2)
+      // Mission panel entrance
       const mp = panels[2];
       const missionEntrance = gsap.timeline({ paused: true });
       missionEntrance
-        .fromTo(mp.querySelector('.mp-subtitle'), { x: -40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power2.out" }, 0)
-        .fromTo(mp.querySelector('.mp-gold-line'), { width: 0 }, { width: 40, duration: 0.6, ease: "power2.out" }, 0.1)
-        .fromTo(mp.querySelector('.mp-heading'), { x: -40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power2.out" }, 0.15)
-        .fromTo(mp.querySelector('.mp-body'), { x: -40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power2.out" }, 0.25)
-        .fromTo(mp.querySelector('.mp-stats'), { x: -40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power2.out" }, 0.35)
-        .fromTo(mp.querySelector('.mp-cta'), { x: -40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power2.out" }, 0.45)
-        .fromTo(mp.querySelector('.mp-image'), { clipPath: "inset(0 0 100% 0)" }, { clipPath: "inset(0 0 0% 0)", duration: 1.2, ease: "power2.out" }, 0.2);
+        .fromTo(mp.querySelector('.mp-subtitle'), { x: -40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power2.out", overwrite: true }, 0)
+        .fromTo(mp.querySelector('.mp-gold-line'), { width: 0 }, { width: 40, duration: 0.6, ease: "power2.out", overwrite: true }, 0.1)
+        .fromTo(mp.querySelector('.mp-heading'), { x: -40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power2.out", overwrite: true }, 0.15)
+        .fromTo(mp.querySelector('.mp-body'), { x: -40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power2.out", overwrite: true }, 0.25)
+        .fromTo(mp.querySelector('.mp-stats'), { x: -40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power2.out", overwrite: true }, 0.35)
+        .fromTo(mp.querySelector('.mp-cta'), { x: -40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power2.out", overwrite: true }, 0.45)
+        .fromTo(mp.querySelector('.mp-image'), { clipPath: "inset(0 0 100% 0)" }, { clipPath: "inset(0 0 0% 0)", duration: 1.2, ease: "power2.out", overwrite: true }, 0.2);
 
-      // Highlights panel entrance (panel index 3)
+      // Highlights panel entrance
       const hp = panels[3];
       const highlightsEntrance = gsap.timeline({ paused: true });
       highlightsEntrance
-        .fromTo(hp.querySelector('.hp-text'), { x: -30, opacity: 0 }, { x: 0, opacity: 1, duration: 0.7, ease: "power2.out" }, 0)
-        .fromTo(hp.querySelectorAll('.hp-tilt-img'), { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, stagger: 0.08, duration: 0.5, ease: "power2.out" }, 0.3);
+        .fromTo(hp.querySelector('.hp-text'), { x: -30, opacity: 0 }, { x: 0, opacity: 1, duration: 0.7, ease: "power2.out", overwrite: true }, 0)
+        .fromTo(hp.querySelectorAll('.hp-tilt-img'), { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, stagger: 0.08, duration: 0.5, ease: "power2.out", overwrite: true }, 0.3);
 
-      // --- Main horizontal scroll ---
+      // Main horizontal scroll — Bug 3: scrub 1.8, end +=400vh
       gsap.to(panels, {
         xPercent: -100 * (totalPanels - 1),
         ease: "none",
@@ -213,21 +210,22 @@ export default function WalkerScroll() {
           trigger: containerRef.current,
           pin: true,
           start: "top top",
-          end: () => `+=${(totalPanels + 1) * 100}vh`,
-          scrub: 1,
+          end: "+=400vh",
+          scrub: 1.8,
           invalidateOnRefresh: true,
           anticipatePin: 1,
           onUpdate: (self) => {
             const p = self.progress;
-            if (p >= 0.25 && p < 0.5 && !valsAnimRef.current) {
+            // Bug 4: corrected thresholds
+            if (p >= 0.22 && !valsAnimRef.current) {
               valsAnimRef.current = true;
               valuesEntrance.play();
             }
-            if (p >= 0.5 && p < 0.75 && !missAnimRef.current) {
+            if (p >= 0.48 && !missAnimRef.current) {
               missAnimRef.current = true;
               missionEntrance.play();
             }
-            if (p >= 0.75 && !highAnimRef.current) {
+            if (p >= 0.72 && !highAnimRef.current) {
               highAnimRef.current = true;
               highlightsEntrance.play();
             }
@@ -235,17 +233,27 @@ export default function WalkerScroll() {
         },
       });
 
-      // Hero crossfade cycle with caption sync
-      const heroTimeline = gsap.timeline({ repeat: -1, repeatDelay: 0 });
-      heroRefs.current.forEach((ref, i) => {
-        if (!ref) return;
-        if (i === 0) { gsap.set(ref, { opacity: 1 }); }
-        else { gsap.set(ref, { opacity: 0 }); }
+      // Bug 5: Hero crossfade — proper overlap, no flash, onStart once per transition
+      const imgs = heroRefs.current.filter(Boolean) as HTMLDivElement[];
+      const n = imgs.length;
+      gsap.set(imgs, { opacity: 0 });
+      gsap.set(imgs[0], { opacity: 1 });
+
+      const heroTimeline = gsap.timeline({ repeat: -1 });
+      for (let i = 0; i < n; i++) {
+        const curr = imgs[i];
+        const next = imgs[(i + 1) % n];
+        const nextIdx = (i + 1) % n;
         heroTimeline
-          .to(ref, { opacity: 1, duration: 1.2, ease: "power2.inOut", onStart: () => setActiveHero(i) })
-          .to({}, { duration: 4.8 })
-          .to(ref, { opacity: 0, duration: 1.2, ease: "power2.inOut" }, "+=0");
-      });
+          .to({}, { duration: 5 })
+          .to(next, {
+            opacity: 1,
+            duration: 1.2,
+            ease: "power2.inOut",
+            onStart: () => setActiveHero(nextIdx),
+          })
+          .to(curr, { opacity: 0, duration: 1.2, ease: "power2.inOut" }, "-=0.6");
+      }
 
       // Mission parallax
       const missionImg = panels[2]?.querySelector<HTMLElement>(".mission-parallax");
@@ -295,50 +303,85 @@ export default function WalkerScroll() {
   }, []);
 
   return (
-    <div ref={containerRef} className="relative" style={{ height: "600vh" }}>
-      <div className="sticky top-0 left-0 w-full h-screen overflow-hidden flex">
+    // Bug 2: height 500vh (was 600vh)
+    <div ref={containerRef} className="relative" style={{ height: "500vh" }}>
+      {/* Smooth scroll: will-change on flex container */}
+      <div className="sticky top-0 left-0 w-full h-screen overflow-hidden flex" style={{ willChange: "transform" }}>
+
         {/* PANEL 1 — HERO */}
-        <section ref={heroSectionRef} className="walk-panel relative w-screen h-screen shrink-0 flex items-center justify-center overflow-hidden">
+        {/* Bug 1: NO logo block — Navbar already has it */}
+        <section
+          ref={heroSectionRef}
+          className="walk-panel relative w-screen h-screen shrink-0 flex items-center justify-center overflow-hidden"
+          style={{ transform: "translateZ(0)" }}
+        >
           <div ref={heroBgRef} className="absolute inset-0" style={{ willChange: "transform" }}>
             {heroImages.map((src, i) => (
-              <div key={src} ref={(el) => { heroRefs.current[i] = el; }} className="absolute inset-0" style={{ opacity: i === 0 ? 1 : 0 }}>
+              <div
+                key={src}
+                ref={(el) => { heroRefs.current[i] = el; }}
+                className="absolute inset-0"
+                style={{ opacity: i === 0 ? 1 : 0 }}
+              >
                 <Image src={src} alt={`School hero ${i + 1}`} fill className="object-cover" priority={i === 0} quality={90} sizes="100vw" />
               </div>
             ))}
           </div>
           <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-[rgba(118,33,35,0.7)]" />
 
-          <div className="absolute top-8 left-8 sm:top-12 sm:left-12 z-10">
-            <motion.div initial={{ opacity: 0, letterSpacing: "-0.05em" }} animate={{ opacity: 1, letterSpacing: "0em" }} transition={{ duration: 1, ease: "easeOut" }} className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-gold flex items-center justify-center">
-                <span className="text-dark font-bold text-xl">MV</span>
-              </div>
-              <div>
-                <p className="text-white font-bold text-lg leading-tight">Malatamba</p>
-                <p className="text-gold text-sm leading-tight">Vidyaniketan</p>
-              </div>
-            </motion.div>
-          </div>
-
           <div ref={heroTextRef} className="relative z-10 text-center px-6 max-w-5xl" style={{ willChange: "transform" }}>
-            <motion.p key={`sub-${activeHero}`} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="text-white/70 text-sm sm:text-base italic tracking-widest uppercase mb-4">
+            <motion.p
+              key={`sub-${activeHero}`}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="text-white/70 text-sm sm:text-base italic tracking-widest uppercase mb-4"
+            >
               {heroCaptions[activeHero].subtitle}
             </motion.p>
-            <motion.h1 key={`h1-${activeHero}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }} className="overflow-hidden">
+            <motion.h1
+              key={`h1-${activeHero}`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4 }}
+              className="overflow-hidden"
+            >
               {heroCaptions[activeHero].lines.map((line, i) => (
-                <motion.span key={line} initial={{ opacity: 0, y: 60 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: i * 0.08 }} className={`block text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-tight tracking-tight ${i === heroCaptions[activeHero].lines.length - 1 ? "text-gold" : "text-white"}`}>
+                <motion.span
+                  key={line}
+                  initial={{ opacity: 0, y: 60 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: i * 0.08 }}
+                  className={`block text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-tight tracking-tight ${i === heroCaptions[activeHero].lines.length - 1 ? "text-gold" : "text-white"}`}
+                >
                   {line}
                 </motion.span>
               ))}
             </motion.h1>
-            <motion.p key={`desc-${activeHero}`} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.35 }} className="text-white/60 text-sm sm:text-base mt-6 max-w-xl mx-auto">
+            <motion.p
+              key={`desc-${activeHero}`}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.35 }}
+              className="text-white/60 text-sm sm:text-base mt-6 max-w-xl mx-auto"
+            >
               {heroCaptions[activeHero].description}
             </motion.p>
           </div>
 
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.8 }} className="absolute bottom-12 left-1/2 -translate-x-1/2 z-10 flex gap-4">
-            <Link href="/#features" className="px-8 py-3 bg-primary text-white font-semibold rounded-full hover:bg-primary/90 transition-all text-sm sm:text-base">Explore School</Link>
-            <Link href="/#contact" className="px-8 py-3 border-2 border-white text-white font-semibold rounded-full hover:bg-white hover:text-primary transition-all text-sm sm:text-base">Contact Us</Link>
+          {/* CTA: Explore School + Enquire Now (gold border) */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.8 }}
+            className="absolute bottom-12 left-1/2 -translate-x-1/2 z-10 flex gap-4"
+          >
+            <Link href="/#features" className="px-8 py-3 bg-primary text-white font-semibold rounded-full hover:bg-primary/90 transition-all text-sm sm:text-base">
+              Explore School
+            </Link>
+            <Link href="/#contact" className="px-8 py-3 border-2 border-gold text-gold font-semibold rounded-full hover:bg-gold hover:text-dark transition-all text-sm sm:text-base">
+              Enquire Now
+            </Link>
           </motion.div>
 
           <div className="absolute bottom-8 right-8 z-10 text-white/40 text-xs font-mono">01 / 04</div>
@@ -357,8 +400,12 @@ export default function WalkerScroll() {
         </section>
 
         {/* PANEL 2 — WE VALUE */}
-        <section className="walk-panel w-screen h-screen shrink-0 bg-white flex items-center">
-          <div className="w-full max-w-7xl mx-auto px-6 sm:px-12 lg:px-16 pt-20">
+        {/* Bug 6: overflow-hidden, items-center justify-center, pt-0, max-h-screen on grid */}
+        <section
+          className="walk-panel w-screen h-screen shrink-0 bg-white flex items-center justify-center overflow-hidden"
+          style={{ transform: "translateZ(0)" }}
+        >
+          <div className="w-full max-w-7xl mx-auto px-6 sm:px-12 lg:px-16 pt-0">
             <h2 className="vp-title text-primary text-6xl sm:text-7xl font-bold leading-none" style={{ opacity: 0 }}>
               WE VALUE
             </h2>
@@ -367,7 +414,7 @@ export default function WalkerScroll() {
               <div className="values-connector absolute left-0 right-12 h-px bg-primary/10 origin-left" style={{ transform: "scaleX(0)" }} />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 items-start">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 items-start max-h-screen">
               {values.map((v, i) => (
                 <ValueCard key={v.num} v={v} index={i} hoveredIndex={hoveredIndex} setHoveredIndex={setHoveredIndex} />
               ))}
@@ -378,7 +425,10 @@ export default function WalkerScroll() {
         </section>
 
         {/* PANEL 3 — MISSION */}
-        <section className="walk-panel relative w-screen h-screen shrink-0 flex items-center overflow-hidden" style={{ backgroundColor: "#0a0a0a" }}>
+        <section
+          className="walk-panel relative w-screen h-screen shrink-0 flex items-center overflow-hidden"
+          style={{ backgroundColor: "#0a0a0a", transform: "translateZ(0)" }}
+        >
           <div className="relative z-10 w-full max-w-7xl mx-auto grid lg:grid-cols-2 h-full">
             {/* LEFT — Text */}
             <div className="flex flex-col justify-center px-6 sm:px-12 lg:px-16 py-16 lg:py-0">
@@ -408,10 +458,13 @@ export default function WalkerScroll() {
                 <span className="text-gold font-bold"><span className="stat-number">50+</span> Faculty</span>
               </div>
 
+              {/* CTA: "Apply for Admission →" → /#contact, bg-gold text-dark font-bold */}
               <div className="mp-cta mt-10" style={{ opacity: 0 }}>
-                <Link href="/#features" className="inline-flex items-center gap-2 px-8 py-3 bg-primary text-white font-semibold text-sm hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/30 transition-all uppercase tracking-wider">
-                  Discover Our School
-                  <span className="text-lg leading-none">&rarr;</span>
+                <Link
+                  href="/#contact"
+                  className="inline-flex items-center gap-2 px-8 py-3 bg-gold text-dark font-bold text-sm hover:opacity-90 hover:shadow-lg hover:shadow-gold/30 transition-all uppercase tracking-wider"
+                >
+                  Apply for Admission →
                 </Link>
               </div>
             </div>
@@ -429,8 +482,12 @@ export default function WalkerScroll() {
         </section>
 
         {/* PANEL 4 — SCHOOL HIGHLIGHTS */}
-        <section className="walk-panel w-screen h-screen shrink-0 bg-light flex items-start pt-16">
-          <div className="w-full max-w-7xl mx-auto px-6 sm:px-12 lg:px-16 grid lg:grid-cols-2 gap-12 pt-8">
+        {/* Bug 7: items-center (was items-start pt-16), no pt-8 on inner div, h-[min(400px,45vh)] */}
+        <section
+          className="walk-panel w-screen h-screen shrink-0 bg-light flex items-center"
+          style={{ transform: "translateZ(0)" }}
+        >
+          <div className="w-full max-w-7xl mx-auto px-6 sm:px-12 lg:px-16 grid lg:grid-cols-2 gap-12">
             <div className="hp-text" style={{ opacity: 0 }}>
               <span className="text-primary font-semibold text-sm tracking-[0.2em] uppercase">School Highlights</span>
               <h2 className="text-3xl sm:text-5xl font-bold text-dark mt-3 leading-tight">Life at Malatamba</h2>
@@ -446,7 +503,7 @@ export default function WalkerScroll() {
               </Link>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 h-[400px] lg:h-[500px]">
+            <div className="grid grid-cols-2 gap-3 h-[min(400px,45vh)]">
               <TiltImage src="/ai-images/highlights-friends.png" alt="Friendship and campus life" label="Campus Life" className="row-span-2" />
               <div className="grid grid-cols-2 grid-rows-2 gap-3">
                 <TiltImage src="/ai-images/highlights-sports.png" alt="Sports activities" label="Sports" />
@@ -458,6 +515,7 @@ export default function WalkerScroll() {
           </div>
           <div className="absolute bottom-8 right-8 z-10 text-gray-400 text-xs font-mono">04 / 04</div>
         </section>
+
       </div>
     </div>
   );
