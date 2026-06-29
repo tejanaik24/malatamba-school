@@ -202,7 +202,8 @@ export default function WalkerScroll() {
         .fromTo(hp.querySelector('.hp-text'), { x: -30, opacity: 0 }, { x: 0, opacity: 1, duration: 0.7, ease: "power2.out", overwrite: true }, 0)
         .fromTo(hp.querySelectorAll('.hp-tilt-img'), { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, stagger: 0.08, duration: 0.5, ease: "power2.out", overwrite: true }, 0.3);
 
-      // Main horizontal scroll — Bug 3: scrub 1.8, end +=400vh
+      // Main horizontal scroll
+      // snap locks to exact panel boundaries — prevents panels half-showing simultaneously
       gsap.to(panels, {
         xPercent: -100 * (totalPanels - 1),
         ease: "none",
@@ -212,20 +213,26 @@ export default function WalkerScroll() {
           start: "top top",
           end: "+=450vh",
           scrub: 1.8,
+          snap: {
+            snapTo: 1 / (totalPanels - 1),   // 0, 0.333, 0.667, 1.0
+            duration: { min: 0.2, max: 0.5 },
+            delay: 0.05,
+            ease: "power2.inOut",
+          },
           invalidateOnRefresh: true,
           anticipatePin: 1,
           onUpdate: (self) => {
             const p = self.progress;
-            // Bug 4: corrected thresholds
-            if (p >= 0.28 && p < 0.55 && !valsAnimRef.current) {
+            // Thresholds fire midway through each transition
+            if (p >= 0.2 && !valsAnimRef.current) {
               valsAnimRef.current = true;
               valuesEntrance.play();
             }
-            if (p >= 0.55 && p < 0.78 && !missAnimRef.current) {
+            if (p >= 0.5 && !missAnimRef.current) {
               missAnimRef.current = true;
               missionEntrance.play();
             }
-            if (p >= 0.78 && !highAnimRef.current) {
+            if (p >= 0.8 && !highAnimRef.current) {
               highAnimRef.current = true;
               highlightsEntrance.play();
             }
