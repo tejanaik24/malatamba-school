@@ -296,7 +296,7 @@ export default function WalkerScroll() {
                   <span className="block text-primary text-[44px] lg:text-[56px] font-bold leading-none mb-2">
                     {v.num}
                   </span>
-                  <div className="relative w-full aspect-[3/4] overflow-hidden">
+                  <div className="relative w-full overflow-hidden" style={{ height: 'clamp(160px, 30vh, 360px)' }}>
                     <Image
                       src={v.image} alt={v.title} fill
                       className="object-cover" quality={90} sizes="25vw" priority={i < 2}
