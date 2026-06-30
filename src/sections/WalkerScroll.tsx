@@ -11,16 +11,16 @@ gsap.registerPlugin(ScrollTrigger);
 /* ─── Data ──────────────────────────────────────────────────────────────── */
 
 const values = [
-  { num: "01", title: "Discipline",  desc: "Building character through structure and self-regulation.", image: "/real-photos/student-gallery/dsc01812-510x286.webp"              },
-  { num: "02", title: "Excellence",  desc: "Pursuing the highest standards in academics and beyond.",   image: "/real-photos/events/annual-day-2023/dsc-7525-506x337.webp"      },
-  { num: "03", title: "Innovation",  desc: "Fostering creativity and critical thinking every day.",     image: "/real-photos/events/science-fair/dsc04004-596x337.webp"         },
-  { num: "04", title: "Integrity",   desc: "Instilling honesty and moral values for life.",             image: "/real-photos/events/sankrathi/dsc04837-596x337.webp"            },
+  { num: "01", title: "Discipline",  desc: "Building character through structure and self-regulation.", image: "/ai-images/values-discipline.png"  },
+  { num: "02", title: "Excellence",  desc: "Pursuing the highest standards in academics and beyond.",   image: "/ai-images/values-excellence.png"  },
+  { num: "03", title: "Innovation",  desc: "Fostering creativity and critical thinking every day.",     image: "/ai-images/values-innovation.png"  },
+  { num: "04", title: "Integrity",   desc: "Instilling honesty and moral values for life.",             image: "/ai-images/values-integrity.png"   },
 ];
 
 const heroImages = [
-  "/real-photos/events/annual-day-2023/dsc-7509-506x337.webp",
-  "/real-photos/student-gallery/dsc01841-596x334.webp",
-  "/real-photos/events/sankrathi/dsc04819-596x337.webp",
+  "/ai-images/hero-1.png",
+  "/ai-images/hero-2.png",
+  "/ai-images/hero-3.png",
 ];
 
 const heroCaptions = [
@@ -361,7 +361,7 @@ export default function WalkerScroll() {
               style={{ clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 88%)" }}
             >
               <Image
-                src="/real-photos/events/annual-day-2023/dsc-7532-506x337.webp" alt="School mission" fill
+                src="/ai-images/mission.png" alt="School mission" fill
                 className="object-cover" quality={90} sizes="50vw" priority
               />
               <div
@@ -403,15 +403,15 @@ export default function WalkerScroll() {
             {/* Image grid — h-[min(380px,42vh)] keeps it contained on short screens */}
             <div className="grid grid-cols-2 gap-3 h-[min(380px,42vh)]">
               <TiltImage
-                src="/real-photos/student-gallery/dsc01828-596x334.webp"
+                src="/ai-images/highlights-friends.png"
                 alt="Campus life" label="Campus Life"
                 className="row-span-2"
               />
               <div className="grid grid-cols-2 grid-rows-2 gap-3">
-                <TiltImage src="/real-photos/events/annual-day-2023/dsc-7519-506x337.webp" alt="Sports"       label="Sports"      />
-                <TiltImage src="/real-photos/events/sankrathi/dsc04828-596x337.webp"       alt="Cultural"     label="Events"      />
-                <TiltImage src="/real-photos/student-gallery/dsc01831-596x334.webp"        alt="Library"      label="Library"     />
-                <TiltImage src="/real-photos/events/science-fair/dsc04003-596x337.webp"    alt="Science lab"  label="Science Lab" />
+                <TiltImage src="/ai-images/highlights-sports.png"     alt="Sports"      label="Sports"      />
+                <TiltImage src="/ai-images/highlights-cultural.png"   alt="Cultural"    label="Events"      />
+                <TiltImage src="/ai-images/highlights-library.png"    alt="Library"     label="Library"     />
+                <TiltImage src="/ai-images/highlights-sciencelab.png" alt="Science lab" label="Science Lab" />
               </div>
             </div>
           </div>
