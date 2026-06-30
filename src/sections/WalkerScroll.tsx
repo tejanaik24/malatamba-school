@@ -110,10 +110,10 @@ export default function WalkerScroll() {
       const valsTl = gsap.timeline({ paused: true });
       valsTl
         .from(panels[1].querySelector(".vp-title"), {
-          x: -40, opacity: 0, duration: 0.6, ease: "power2.out",
+          x: -40, opacity: 0, duration: 0.6, ease: "power2.out", immediateRender: false,
         })
         .from(panels[1].querySelectorAll(".vp-card"), {
-          y: 50, opacity: 0, stagger: 0.1, duration: 0.5, ease: "power2.out",
+          y: 50, opacity: 0, stagger: 0.1, duration: 0.5, ease: "power2.out", immediateRender: false,
         }, 0.15);
 
       ScrollTrigger.create({
@@ -127,11 +127,11 @@ export default function WalkerScroll() {
       // ── Panel 3 (Mission) entrance ────────────────────────────────────
       const missTl = gsap.timeline({ paused: true });
       missTl
-        .from(panels[2].querySelector(".mp-subtitle"), { x: -30, opacity: 0, duration: 0.5, ease: "power2.out" })
-        .from(panels[2].querySelector(".mp-heading"),  { x: -30, opacity: 0, duration: 0.6, ease: "power2.out" }, 0.1)
-        .from(panels[2].querySelector(".mp-body"),     { x: -30, opacity: 0, duration: 0.5, ease: "power2.out" }, 0.2)
-        .from(panels[2].querySelector(".mp-stats"),    { x: -30, opacity: 0, duration: 0.5, ease: "power2.out" }, 0.3)
-        .from(panels[2].querySelector(".mp-cta"),      { x: -30, opacity: 0, duration: 0.5, ease: "power2.out" }, 0.4)
+        .from(panels[2].querySelector(".mp-subtitle"), { x: -30, opacity: 0, duration: 0.5, ease: "power2.out", immediateRender: false })
+        .from(panels[2].querySelector(".mp-heading"),  { x: -30, opacity: 0, duration: 0.6, ease: "power2.out", immediateRender: false }, 0.1)
+        .from(panels[2].querySelector(".mp-body"),     { x: -30, opacity: 0, duration: 0.5, ease: "power2.out", immediateRender: false }, 0.2)
+        .from(panels[2].querySelector(".mp-stats"),    { x: -30, opacity: 0, duration: 0.5, ease: "power2.out", immediateRender: false }, 0.3)
+        .from(panels[2].querySelector(".mp-cta"),      { x: -30, opacity: 0, duration: 0.5, ease: "power2.out", immediateRender: false }, 0.4)
         .fromTo(
           panels[2].querySelector(".mp-image"),
           { opacity: 0, x: 40 },
@@ -151,10 +151,10 @@ export default function WalkerScroll() {
       const highTl = gsap.timeline({ paused: true });
       highTl
         .from(panels[3].querySelector(".hp-text"), {
-          x: -30, opacity: 0, duration: 0.6, ease: "power2.out",
+          x: -30, opacity: 0, duration: 0.6, ease: "power2.out", immediateRender: false,
         })
         .from(panels[3].querySelectorAll(".hp-img"), {
-          opacity: 0, scale: 0.9, stagger: 0.07, duration: 0.5, ease: "power2.out",
+          opacity: 0, scale: 0.9, stagger: 0.07, duration: 0.5, ease: "power2.out", immediateRender: false,
         }, 0.3);
 
       ScrollTrigger.create({
@@ -190,10 +190,10 @@ export default function WalkerScroll() {
   const cap = heroCaptions[activeHero];
 
   return (
-    /* Container — no hardcoded height; GSAP pin spacer sets scroll distance */
-    <div ref={containerRef} className="relative overflow-hidden">
-      {/* Flex wrapper — will-change only here, not on every panel */}
-      <div className="flex h-screen w-full" style={{ willChange: "transform" }}>
+    /* Container — no overflow-hidden here; GSAP pin must not have it on the trigger */
+    <div ref={containerRef} className="relative">
+      {/* overflow-hidden lives on the child, not the pin trigger */}
+      <div className="flex h-screen w-full overflow-hidden" style={{ willChange: "transform" }}>
 
         {/* ── PANEL 1: HERO ─────────────────────────────────────────────── */}
         <section className="walk-panel relative w-screen h-screen shrink-0 flex items-center justify-center overflow-hidden">
