@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WalkerScroll from "@/sections/WalkerScroll";
+import LeadershipMessage from "@/sections/LeadershipMessage";
 import FeaturesGrid from "@/sections/FeaturesGrid";
 import VideoSection from "@/sections/VideoSection";
 import GoogleReviews from "@/sections/GoogleReviews";
@@ -23,10 +24,11 @@ export default async function Home() {
       <Navbar />
       <main>
         <WalkerScroll />
+        <LeadershipMessage />
         <FeaturesGrid images={images} />
         <VideoSection images={images} />
         <GoogleReviews />
-        <GalleryPreview images={images} />
+        <GalleryPreview />
       </main>
       <Footer />
     </>

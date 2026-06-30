@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 const socialLinks = [
   {
@@ -61,9 +62,13 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           <div>
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-full bg-gold flex items-center justify-center">
-                <span className="text-dark font-bold text-xl">MV</span>
-              </div>
+              <Image
+                src="/real-photos/logo/logo-footer.png"
+                alt="Malatamba Vidyaniketan logo"
+                width={56}
+                height={56}
+                className="rounded-full"
+              />
               <div>
                 <h3 className="text-white font-bold text-lg">Malatamba</h3>
                 <p className="text-gold text-sm">Vidyaniketan</p>
