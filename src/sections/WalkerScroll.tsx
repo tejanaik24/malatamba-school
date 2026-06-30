@@ -127,8 +127,9 @@ export default function WalkerScroll() {
         trigger: panels[1],
         containerAnimation: mainTween,
         start: "left center",
-        once: true,
+        end: "right center",
         onEnter: () => valsTl.play(),
+        onEnterBack: () => valsTl.play(),
       });
 
       // ── Panel 3 (Mission) entrance ────────────────────────────────────
@@ -150,8 +151,9 @@ export default function WalkerScroll() {
         trigger: panels[2],
         containerAnimation: mainTween,
         start: "left center",
-        once: true,
+        end: "right center",
         onEnter: () => missTl.play(),
+        onEnterBack: () => missTl.play(),
       });
 
       // ── Panel 4 (Highlights) entrance ────────────────────────────────
@@ -168,8 +170,9 @@ export default function WalkerScroll() {
         trigger: panels[3],
         containerAnimation: mainTween,
         start: "left center",
-        once: true,
+        end: "right center",
         onEnter: () => highTl.play(),
+        onEnterBack: () => highTl.play(),
       });
 
       // ── Hero image crossfade (5 s hold, simultaneous fade) ────────────
