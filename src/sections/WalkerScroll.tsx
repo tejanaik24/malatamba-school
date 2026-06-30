@@ -280,8 +280,8 @@ export default function WalkerScroll() {
         </section>
 
         {/* ── PANEL 2: VALUES ───────────────────────────────────────────── */}
-        <section className="walk-panel relative w-screen h-screen shrink-0 flex items-center justify-center overflow-hidden bg-white">
-          <div className="w-full max-w-7xl mx-auto px-6 sm:px-12 lg:px-16 pt-20 lg:pt-0">
+        <section className="walk-panel relative w-screen h-screen shrink-0 flex items-start justify-center overflow-hidden bg-white">
+          <div className="w-full max-w-7xl mx-auto px-6 sm:px-12 lg:px-16 pt-24">
 
             <span className="vp-subtitle text-primary text-xs tracking-[0.2em] uppercase font-light block mb-4">
               Our Core Values
