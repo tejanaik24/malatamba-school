@@ -4,59 +4,70 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 const navLinks = [
   { label: "Home", href: "/" },
-  { label: "About", href: "/#about" },
+  { label: "About", href: "/about" },
+  {
+    label: "Academics",
+    href: "/academics",
+    dropdown: [
+      { label: "Curriculum & Subjects", href: "/academics" },
+      { label: "Faculty", href: "/faculty" },
+      { label: "Rules & Regulations", href: "/rules" },
+    ],
+  },
   {
     label: "Infrastructure",
-    href: "#",
+    href: "/infrastructure",
     dropdown: [
-      { label: "Classrooms", href: "/#features" },
-      { label: "Laboratory", href: "/#features" },
-      { label: "Computer Lab", href: "/#features" },
-      { label: "Library", href: "/#features" },
-      { label: "Transport", href: "/#features" },
+      { label: "Classrooms", href: "/infrastructure#classrooms" },
+      { label: "Science & Computer Labs", href: "/infrastructure#labs" },
+      { label: "Library", href: "/infrastructure#library" },
+      { label: "Sports", href: "/infrastructure#sports" },
+      { label: "Transport", href: "/infrastructure#transport" },
     ],
   },
-  {
-    label: "Gallery",
-    href: "/gallery",
-    dropdown: [
-      { label: "All Events", href: "/gallery" },
-      { label: "Annual Day", href: "/gallery" },
-      { label: "Science Fair", href: "/gallery" },
-    ],
-  },
-  { label: "Rules", href: "/#rules" },
-  { label: "Contact", href: "/#contact" },
+  { label: "Gallery", href: "/gallery" },
+  { label: "Admissions", href: "/admissions" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Close mobile menu on route change
+  useEffect(() => { setMobileOpen(false); setOpenDropdown(null); }, [pathname]);
+
+  const isHome = pathname === "/";
 
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-primary/95 backdrop-blur-md shadow-lg" : "bg-transparent"
+        scrolled || !isHome
+          ? "bg-primary/95 backdrop-blur-md shadow-lg"
+          : "bg-transparent"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
-          <Link href="/" className="flex items-center gap-2">
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-2 shrink-0">
             <Image
               src="/real-photos/logo/logo-main.png"
               alt="Malatamba Vidyaniketan logo"
-              width={56}
-              height={56}
+              width={48}
+              height={48}
               className="rounded-full"
             />
             <div className="flex flex-col">
@@ -67,42 +78,62 @@ export default function Navbar() {
             </div>
           </Link>
 
-          <div className="hidden lg:flex items-center gap-1">
-            {navLinks.map((link) => (
-              <div
-                key={link.label}
-                className="relative"
-                onMouseEnter={() => link.dropdown && setOpenDropdown(link.label)}
-                onMouseLeave={() => setOpenDropdown(null)}
-              >
-                <Link
-                  href={link.href}
-                  className="px-3 py-2 text-sm font-medium text-white/90 hover:text-gold transition-colors rounded-md"
+          {/* Desktop nav */}
+          <div className="hidden lg:flex items-center gap-0.5">
+            {navLinks.map((link) => {
+              const isActive = pathname === link.href || pathname.startsWith(link.href + "/");
+              return (
+                <div
+                  key={link.label}
+                  className="relative"
+                  onMouseEnter={() => link.dropdown && setOpenDropdown(link.label)}
+                  onMouseLeave={() => setOpenDropdown(null)}
                 >
-                  {link.label}
-                </Link>
-                {link.dropdown && openDropdown === link.label && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -8 }}
-                    className="absolute top-full left-0 mt-1 w-48 bg-white rounded-lg shadow-xl py-2"
+                  <Link
+                    href={link.href}
+                    className={`px-3 py-2 text-sm font-medium transition-colors rounded-md flex items-center gap-1 ${
+                      isActive
+                        ? "text-gold"
+                        : "text-white/90 hover:text-gold"
+                    }`}
                   >
-                    {link.dropdown.map((item) => (
-                      <Link
-                        key={item.label}
-                        href={item.href}
-                        className="block px-4 py-2 text-sm text-dark hover:bg-crimson-50 hover:text-primary transition-colors"
-                      >
-                        {item.label}
-                      </Link>
-                    ))}
-                  </motion.div>
-                )}
-              </div>
-            ))}
+                    {link.label}
+                    {link.dropdown && (
+                      <svg className="w-3 h-3 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                        <path d="M19 9l-7 7-7-7" />
+                      </svg>
+                    )}
+                  </Link>
+                  {link.dropdown && openDropdown === link.label && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -6 }}
+                      className="absolute top-full left-0 mt-1 w-52 bg-white rounded-xl shadow-2xl py-2 border border-gray-100"
+                    >
+                      {link.dropdown.map((item) => (
+                        <Link
+                          key={item.label}
+                          href={item.href}
+                          className="block px-4 py-2.5 text-sm text-dark hover:bg-crimson-50 hover:text-primary transition-colors"
+                        >
+                          {item.label}
+                        </Link>
+                      ))}
+                    </motion.div>
+                  )}
+                </div>
+              );
+            })}
+            <Link
+              href="/admissions"
+              className="ml-3 px-5 py-2 bg-gold text-dark font-bold text-sm rounded-full hover:opacity-90 transition-all hover:shadow-md"
+            >
+              Enquire Now
+            </Link>
           </div>
 
+          {/* Mobile hamburger */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className="lg:hidden text-white p-2"
@@ -113,9 +144,7 @@ export default function Navbar() {
                 <path d="M6 18L18 6M6 6l12 12" />
               ) : (
                 <>
-                  <path d="M3 12h18" />
-                  <path d="M3 6h18" />
-                  <path d="M3 18h18" />
+                  <path d="M3 12h18" /><path d="M3 6h18" /><path d="M3 18h18" />
                 </>
               )}
             </svg>
@@ -123,28 +152,29 @@ export default function Navbar() {
         </div>
       </div>
 
+      {/* Mobile menu */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden bg-primary border-t border-white/10"
+            className="lg:hidden bg-primary border-t border-white/10 overflow-hidden"
           >
-            <div className="px-4 py-4 space-y-1">
+            <div className="px-4 py-4 space-y-1 max-h-[75vh] overflow-y-auto">
               {navLinks.map((link) => (
                 <div key={link.label}>
                   <button
-                    onClick={() => {
-                      if (link.dropdown) {
-                        setOpenDropdown(openDropdown === link.label ? null : link.label);
-                      } else {
-                        setMobileOpen(false);
-                      }
-                    }}
-                    className="flex items-center justify-between w-full px-3 py-2 text-sm font-medium text-white/90 hover:text-gold transition-colors rounded-md"
+                    onClick={() =>
+                      link.dropdown
+                        ? setOpenDropdown(openDropdown === link.label ? null : link.label)
+                        : setMobileOpen(false)
+                    }
+                    className="flex items-center justify-between w-full px-3 py-2.5 text-sm font-medium text-white/90 hover:text-gold transition-colors rounded-md"
                   >
-                    {link.label}
+                    <Link href={link.href} onClick={() => setMobileOpen(false)} className="flex-1 text-left">
+                      {link.label}
+                    </Link>
                     {link.dropdown && (
                       <svg
                         className={`w-4 h-4 transition-transform ${openDropdown === link.label ? "rotate-180" : ""}`}
@@ -155,13 +185,13 @@ export default function Navbar() {
                     )}
                   </button>
                   {link.dropdown && openDropdown === link.label && (
-                    <div className="ml-4 mt-1 space-y-1">
+                    <div className="ml-4 mt-1 space-y-1 border-l-2 border-gold/30 pl-3">
                       {link.dropdown.map((item) => (
                         <Link
                           key={item.label}
                           href={item.href}
                           onClick={() => setMobileOpen(false)}
-                          className="block px-3 py-2 text-sm text-white/70 hover:text-gold transition-colors rounded-md"
+                          className="block py-2 text-sm text-white/70 hover:text-gold transition-colors"
                         >
                           {item.label}
                         </Link>
@@ -170,6 +200,15 @@ export default function Navbar() {
                   )}
                 </div>
               ))}
+              <div className="pt-3 border-t border-white/10">
+                <Link
+                  href="/admissions"
+                  onClick={() => setMobileOpen(false)}
+                  className="block w-full text-center px-5 py-3 bg-gold text-dark font-bold text-sm rounded-full"
+                >
+                  Enquire Now
+                </Link>
+              </div>
             </div>
           </motion.div>
         )}

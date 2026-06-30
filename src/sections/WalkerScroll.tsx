@@ -256,13 +256,13 @@ export default function WalkerScroll() {
           {/* CTAs */}
           <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-10 flex flex-wrap justify-center gap-4">
             <Link
-              href="/#features"
+              href="/infrastructure"
               className="px-8 py-3 bg-primary text-white font-semibold rounded-full hover:bg-primary/90 transition-all text-sm sm:text-base whitespace-nowrap"
             >
               Explore School
             </Link>
             <Link
-              href="/#contact"
+              href="/admissions"
               className="px-8 py-3 border-2 border-gold text-gold font-semibold rounded-full hover:bg-gold hover:text-dark transition-all text-sm sm:text-base whitespace-nowrap"
             >
               Enquire Now
@@ -306,10 +306,10 @@ export default function WalkerScroll() {
                     {v.title}
                   </h3>
                   <p className="text-gray-600 text-xs lg:text-sm leading-relaxed">{v.desc}</p>
-                  <button className="w-full mt-3 bg-dark text-white text-xs font-semibold py-2 lg:py-3 px-3 flex items-center justify-between hover:bg-primary transition-colors uppercase tracking-wider">
+                  <Link href="/about" className="w-full mt-3 bg-dark text-white text-xs font-semibold py-2 lg:py-3 px-3 flex items-center justify-between hover:bg-primary transition-colors uppercase tracking-wider">
                     <span>Learn More</span>
                     <span className="text-base leading-none">&rsaquo;</span>
-                  </button>
+                  </Link>
                 </div>
               ))}
             </div>
@@ -347,7 +347,7 @@ export default function WalkerScroll() {
               </div>
               <div className="mp-cta mt-10">
                 <Link
-                  href="/#contact"
+                  href="/admissions"
                   className="inline-flex items-center gap-2 px-8 py-3 bg-gold text-dark font-bold text-sm hover:opacity-90 hover:shadow-lg transition-all uppercase tracking-wider"
                 >
                   Apply for Admission →
@@ -390,7 +390,7 @@ export default function WalkerScroll() {
                 From vibrant classrooms to sports fields, science labs to cultural events — every day at Malatamba Vidyaniketan is an opportunity for discovery and growth.
               </p>
               <Link
-                href="/#gallery"
+                href="/gallery"
                 className="inline-flex items-center gap-2 px-7 py-3 bg-primary text-white font-semibold rounded-full hover:bg-primary/90 transition-all text-sm"
               >
                 View Gallery
