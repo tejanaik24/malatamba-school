@@ -81,6 +81,7 @@ export default function WalkerScroll() {
   // Animate caption in after React renders the new text
   useEffect(() => {
     if (!captionRef.current) return;
+    gsap.killTweensOf(captionRef.current);
     gsap.fromTo(
       captionRef.current,
       { opacity: 0, y: 16 },
@@ -199,7 +200,7 @@ export default function WalkerScroll() {
     /* Container — no overflow-hidden here; GSAP pin must not have it on the trigger */
     <div ref={containerRef} className="relative">
       {/* overflow-hidden lives on the child, not the pin trigger */}
-      <div className="flex h-screen w-full overflow-hidden" style={{ willChange: "transform" }}>
+      <div className="flex h-screen w-full overflow-hidden">
 
         {/* ── PANEL 1: HERO ─────────────────────────────────────────────── */}
         <section className="walk-panel relative w-screen h-screen shrink-0 flex items-center justify-center overflow-hidden">
