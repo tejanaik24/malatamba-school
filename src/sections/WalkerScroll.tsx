@@ -281,7 +281,7 @@ export default function WalkerScroll() {
 
         {/* ── PANEL 2: VALUES ───────────────────────────────────────────── */}
         <section className="walk-panel relative w-screen h-screen shrink-0 flex items-center justify-center overflow-hidden bg-white">
-          <div className="w-full max-w-7xl mx-auto px-6 sm:px-12 lg:px-16">
+          <div className="w-full max-w-7xl mx-auto px-6 sm:px-12 lg:px-16 pt-20 lg:pt-0">
 
             <span className="vp-subtitle text-primary text-xs tracking-[0.2em] uppercase font-light block mb-4">
               Our Core Values
@@ -325,7 +325,7 @@ export default function WalkerScroll() {
           <div className="w-full max-w-7xl mx-auto grid lg:grid-cols-2 h-full">
 
             {/* Left — text */}
-            <div className="flex flex-col justify-center px-6 sm:px-12 lg:px-16 pt-28 pb-16 lg:pt-0 lg:pb-0">
+            <div className="flex flex-col justify-center px-6 sm:px-12 lg:px-16 pt-36 pb-16 lg:pt-0 lg:pb-0">
               <span className="mp-subtitle text-gold text-xs tracking-[0.2em] uppercase font-light block mb-6">
                 Our Mission
               </span>
