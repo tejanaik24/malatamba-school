@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import ClientLayout from "./ClientLayout";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import MobileStickyBar from "@/components/MobileStickyBar";
 
 export const metadata: Metadata = {
   title: {
@@ -54,6 +55,7 @@ export default function RootLayout({
       <body className="antialiased">
         <ClientLayout>{children}</ClientLayout>
         <WhatsAppButton />
+        <MobileStickyBar />
       </body>
     </html>
   );

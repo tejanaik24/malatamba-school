@@ -175,3 +175,47 @@ body::after {
     transform: none !important;
   }
 }
+
+/* Trust bar marquee */
+@keyframes trust-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-33.333%); }
+}
+.trust-marquee {
+  animation: trust-scroll 28s linear infinite;
+}
+.trust-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Campus map pulse ring */
+@keyframes campus-ring-pulse {
+  0%   { r: 4.5; opacity: 0.6; }
+  60%  { r: 8;   opacity: 0;   }
+  100% { r: 4.5; opacity: 0;   }
+}
+.campus-pulse {
+  animation: campus-ring-pulse 2.2s ease-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* Mobile safe-area body padding for sticky bar */
+@media (max-width: 1023px) {
+  body {
+    padding-bottom: calc(56px + env(safe-area-inset-bottom));
+  }
+}
+
+/* Prevent line-clamp overflow */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* text-balance fallback */
+.text-balance {
+  text-wrap: balance;
+}

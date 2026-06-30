@@ -1,9 +1,13 @@
 "use client";
 
-import { useRef } from "react";
-import { motion } from "framer-motion";
+import { useRef, useEffect } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
+import Link from "next/link";
 import { ImageData } from "@/lib/images";
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface FeaturesGridProps {
   images: ImageData[];
@@ -13,140 +17,237 @@ const features = [
   {
     num: "01",
     title: "Experienced Faculty",
-    desc: "Our dedicated team of qualified educators brings years of experience and a passion for teaching, ensuring every child receives personalized attention.",
+    desc: "Qualified educators with years of experience and a passion for teaching — giving every child personalized attention.",
     localImage: "/ai-images/feature-faculty.png",
     alt: "Experienced faculty member teaching",
+    accent: "#762123",
+    span: "col-span-2 row-span-2",
+    textSize: "text-2xl sm:text-3xl",
   },
   {
     num: "02",
     title: "Science & Computer Labs",
-    desc: "Well-equipped physics, chemistry, and biology laboratories alongside a modern computer lab with high-speed internet for digital literacy.",
+    desc: "Physics, Chemistry, Biology labs + 2 computer labs with 40 PCs each and high-speed internet.",
     localImage: "/ai-images/feature-lab.png",
     alt: "Students in science laboratory",
+    accent: "#c9a84c",
+    span: "col-span-1 row-span-1",
+    textSize: "text-lg",
   },
   {
     num: "03",
     title: "Sports & Athletics",
-    desc: "Extensive sports facilities including a playground for cricket, football, athletics, and indoor games to promote physical fitness and teamwork.",
+    desc: "Cricket, football, athletics, basketball and indoor games — for fitness and teamwork.",
     localImage: "/ai-images/feature-sports.png",
     alt: "Students playing sports",
+    accent: "#1e4a8a",
+    span: "col-span-1 row-span-1",
+    textSize: "text-lg",
   },
   {
     num: "04",
     title: "Smart Classrooms",
-    desc: "Technology-enabled classrooms with interactive smart boards, projectors, and digital learning tools that make lessons engaging and effective.",
+    desc: "Interactive smart boards, projectors, and digital tools that make every lesson engaging.",
     imageKey: "features-smart-class",
     alt: "Smart classroom with interactive board",
+    accent: "#2e6b3e",
+    span: "col-span-1 row-span-1",
+    textSize: "text-lg",
   },
   {
     num: "05",
-    title: "Library & Reading Room",
-    desc: "A well-stocked library with over 5,000 books, reference materials, newspapers, and magazines to cultivate a strong reading habit.",
+    title: "Library — 5,000+ Books",
+    desc: "A rich library with books, magazines, newspapers, and a quiet reading room for curious minds.",
     imageKey: "features-library",
     alt: "School library interior",
+    accent: "#5a3a7e",
+    span: "col-span-2 row-span-1",
+    textSize: "text-xl",
   },
   {
     num: "06",
-    title: "Safe Transport",
-    desc: "Safe and reliable bus service covering major routes across Tirupati with GPS tracking, female attendants, and trained drivers.",
+    title: "Safe GPS Transport",
+    desc: "GPS-tracked buses with trained drivers and female attendants — covering all of Visakhapatnam.",
     imageKey: "features-transport",
     alt: "School bus",
+    accent: "#6b3a1e",
+    span: "col-span-1 row-span-1",
+    textSize: "text-lg",
   },
 ];
 
-export default function FeaturesGrid({ images }: FeaturesGridProps) {
-  const tiltRefs = useRef<(HTMLDivElement | null)[]>([]);
+function BentoCard({
+  feat,
+  imgSrc,
+  className,
+}: {
+  feat: typeof features[number];
+  imgSrc: string | undefined;
+  className?: string;
+}) {
+  const cardRef = useRef<HTMLDivElement>(null);
 
-  const handleTiltMove = (index: number) => (e: React.MouseEvent) => {
-    const el = tiltRefs.current[index];
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
-    el.style.transform = `perspective(1000px) rotateY(${x * 6}deg) rotateX(${-y * 6}deg) scale(1.02)`;
-    el.style.boxShadow = "0 25px 50px rgba(118,33,35,0.15)";
+  const onMove = (e: React.MouseEvent) => {
+    const el = cardRef.current;
+    if (!el || window.matchMedia("(hover: none)").matches) return;
+    const r = el.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top) / r.height - 0.5;
+    el.style.transform = `perspective(900px) rotateY(${x * 5}deg) rotateX(${-y * 5}deg) scale(1.015)`;
   };
 
-  const handleTiltLeave = (index: number) => () => {
-    const el = tiltRefs.current[index];
-    if (el) {
-      el.style.transform = "";
-      el.style.boxShadow = "";
-    }
+  const onLeave = () => {
+    if (cardRef.current) cardRef.current.style.transform = "";
   };
 
   return (
-    <section className="py-20 sm:py-28 bg-white" id="features">
-      <div className="max-w-7xl mx-auto px-6 sm:px-12 lg:px-16">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+    <div
+      ref={cardRef}
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
+      className={`feat-card relative rounded-2xl overflow-hidden group cursor-default ${className ?? ""}`}
+      style={{
+        transformStyle: "preserve-3d",
+        willChange: "transform",
+        transition: "transform 0.25s ease, box-shadow 0.25s ease",
+        boxShadow: "0 4px 24px rgba(0,0,0,0.08)",
+        minHeight: "180px",
+      }}
+    >
+      {/* Background image */}
+      {imgSrc ? (
+        <Image
+          src={imgSrc}
+          alt={feat.alt}
+          fill
+          className="object-cover transition-transform duration-700 group-hover:scale-105"
+          quality={85}
+          sizes="(max-width: 768px) 100vw, 50vw"
+        />
+      ) : (
+        <div style={{ backgroundColor: feat.accent, opacity: 0.15 }} className="absolute inset-0" />
+      )}
+
+      {/* Dark gradient overlay */}
+      <div
+        className="absolute inset-0 transition-opacity duration-300"
+        style={{
+          background: `linear-gradient(160deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.72) 100%)`,
+        }}
+      />
+
+      {/* Accent top border */}
+      <div
+        className="absolute top-0 left-0 right-0 h-0.5"
+        style={{ background: feat.accent }}
+      />
+
+      {/* Content */}
+      <div className="absolute inset-0 p-5 sm:p-6 flex flex-col justify-end">
+        <span
+          className="text-[40px] sm:text-[56px] font-black leading-none select-none absolute top-4 right-5 opacity-10 text-white"
+          aria-hidden="true"
         >
-          <span className="text-primary font-semibold text-sm tracking-[0.2em] uppercase">
+          {feat.num}
+        </span>
+        <h3 className={`${feat.textSize} font-bold text-white mb-1.5 leading-tight text-balance`}>
+          {feat.title}
+        </h3>
+        <p className="text-white/60 text-xs sm:text-sm leading-relaxed line-clamp-2 group-hover:text-white/80 transition-colors duration-300">
+          {feat.desc}
+        </p>
+      </div>
+
+      {/* Hover reveal: Learn More */}
+      <div
+        className="absolute bottom-0 left-0 right-0 h-10 flex items-center justify-center translate-y-full group-hover:translate-y-0 transition-transform duration-300"
+        style={{ background: feat.accent }}
+      >
+        <Link
+          href="/infrastructure"
+          className="text-white text-xs font-bold tracking-wider uppercase flex items-center gap-1.5"
+          onClick={(e) => e.stopPropagation()}
+        >
+          Learn More
+          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+            <path d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+export default function FeaturesGrid({ images }: FeaturesGridProps) {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.from(".feat-card", {
+        y: 40, opacity: 0, stagger: { amount: 0.5, from: "start" },
+        duration: 0.65, ease: "power2.out",
+        scrollTrigger: { trigger: sectionRef.current, start: "top 80%", toggleActions: "play none none reverse" },
+      });
+      gsap.from(".fg-heading", {
+        y: 30, opacity: 0, duration: 0.7, ease: "power2.out",
+        scrollTrigger: { trigger: sectionRef.current, start: "top 85%", toggleActions: "play none none reverse" },
+      });
+    }, sectionRef);
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <section ref={sectionRef} className="py-20 sm:py-28 bg-white" id="features">
+      <div className="max-w-7xl mx-auto px-6 sm:px-12 lg:px-16">
+
+        <div className="fg-heading text-center mb-14">
+          <span className="text-primary font-semibold text-xs tracking-[0.25em] uppercase">
             Why Choose Us
           </span>
-          <h2 className="text-3xl sm:text-5xl font-bold text-dark mt-3">
+          <h2 className="text-3xl sm:text-5xl font-bold text-dark mt-3 mb-4">
             Everything Your Child Needs
           </h2>
-          <p className="text-gray-600 max-w-xl mx-auto mt-4 text-base sm:text-lg">
-            From modern infrastructure to nurturing environment, we provide the complete ecosystem
-            for academic and personal growth.
+          <p className="text-gray-500 max-w-xl mx-auto text-sm sm:text-base">
+            From modern infrastructure to a nurturing environment — the complete ecosystem for academic and personal growth.
           </p>
-        </motion.div>
-
-        <div className="space-y-20">
-          {features.map((feat, i) => {
-            const imgSrc = feat.localImage || images.find((img) => img.section === feat.imageKey)?.url;
-            return (
-              <motion.div
-                key={feat.num}
-                initial={{ opacity: 0, x: i % 2 === 0 ? -60 : 60 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.7, ease: "easeOut" }}
-                className={`flex flex-col ${
-                  i % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
-                } items-center gap-8 lg:gap-16`}
-              >
-                <div
-                  ref={(el) => { tiltRefs.current[i] = el; }}
-                  onMouseMove={handleTiltMove(i)}
-                  onMouseLeave={handleTiltLeave(i)}
-                  className="relative w-full lg:w-1/2 aspect-[4/3] rounded-2xl overflow-hidden shadow-lg shrink-0 transition-transform duration-300 tilt-3d"
-                  style={{ transformStyle: "preserve-3d", willChange: "transform" }}
-                >
-                  {imgSrc && (
-                    <Image
-                      src={imgSrc}
-                      alt={feat.alt}
-                      fill
-                      className="object-cover hover:scale-105 transition-transform duration-500"
-                      quality={90}
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                    />
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-tr from-dark/30 to-transparent" />
-                  <span className="absolute top-4 left-4 text-[64px] sm:text-[80px] font-bold text-white/10 leading-none pointer-events-none select-none">
-                    {feat.num}
-                  </span>
-                  <span className="absolute bottom-4 left-4 bg-white/20 backdrop-blur text-white text-xs font-semibold px-3 py-1 rounded-full">
-                    {feat.num}
-                  </span>
-                </div>
-
-                <div className="w-full lg:w-1/2">
-                  <span className="text-gold text-sm font-bold">{feat.num}</span>
-                  <h3 className="text-2xl sm:text-3xl font-bold text-dark mt-2 mb-4">{feat.title}</h3>
-                  <p className="text-gray-600 text-base sm:text-lg leading-relaxed">{feat.desc}</p>
-                  <div className="w-12 h-0.5 bg-primary mt-6" />
-                </div>
-              </motion.div>
-            );
-          })}
         </div>
+
+        {/* Bento grid */}
+        <div
+          className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 auto-rows-[minmax(160px,auto)]"
+          style={{ gridTemplateRows: "auto" }}
+        >
+          {/* Card 1 — big (2×2 on lg) */}
+          <BentoCard
+            feat={features[0]}
+            imgSrc={features[0].localImage}
+            className="lg:col-span-2 lg:row-span-2"
+          />
+
+          {/* Cards 2 & 3 — normal */}
+          <BentoCard feat={features[1]} imgSrc={features[1].localImage} />
+          <BentoCard feat={features[2]} imgSrc={features[2].localImage} />
+
+          {/* Card 4 — normal */}
+          <BentoCard
+            feat={features[3]}
+            imgSrc={images.find((img) => img.section === features[3].imageKey)?.url}
+          />
+
+          {/* Card 5 — wide (2 cols on lg) */}
+          <BentoCard
+            feat={features[4]}
+            imgSrc={images.find((img) => img.section === features[4].imageKey)?.url}
+            className="col-span-2 lg:col-span-2"
+          />
+
+          {/* Card 6 — normal */}
+          <BentoCard
+            feat={features[5]}
+            imgSrc={images.find((img) => img.section === features[5].imageKey)?.url}
+          />
+        </div>
+
       </div>
     </section>
   );
