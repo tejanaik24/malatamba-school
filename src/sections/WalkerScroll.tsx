@@ -101,7 +101,13 @@ export default function WalkerScroll() {
           trigger: containerRef.current,
           pin: true,
           scrub: 1,
-          snap: 1 / (panels.length - 1),
+          snap: {
+            snapTo: 1 / (panels.length - 1),
+            duration: 0.5,
+            delay: 0.1,
+            ease: "power1.inOut",
+            inertia: false,
+          },
           end: () => "+=" + (containerRef.current!.offsetWidth * (panels.length - 1)),
           invalidateOnRefresh: true,
         },
@@ -304,8 +310,7 @@ export default function WalkerScroll() {
 
         {/* ── PANEL 3: MISSION ──────────────────────────────────────────── */}
         <section
-          className="walk-panel relative w-screen h-screen shrink-0 flex items-center justify-center overflow-hidden"
-          style={{ backgroundColor: "#0a0a0a" }}
+          className="walk-panel relative w-screen h-screen shrink-0 flex items-center justify-center overflow-hidden bg-white"
         >
           <div className="w-full max-w-7xl mx-auto grid lg:grid-cols-2 h-full">
 
@@ -314,13 +319,13 @@ export default function WalkerScroll() {
               <span className="mp-subtitle text-gold text-xs tracking-[0.2em] uppercase font-light block mb-6">
                 Our Mission
               </span>
-              <h2 className="mp-heading text-[32px] sm:text-[44px] lg:text-[52px] font-bold leading-[1.1] text-white mb-6">
+              <h2 className="mp-heading text-[32px] sm:text-[44px] lg:text-[52px] font-bold leading-[1.1] text-dark mb-6">
                 Inspiring Young Minds<br />
                 <span className="text-transparent bg-gradient-to-r from-primary via-gold to-primary bg-[length:200%_100%] bg-clip-text">
                   Through Quality Education
                 </span>
               </h2>
-              <p className="mp-body text-[#999] text-base leading-loose max-w-[420px]">
+              <p className="mp-body text-gray-600 text-base leading-loose max-w-[420px]">
                 At Malatamba Vidyaniketan, we are dedicated to providing a holistic education that nurtures academic excellence, character development, and lifelong learning in every student.
               </p>
               <div className="mp-stats flex flex-wrap items-center gap-x-3 gap-y-1 mt-8 text-sm">
@@ -356,7 +361,7 @@ export default function WalkerScroll() {
             </div>
           </div>
 
-          <div className="absolute bottom-8 right-8 text-white/30 text-xs font-mono">03 / 04</div>
+          <div className="absolute bottom-8 right-8 text-gray-400 text-xs font-mono">03 / 04</div>
         </section>
 
         {/* ── PANEL 4: HIGHLIGHTS ───────────────────────────────────────── */}
