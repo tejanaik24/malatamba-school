@@ -116,9 +116,12 @@ export default function WalkerScroll() {
       // ── Panel 2 (Values) entrance ─────────────────────────────────────
       const valsTl = gsap.timeline({ paused: true });
       valsTl
+        .from(panels[1].querySelector(".vp-subtitle"), {
+          x: -40, opacity: 0, duration: 0.5, ease: "power2.out", immediateRender: false,
+        })
         .from(panels[1].querySelector(".vp-title"), {
           x: -40, opacity: 0, duration: 0.6, ease: "power2.out", immediateRender: false,
-        })
+        }, 0.1)
         .from(panels[1].querySelectorAll(".vp-card"), {
           y: 50, opacity: 0, stagger: 0.1, duration: 0.5, ease: "power2.out", immediateRender: false,
         }, 0.15);
@@ -280,6 +283,9 @@ export default function WalkerScroll() {
         <section className="walk-panel relative w-screen h-screen shrink-0 flex items-center justify-center overflow-hidden bg-white">
           <div className="w-full max-w-7xl mx-auto px-6 sm:px-12 lg:px-16">
 
+            <span className="vp-subtitle text-primary text-xs tracking-[0.2em] uppercase font-light block mb-4">
+              Our Core Values
+            </span>
             <h2 className="vp-title text-primary text-5xl sm:text-6xl lg:text-7xl font-bold leading-none mb-8 lg:mb-10">
               WE VALUE
             </h2>
@@ -319,7 +325,7 @@ export default function WalkerScroll() {
           <div className="w-full max-w-7xl mx-auto grid lg:grid-cols-2 h-full">
 
             {/* Left — text */}
-            <div className="flex flex-col justify-center px-6 sm:px-12 lg:px-16 py-16 lg:py-0">
+            <div className="flex flex-col justify-center px-6 sm:px-12 lg:px-16 pt-28 pb-16 lg:pt-0 lg:pb-0">
               <span className="mp-subtitle text-gold text-xs tracking-[0.2em] uppercase font-light block mb-6">
                 Our Mission
               </span>
