@@ -78,15 +78,21 @@ export default function WalkerScroll() {
   const captionRef    = useRef<HTMLDivElement>(null);
   const [activeHero, setActiveHero] = useState(0);
 
-  // Animate caption in after React renders the new text
+  // Cinematic word-by-word reveal — fires on every image crossfade
   useEffect(() => {
     if (!captionRef.current) return;
-    gsap.killTweensOf(captionRef.current);
-    gsap.fromTo(
-      captionRef.current,
-      { opacity: 0, y: 16 },
-      { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
-    );
+
+    gsap.killTweensOf([".hw-subtitle", ".hw-word", ".hw-desc", ".hw-cta"]);
+    gsap.set(".hw-subtitle", { opacity: 0, y: 12 });
+    gsap.set(".hw-word",     { opacity: 0, y: 44 });
+    gsap.set(".hw-desc",     { opacity: 0, y: 18 });
+    gsap.set(".hw-cta",      { opacity: 0, y: 16 });
+
+    gsap.timeline()
+      .to(".hw-subtitle", { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" })
+      .to(".hw-word",     { opacity: 1, y: 0, duration: 0.65, stagger: 0.07, ease: "power4.out" }, "-=0.15")
+      .to(".hw-desc",     { opacity: 1, y: 0, duration: 0.5,  ease: "power3.out" }, "-=0.25")
+      .to(".hw-cta",      { opacity: 1, y: 0, duration: 0.45, stagger: 0.1, ease: "power3.out" }, "-=0.25");
   }, [activeHero]);
 
   useEffect(() => {
@@ -231,52 +237,79 @@ export default function WalkerScroll() {
           {/* Overlay */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-[rgba(118,33,35,0.7)]" />
 
-          {/* Caption — GSAP animates this ref on activeHero change */}
-          <div ref={captionRef} className="relative z-10 text-center px-6 max-w-5xl">
-            <p className="text-white/70 text-sm sm:text-base italic tracking-widest uppercase mb-4">
+          {/* Caption — GSAP word-reveal animates this on activeHero change */}
+          <div ref={captionRef} className="relative z-10 text-center px-6 max-w-6xl">
+
+            {/* Eyebrow label */}
+            <p className="hw-subtitle text-white/60 text-xs sm:text-sm font-light italic tracking-[0.22em] uppercase mb-5">
               {cap.subtitle}
             </p>
-            <h1>
-              {cap.lines.map((line, i) => (
+
+            {/* Headline — word-by-word reveal */}
+            <h1 className="mb-0">
+              {cap.lines.map((line, li) => (
                 <span
-                  key={`${activeHero}-${i}`}
-                  className={`block text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-tight tracking-tight ${
-                    i === cap.lines.length - 1 ? "text-gold" : "text-white"
+                  key={`${activeHero}-${li}`}
+                  className={`block leading-[1.0] tracking-[-0.03em] font-extrabold ${
+                    li === cap.lines.length - 1 ? "text-gold" : "text-white"
                   }`}
+                  style={{ fontSize: "clamp(48px, 9vw, 118px)" }}
                 >
-                  {line}
+                  {line.split(" ").map((word, wi, arr) => (
+                    <span
+                      key={wi}
+                      className="hw-word"
+                      style={{
+                        display: "inline-block",
+                        marginRight: wi < arr.length - 1 ? "0.22em" : 0,
+                      }}
+                    >
+                      {word}
+                    </span>
+                  ))}
                 </span>
               ))}
             </h1>
-            <p className="text-white/60 text-sm sm:text-base mt-6 max-w-xl mx-auto">
+
+            {/* Description */}
+            <p className="hw-desc text-white/55 text-sm sm:text-base mt-7 max-w-lg mx-auto leading-relaxed">
               {cap.description}
             </p>
+
+            {/* CTAs — inline under description */}
+            <div className="mt-8 flex flex-wrap justify-center gap-4">
+              <Link
+                href="/infrastructure"
+                className="hw-cta px-8 py-3.5 bg-primary text-white font-semibold rounded-full hover:bg-primary/90 transition-all text-sm sm:text-base whitespace-nowrap"
+              >
+                Explore School
+              </Link>
+              <Link
+                href="/admissions"
+                className="hw-cta px-8 py-3.5 border-2 border-gold text-gold font-semibold rounded-full hover:bg-gold hover:text-dark transition-all text-sm sm:text-base whitespace-nowrap"
+              >
+                Enquire Now
+              </Link>
+            </div>
           </div>
 
-          {/* CTAs */}
-          <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-10 flex flex-wrap justify-center gap-4">
-            <Link
-              href="/infrastructure"
-              className="px-8 py-3 bg-primary text-white font-semibold rounded-full hover:bg-primary/90 transition-all text-sm sm:text-base whitespace-nowrap"
-            >
-              Explore School
-            </Link>
-            <Link
-              href="/admissions"
-              className="px-8 py-3 border-2 border-gold text-gold font-semibold rounded-full hover:bg-gold hover:text-dark transition-all text-sm sm:text-base whitespace-nowrap"
-            >
-              Enquire Now
-            </Link>
+          {/* Progress dots */}
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex items-center gap-2">
+            <div className="w-6 h-1.5 rounded-full bg-gold" />
+            <div className="w-1.5 h-1.5 rounded-full bg-white/30" />
+            <div className="w-1.5 h-1.5 rounded-full bg-white/30" />
+            <div className="w-1.5 h-1.5 rounded-full bg-white/30" />
           </div>
 
-          {/* Scroll chevron */}
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 animate-bounce">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" className="text-white/40">
-              <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
+          {/* Scroll hint */}
+          <div className="absolute bottom-7 right-8 z-10 flex flex-col items-center gap-1.5">
+            <span className="text-white/30 text-[9px] font-mono tracking-[0.18em] uppercase">Scroll</span>
+            <div className="animate-bounce">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="text-white/35">
+                <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </div>
           </div>
-
-          <div className="absolute bottom-8 right-8 z-10 text-white/40 text-xs font-mono">01 / 04</div>
         </section>
 
         {/* ── PANEL 2: VALUES ───────────────────────────────────────────── */}
