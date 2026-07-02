@@ -313,42 +313,79 @@ export default function WalkerScroll() {
         </section>
 
         {/* ── PANEL 2: VALUES ───────────────────────────────────────────── */}
-        <section className="walk-panel relative w-screen h-screen shrink-0 flex items-start justify-center overflow-hidden bg-white">
-          <div className="w-full max-w-7xl mx-auto px-6 sm:px-12 lg:px-16 pt-24">
+        <section className="walk-panel relative w-screen h-screen shrink-0 flex flex-col justify-center overflow-hidden bg-white">
+          <div className="w-full max-w-7xl mx-auto px-6 sm:px-12 lg:px-16">
 
-            <span className="vp-subtitle text-primary text-xs tracking-[0.2em] uppercase font-light block mb-4">
-              Our Core Values
-            </span>
-            <h2 className="vp-title text-primary text-5xl sm:text-6xl lg:text-7xl font-bold leading-none mb-8 lg:mb-10">
-              WE VALUE
-            </h2>
+            {/* Header row */}
+            <div className="flex items-baseline gap-6 mb-6 lg:mb-8">
+              <h2 className="vp-title text-primary font-extrabold leading-none tracking-[-0.03em]"
+                style={{ fontSize: "clamp(40px, 6vw, 80px)" }}>
+                WE VALUE
+              </h2>
+              <span className="vp-subtitle text-gray-400 text-xs tracking-[0.22em] uppercase font-light hidden sm:block">
+                Our Core Values
+              </span>
+            </div>
 
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 w-full">
+            {/* 4-column grid — equal height cards */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-5 items-stretch">
               {values.map((v, i) => (
-                <div key={v.num} className="vp-card">
-                  <span className="block text-primary text-[44px] lg:text-[56px] font-bold leading-none mb-2">
+                <div key={v.num} className="vp-card flex flex-col group cursor-pointer">
+
+                  {/* Number */}
+                  <span
+                    className="block text-primary font-extrabold leading-none mb-2 tracking-[-0.02em]"
+                    style={{ fontSize: "clamp(36px, 4.5vw, 64px)" }}
+                  >
                     {v.num}
                   </span>
-                  <div className="relative w-full overflow-hidden" style={{ height: 'clamp(160px, 30vh, 360px)' }}>
+
+                  {/* Image — fixed aspect ratio so all cards identical height */}
+                  <div
+                    className="relative w-full overflow-hidden"
+                    style={{ aspectRatio: "4/5", maxHeight: "clamp(140px, 27vh, 260px)" }}
+                  >
                     <Image
                       src={v.image} alt={v.title} fill
-                      className="object-cover" quality={90} sizes="25vw" priority={i < 2}
+                      className="object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+                      quality={90} sizes="25vw" priority={i < 2}
                     />
                   </div>
-                  <h3 className="text-primary font-bold uppercase text-sm lg:text-base mt-3 mb-1 tracking-wide">
+
+                  {/* Title */}
+                  <h3 className="text-primary font-bold uppercase tracking-[0.12em] mt-3 mb-1"
+                    style={{ fontSize: "clamp(11px, 1.1vw, 14px)" }}>
                     {v.title}
                   </h3>
-                  <p className="text-gray-600 text-xs lg:text-sm leading-relaxed">{v.desc}</p>
-                  <Link href="/about" className="w-full mt-3 bg-dark text-white text-xs font-semibold py-2 lg:py-3 px-3 flex items-center justify-between hover:bg-primary transition-colors uppercase tracking-wider">
+
+                  {/* Description — grows to fill space */}
+                  <p className="text-gray-500 leading-relaxed flex-1"
+                    style={{ fontSize: "clamp(11px, 1vw, 13px)" }}>
+                    {v.desc}
+                  </p>
+
+                  {/* Button — always pinned to bottom */}
+                  <Link
+                    href="/about"
+                    className="mt-3 bg-dark text-white text-[11px] font-semibold py-2.5 px-3 flex items-center gap-2 uppercase tracking-[0.12em] hover:bg-primary transition-colors duration-300"
+                  >
+                    <span className="text-sm leading-none">›</span>
                     <span>Learn More</span>
-                    <span className="text-base leading-none">&rsaquo;</span>
                   </Link>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="absolute bottom-8 right-8 text-gray-400 text-xs font-mono">02 / 04</div>
+          {/* Progress dots */}
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-2">
+            <div className="w-1.5 h-1.5 rounded-full bg-gray-300" />
+            <div className="w-6 h-1.5 rounded-full bg-primary" />
+            <div className="w-1.5 h-1.5 rounded-full bg-gray-300" />
+            <div className="w-1.5 h-1.5 rounded-full bg-gray-300" />
+          </div>
+
+          <div className="absolute bottom-8 right-8 text-gray-300 text-xs font-mono">02 / 04</div>
         </section>
 
         {/* ── PANEL 3: MISSION ──────────────────────────────────────────── */}
