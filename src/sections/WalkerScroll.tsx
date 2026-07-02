@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useState, useCallback } from "react";
+import { useRef, useEffect, useCallback } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
@@ -17,17 +17,8 @@ const values = [
   { num: "04", title: "Integrity",   desc: "Instilling honesty and moral values for life.",             image: "/ai-images/values-integrity.png"   },
 ];
 
-const heroImages = [
-  "/ai-images/hero-1.png",
-  "/ai-images/hero-2.png",
-  "/ai-images/hero-3.png",
-];
-
-const heroCaptions = [
-  { subtitle: "Building Excellence", lines: ["YOUR CHILDREN'S", "FUTURE", "STARTS HERE"],         description: "Where tradition meets innovation in education since 2005."                },
-  { subtitle: "Inspiring Minds",     lines: ["WHERE EVERY", "LESSON BUILDS", "TOMORROW"],          description: "Smart classrooms and dedicated teachers shaping young minds."             },
-  { subtitle: "Embracing Growth",    lines: ["NURTURING", "POTENTIAL", "CELEBRATING GROWTH"],      description: "A vibrant campus where every child discovers their passion."              },
-];
+const HEADLINE_L1 = ["Your", "Children’s", "Future"];
+const HEADLINE_L2 = ["Starts", "Here"];
 
 /* ─── TiltImage (highlights panel) ─────────────────────────────────────── */
 
@@ -74,33 +65,21 @@ function TiltImage({ src, alt, label, className }: {
 
 export default function WalkerScroll() {
   const containerRef  = useRef<HTMLDivElement>(null);
-  const heroImgRefs   = useRef<(HTMLDivElement | null)[]>([]);
-  const captionRef    = useRef<HTMLDivElement>(null);
-  const [activeHero, setActiveHero] = useState(0);
-
-  // Cinematic word-by-word reveal — fires on every image crossfade
-  useEffect(() => {
-    if (!captionRef.current) return;
-
-    gsap.killTweensOf([".hw-subtitle", ".hw-word", ".hw-desc", ".hw-cta"]);
-    gsap.set(".hw-subtitle", { opacity: 0, y: 12 });
-    gsap.set(".hw-word",     { opacity: 0, y: 44 });
-    gsap.set(".hw-desc",     { opacity: 0, y: 18 });
-    gsap.set(".hw-cta",      { opacity: 0, y: 16 });
-
-    gsap.timeline()
-      .to(".hw-subtitle", { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" })
-      .to(".hw-word",     { opacity: 1, y: 0, duration: 0.65, stagger: 0.07, ease: "power4.out" }, "-=0.15")
-      .to(".hw-desc",     { opacity: 1, y: 0, duration: 0.5,  ease: "power3.out" }, "-=0.25")
-      .to(".hw-cta",      { opacity: 1, y: 0, duration: 0.45, stagger: 0.1, ease: "power3.out" }, "-=0.25");
-  }, [activeHero]);
+  const headlineRef   = useRef<HTMLHeadingElement>(null);
+  const eyebrowRef    = useRef<HTMLParagraphElement>(null);
+  const ctaRef        = useRef<HTMLDivElement>(null);
+  const card1Ref      = useRef<HTMLDivElement>(null);
+  const card2Ref      = useRef<HTMLDivElement>(null);
+  const card3Ref      = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
     const ctx = gsap.context(() => {
       const panels = gsap.utils.toArray<HTMLElement>(".walk-panel");
       if (!panels.length || !containerRef.current) return;
 
-      // ── GSAP official horizontal-scroll-snap pattern ──────────────────
+      /* ── GSAP horizontal-scroll-snap ────────────────────────────────── */
       const mainTween = gsap.to(panels, {
         xPercent: -100 * (panels.length - 1),
         ease: "none",
@@ -119,7 +98,8 @@ export default function WalkerScroll() {
           invalidateOnRefresh: true,
         },
       });
-      // ── Panel 2 (Values) entrance ─────────────────────────────────────
+
+      /* ── Panel 2 (Values) entrance ──────────────────────────────────── */
       const valsTl = gsap.timeline({ paused: true });
       valsTl
         .from(panels[1].querySelector(".vp-subtitle"), {
@@ -137,11 +117,11 @@ export default function WalkerScroll() {
         containerAnimation: mainTween,
         start: "left center",
         end: "right center",
-        onEnter: () => valsTl.play(),
+        onEnter:     () => valsTl.play(),
         onEnterBack: () => valsTl.play(),
       });
 
-      // ── Panel 3 (Mission) entrance ────────────────────────────────────
+      /* ── Panel 3 (Mission) entrance ─────────────────────────────────── */
       const missTl = gsap.timeline({ paused: true });
       missTl
         .from(panels[2].querySelector(".mp-subtitle"), { x: -30, opacity: 0, duration: 0.5, ease: "power2.out", immediateRender: false })
@@ -161,11 +141,11 @@ export default function WalkerScroll() {
         containerAnimation: mainTween,
         start: "left center",
         end: "right center",
-        onEnter: () => missTl.play(),
+        onEnter:     () => missTl.play(),
         onEnterBack: () => missTl.play(),
       });
 
-      // ── Panel 4 (Highlights) entrance ────────────────────────────────
+      /* ── Panel 4 (Highlights) entrance ─────────────────────────────── */
       const highTl = gsap.timeline({ paused: true });
       highTl
         .from(panels[3].querySelector(".hp-text"), {
@@ -180,143 +160,377 @@ export default function WalkerScroll() {
         containerAnimation: mainTween,
         start: "left center",
         end: "right center",
-        onEnter: () => highTl.play(),
+        onEnter:     () => highTl.play(),
         onEnterBack: () => highTl.play(),
       });
 
-      // ── Hero image crossfade (5 s hold, simultaneous fade) ────────────
-      const imgs = heroImgRefs.current.filter(Boolean) as HTMLDivElement[];
-      gsap.set(imgs, { opacity: 0 });
-      gsap.set(imgs[0], { opacity: 1 });
-
-      const heroTl = gsap.timeline({ repeat: -1 });
-      for (let i = 0; i < imgs.length; i++) {
-        const nextIdx = (i + 1) % imgs.length;
-        heroTl
-          .to({}, { duration: 5 })
-          .to(imgs[nextIdx], {
-            opacity: 1, duration: 1, ease: "power2.inOut",
-            onStart: () => setActiveHero(nextIdx),
-          }, "+=0")
-          .to(imgs[i], { opacity: 0, duration: 1, ease: "power2.inOut" }, "<");
+      /* ── Hero entrance (Panel 1) ────────────────────────────────────── */
+      if (reducedMotion) {
+        // Simple fade — respect OS preference
+        gsap.set([eyebrowRef.current, ctaRef.current], { opacity: 1, y: 0 });
+        gsap.set(".hw-word-inner", { y: "0%" });
+        return;
       }
+
+      const cards = [card1Ref.current, card2Ref.current, card3Ref.current].filter(Boolean) as HTMLElement[];
+
+      gsap.set(cards, { scale: 0.92, willChange: "transform" });
+      gsap.set([eyebrowRef.current, ctaRef.current], { opacity: 0, y: 18 });
+      // .hw-word-inner starts at translateY(110%) via inline style — GSAP takes over here
+
+      const entranceTl = gsap.timeline({ delay: 0.1 });
+      entranceTl
+        // Words rise from mask — stagger per word across both lines
+        .to(".hw-word-inner", {
+          y: "0%",
+          stagger: 0.08,
+          duration: 0.9,
+          ease: "power4.out",
+        })
+        // Cards scale in + initial CSS rotation settles naturally
+        .to(cards, {
+          scale: 1,
+          duration: 0.9,
+          stagger: 0.12,
+          ease: "power3.out",
+        }, "-=0.65")
+        // Eyebrow + CTA fade in
+        .to([eyebrowRef.current, ctaRef.current], {
+          opacity: 1,
+          y: 0,
+          stagger: 0.12,
+          duration: 0.6,
+          ease: "power3.out",
+        }, "-=0.4")
+        // Clear will-change after entrance completes
+        .call(() => {
+          gsap.set(cards, { clearProps: "willChange" });
+        });
+
+      // ── Idle float — gentle y oscillation per card ─────────────────
+      cards.forEach((card, i) => {
+        gsap.to(card, {
+          y: "+=6",
+          duration: 5.5 + i * 0.9,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+          delay: i * 1.8,
+        });
+      });
+
+      // ── Scroll-exit parallax as hero pans into Values panel ─────────
+      ScrollTrigger.create({
+        trigger: panels[0],
+        containerAnimation: mainTween,
+        start: "left left",
+        end:   "right left",
+        scrub: true,
+        onUpdate(self) {
+          const p = self.progress;
+          if (headlineRef.current) gsap.set(headlineRef.current, { y: -p * 60 });
+          // Three depth layers: near / mid / far
+          if (card1Ref.current) gsap.set(card1Ref.current, { x:  p * 24 });
+          if (card2Ref.current) gsap.set(card2Ref.current, { x: -p * 20 });
+          if (card3Ref.current) gsap.set(card3Ref.current, { x: -p * 48 });
+        },
+      });
 
     }, containerRef);
 
     return () => ctx.revert();
   }, []);
 
-  const cap = heroCaptions[activeHero];
-
   return (
-    /* Container — no overflow-hidden here; GSAP pin must not have it on the trigger */
     <div ref={containerRef} className="relative">
-      {/* overflow-hidden lives on the child, not the pin trigger */}
+      {/* overflow-hidden lives on the child flex container, not the pin trigger */}
       <div className="flex h-screen w-full overflow-hidden">
 
-        {/* ── PANEL 1: HERO ─────────────────────────────────────────────── */}
-        <section className="walk-panel relative w-screen h-screen shrink-0 flex items-center justify-center overflow-hidden">
+        {/* ════════════════════════════════════════════════════════════════
+            PANEL 1 — HERO  (bright-editorial / Scandinavian)
+        ════════════════════════════════════════════════════════════════ */}
+        <section
+          className="walk-panel relative w-screen h-screen shrink-0 overflow-hidden"
+          style={{ background: "#FAFAF7" }}
+        >
 
-          {/* Background images — stacked, crossfade via GSAP */}
-          <div className="absolute inset-0">
-            {heroImages.map((src, i) => (
-              <div
-                key={src}
-                ref={(el) => { heroImgRefs.current[i] = el; }}
-                className="absolute inset-0"
-                style={{ opacity: i === 0 ? 1 : 0 }}
-              >
-                <Image
-                  src={src} alt={`School hero ${i + 1}`} fill
-                  className="object-cover" priority={i === 0} quality={90} sizes="100vw"
-                />
-              </div>
-            ))}
+          {/* ── Card 1 — large, BEHIND headline (z-5) ───────────────── */}
+          <div
+            ref={card1Ref}
+            className="absolute hidden md:block"
+            style={{
+              width: "clamp(240px, 30vw, 480px)",
+              height: "clamp(320px, 44vh, 580px)",
+              aspectRatio: "3 / 4",
+              right: "12vw",
+              top: "8%",
+              transform: "rotate(-2deg)",
+              zIndex: 5,
+            }}
+          >
+            <Image
+              src="/ai-images/hero-1.png"
+              alt="Students at Malatamba Vidyaniketan"
+              fill
+              priority
+              sizes="30vw"
+              style={{ objectFit: "contain" }}
+            />
           </div>
 
-          {/* Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-[rgba(118,33,35,0.7)]" />
+          {/* ── Card 2 — medium, IN FRONT (z-30) ───────────────────── */}
+          <div
+            ref={card2Ref}
+            className="absolute hidden md:block"
+            style={{
+              width: "clamp(160px, 20vw, 320px)",
+              height: "clamp(200px, 30vh, 420px)",
+              aspectRatio: "3 / 4",
+              right: "2vw",
+              top: "4%",
+              transform: "rotate(3deg)",
+              zIndex: 30,
+            }}
+          >
+            <Image
+              src="/ai-images/hero-2.png"
+              alt="School life at Malatamba Vidyaniketan"
+              fill
+              sizes="20vw"
+              style={{ objectFit: "contain" }}
+            />
+          </div>
 
-          {/* Caption — GSAP word-reveal animates this on activeHero change */}
-          <div ref={captionRef} className="relative z-10 text-center px-6 max-w-6xl">
+          {/* ── Card 3 — small, IN FRONT (z-30) ────────────────────── */}
+          <div
+            ref={card3Ref}
+            className="absolute hidden md:block"
+            style={{
+              width: "clamp(130px, 16vw, 260px)",
+              height: "clamp(170px, 24vh, 360px)",
+              aspectRatio: "3 / 4",
+              right: "20vw",
+              bottom: "10%",
+              transform: "rotate(-4deg)",
+              zIndex: 30,
+            }}
+          >
+            <Image
+              src="/ai-images/hero-3.png"
+              alt="Campus activities at Malatamba Vidyaniketan"
+              fill
+              sizes="16vw"
+              style={{ objectFit: "contain" }}
+            />
+          </div>
 
-            {/* Eyebrow label */}
-            <p className="hw-subtitle text-white/60 text-xs sm:text-sm font-light italic tracking-[0.22em] uppercase mb-5">
-              {cap.subtitle}
+          {/* ── Typography zone ─────────────────────────────────────── */}
+          <div
+            className="absolute inset-y-0 left-0 flex flex-col justify-center"
+            style={{
+              paddingLeft: "clamp(24px, 8vw, 120px)",
+              paddingRight: "clamp(20px, 3vw, 48px)",
+              maxWidth: "min(680px, 56vw)",
+              zIndex: 20,
+            }}
+          >
+            {/* Eyebrow — hidden initially, fades in last */}
+            <p
+              ref={eyebrowRef}
+              style={{
+                fontFamily: "'Inter', system-ui, sans-serif",
+                fontSize: "clamp(9px, 0.8vw, 11px)",
+                letterSpacing: "0.22em",
+                textTransform: "uppercase",
+                color: "#762123",
+                marginBottom: "clamp(14px, 2.2vh, 26px)",
+                fontWeight: 600,
+                opacity: 0,
+              }}
+            >
+              Malatamba Vidyaniketan&nbsp;&middot;&nbsp;Visakhapatnam
             </p>
 
-            {/* Headline — word-by-word reveal */}
-            <h1 className="mb-0">
-              {cap.lines.map((line, li) => (
-                <span
-                  key={`${activeHero}-${li}`}
-                  className={`block leading-[1.0] tracking-[-0.03em] font-extrabold ${
-                    li === cap.lines.length - 1 ? "text-gold" : "text-white"
-                  }`}
-                  style={{ fontSize: "clamp(48px, 9vw, 118px)" }}
-                >
-                  {line.split(" ").map((word, wi, arr) => (
+            {/* Headline — words rise from individual overflow:hidden masks */}
+            <h1
+              ref={headlineRef}
+              style={{
+                fontFamily: "var(--font-fraunces, Georgia, serif)",
+                fontSize: "clamp(2.4rem, 11vw, 9.5rem)",
+                fontWeight: 900,
+                lineHeight: 1.0,
+                color: "#1a0a0a",
+                margin: 0,
+                letterSpacing: "-0.03em",
+              }}
+            >
+              {/* Line 1: Your Children's Future */}
+              <span style={{ display: "block" }}>
+                {HEADLINE_L1.map((word, i) => (
+                  <span key={i} style={{ display: "inline" }}>
+                    {/* Mask wrapper — overflow hidden clips the rising word */}
                     <span
-                      key={wi}
-                      className="hw-word"
                       style={{
                         display: "inline-block",
-                        marginRight: wi < arr.length - 1 ? "0.22em" : 0,
+                        overflow: "hidden",
+                        verticalAlign: "bottom",
+                        lineHeight: 1.12,
                       }}
                     >
-                      {word}
+                      <span
+                        className="hw-word-inner"
+                        style={{ display: "inline-block", transform: "translateY(110%)" }}
+                      >
+                        {word}
+                      </span>
                     </span>
-                  ))}
-                </span>
-              ))}
+                    {/* Explicit space span preserves word gaps through GSAP transforms */}
+                    {i < HEADLINE_L1.length - 1 && (
+                      <span style={{ display: "inline-block", width: "0.25em" }} aria-hidden="true" />
+                    )}
+                  </span>
+                ))}
+              </span>
+
+              {/* Line 2: Starts Here — primary maroon */}
+              <span style={{ display: "block", color: "#762123" }}>
+                {HEADLINE_L2.map((word, i) => (
+                  <span key={i} style={{ display: "inline" }}>
+                    <span
+                      style={{
+                        display: "inline-block",
+                        overflow: "hidden",
+                        verticalAlign: "bottom",
+                        lineHeight: 1.12,
+                      }}
+                    >
+                      <span
+                        className="hw-word-inner"
+                        style={{ display: "inline-block", transform: "translateY(110%)" }}
+                      >
+                        {word}
+                      </span>
+                    </span>
+                    {i === 0 && (
+                      <span style={{ display: "inline-block", width: "0.25em" }} aria-hidden="true" />
+                    )}
+                  </span>
+                ))}
+              </span>
             </h1>
 
-            {/* Description */}
-            <p className="hw-desc text-white/55 text-sm sm:text-base mt-7 max-w-lg mx-auto leading-relaxed">
-              {cap.description}
-            </p>
-
-            {/* CTAs — inline under description */}
-            <div className="mt-8 flex flex-wrap justify-center gap-4">
-              <Link
-                href="/infrastructure"
-                className="hw-cta px-8 py-3.5 bg-primary text-white font-semibold rounded-full hover:bg-primary/90 transition-all text-sm sm:text-base whitespace-nowrap"
-              >
-                Explore School
-              </Link>
+            {/* CTA row */}
+            <div
+              ref={ctaRef}
+              style={{
+                marginTop: "clamp(24px, 4vh, 52px)",
+                display: "flex",
+                alignItems: "center",
+                gap: "clamp(16px, 2.5vw, 36px)",
+                flexWrap: "wrap",
+                opacity: 0,
+              }}
+            >
               <Link
                 href="/admissions"
-                className="hw-cta px-8 py-3.5 border-2 border-gold text-gold font-semibold rounded-full hover:bg-gold hover:text-dark transition-all text-sm sm:text-base whitespace-nowrap"
+                style={{
+                  display: "inline-block",
+                  background: "#762123",
+                  color: "#FAFAF7",
+                  fontFamily: "'Inter', system-ui, sans-serif",
+                  fontSize: "clamp(12px, 0.95vw, 15px)",
+                  fontWeight: 600,
+                  letterSpacing: "0.05em",
+                  padding: "14px 32px",
+                  textDecoration: "none",
+                  transition: "background 0.25s",
+                }}
+                onMouseEnter={e => (e.currentTarget.style.background = "#5a191b")}
+                onMouseLeave={e => (e.currentTarget.style.background = "#762123")}
               >
                 Enquire Now
               </Link>
+              <Link
+                href="/infrastructure"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "7px",
+                  color: "#762123",
+                  fontFamily: "'Inter', system-ui, sans-serif",
+                  fontSize: "clamp(12px, 0.95vw, 15px)",
+                  fontWeight: 500,
+                  letterSpacing: "0.02em",
+                  textDecoration: "none",
+                  borderBottom: "1.5px solid currentColor",
+                  paddingBottom: "2px",
+                }}
+              >
+                Explore School
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </Link>
+            </div>
+
+            {/* Mobile: 2-up card collage (no GSAP loops on mobile) */}
+            <div
+              className="md:hidden"
+              style={{
+                marginTop: "clamp(20px, 4vh, 28px)",
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: "8px",
+                height: "clamp(160px, 38vw, 260px)",
+              }}
+            >
+              <div style={{ position: "relative", gridRow: "span 2" }}>
+                <Image src="/ai-images/hero-1.png" alt="Students" fill priority style={{ objectFit: "contain" }} sizes="45vw" />
+              </div>
+              <div style={{ position: "relative" }}>
+                <Image src="/ai-images/hero-2.png" alt="School life" fill style={{ objectFit: "contain" }} sizes="45vw" />
+              </div>
+              <div style={{ position: "relative" }}>
+                <Image src="/ai-images/hero-3.png" alt="Campus" fill style={{ objectFit: "contain" }} sizes="45vw" />
+              </div>
             </div>
           </div>
 
-          {/* Progress dots */}
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex items-center gap-2">
-            <div className="w-6 h-1.5 rounded-full bg-gold" />
-            <div className="w-1.5 h-1.5 rounded-full bg-white/30" />
-            <div className="w-1.5 h-1.5 rounded-full bg-white/30" />
-            <div className="w-1.5 h-1.5 rounded-full bg-white/30" />
-          </div>
+          {/* Decorative accent line — desktop only */}
+          <div
+            className="absolute hidden md:block"
+            style={{
+              bottom: "12%",
+              left: "clamp(24px, 8vw, 120px)",
+              width: "44px",
+              height: "2px",
+              background: "#762123",
+              opacity: 0.5,
+            }}
+          />
 
-          {/* Scroll hint */}
-          <div className="absolute bottom-7 right-8 z-10 flex flex-col items-center gap-1.5">
-            <span className="text-white/30 text-[9px] font-mono tracking-[0.18em] uppercase">Scroll</span>
-            <div className="animate-bounce">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="text-white/35">
-                <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </div>
+          {/* Panel counter */}
+          <div
+            className="absolute bottom-7 right-8 z-10 hidden md:block"
+            style={{
+              color: "#762123",
+              fontFamily: "'Inter', system-ui, sans-serif",
+              fontSize: "11px",
+              letterSpacing: "0.1em",
+              fontWeight: 500,
+              opacity: 0.5,
+            }}
+          >
+            01 / 04
           </div>
         </section>
 
-        {/* ── PANEL 2: VALUES ───────────────────────────────────────────── */}
+        {/* ════════════════════════════════════════════════════════════════
+            PANEL 2 — VALUES  (unchanged)
+        ════════════════════════════════════════════════════════════════ */}
         <section className="walk-panel relative w-screen h-screen shrink-0 flex flex-col justify-center overflow-hidden bg-white">
           <div className="w-full max-w-7xl mx-auto px-6 sm:px-12 lg:px-16">
 
-            {/* Header row */}
             <div className="flex items-baseline gap-6 mb-6 lg:mb-8">
               <h2 className="vp-title text-primary font-extrabold leading-none tracking-[-0.03em]"
                 style={{ fontSize: "clamp(40px, 6vw, 80px)" }}>
@@ -327,7 +541,6 @@ export default function WalkerScroll() {
               </span>
             </div>
 
-            {/* 4-column grid */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
               {values.map((v, i) => (
                 <div
@@ -349,7 +562,6 @@ export default function WalkerScroll() {
                     gsap.to(card.querySelector(".vp-num-img"),     { opacity: 0,    duration: 0.15 });
                   }}
                 >
-                  {/* Number above — big maroon, fades out on hover */}
                   <span
                     className="vp-num-above block text-primary font-extrabold leading-[1] select-none"
                     style={{ fontSize: "clamp(40px, 5vw, 72px)", paddingBottom: "4px" }}
@@ -357,7 +569,6 @@ export default function WalkerScroll() {
                     {v.num}
                   </span>
 
-                  {/* Image — starts small (28%), expands to 82% on hover */}
                   <div
                     className="vp-img-wrap relative w-full overflow-hidden"
                     style={{ height: "28%" }}
@@ -367,12 +578,10 @@ export default function WalkerScroll() {
                       className="object-cover object-top"
                       quality={90} sizes="25vw" priority={i < 2}
                     />
-                    {/* Dark overlay for number contrast */}
                     <div
                       className="vp-overlay absolute inset-0 bg-black/30"
                       style={{ opacity: 0 }}
                     />
-                    {/* Number on image — white, fades in on hover */}
                     <span
                       className="vp-num-img absolute top-2 left-3 z-10 text-white font-extrabold leading-[1] select-none"
                       style={{
@@ -385,7 +594,6 @@ export default function WalkerScroll() {
                     </span>
                   </div>
 
-                  {/* Content — title + desc + button, sits below image */}
                   <div className="pt-2">
                     <h3
                       className="text-primary font-bold uppercase tracking-[0.1em] mb-0.5"
@@ -412,7 +620,6 @@ export default function WalkerScroll() {
             </div>
           </div>
 
-          {/* Progress dots */}
           <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-2">
             <div className="w-1.5 h-1.5 rounded-full bg-gray-300" />
             <div className="w-6 h-1.5 rounded-full bg-primary" />
@@ -423,13 +630,14 @@ export default function WalkerScroll() {
           <div className="absolute bottom-8 right-8 text-gray-300 text-xs font-mono">02 / 04</div>
         </section>
 
-        {/* ── PANEL 3: MISSION ──────────────────────────────────────────── */}
+        {/* ════════════════════════════════════════════════════════════════
+            PANEL 3 — MISSION  (unchanged)
+        ════════════════════════════════════════════════════════════════ */}
         <section
           className="walk-panel relative w-screen h-screen shrink-0 flex items-center justify-center overflow-hidden bg-white"
         >
           <div className="w-full max-w-7xl mx-auto grid lg:grid-cols-2 h-full">
 
-            {/* Left — text */}
             <div className="flex flex-col justify-center px-6 sm:px-12 lg:px-16 pt-36 pb-16 lg:pt-0 lg:pb-0">
               <span className="mp-subtitle text-gold text-xs tracking-[0.2em] uppercase font-light block mb-6">
                 Our Mission
@@ -460,7 +668,6 @@ export default function WalkerScroll() {
               </div>
             </div>
 
-            {/* Right — image */}
             <div
               className="mp-image relative hidden lg:block h-full"
               style={{ clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 88%)" }}
@@ -479,7 +686,9 @@ export default function WalkerScroll() {
           <div className="absolute bottom-8 right-8 text-gray-400 text-xs font-mono">03 / 04</div>
         </section>
 
-        {/* ── PANEL 4: HIGHLIGHTS ───────────────────────────────────────── */}
+        {/* ════════════════════════════════════════════════════════════════
+            PANEL 4 — HIGHLIGHTS  (unchanged)
+        ════════════════════════════════════════════════════════════════ */}
         <section className="walk-panel relative w-screen h-screen shrink-0 flex items-center justify-center overflow-hidden bg-light">
           <div className="w-full max-w-7xl mx-auto px-6 sm:px-12 lg:px-16 grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
 
@@ -505,7 +714,6 @@ export default function WalkerScroll() {
               </Link>
             </div>
 
-            {/* Image grid — h-[min(380px,42vh)] keeps it contained on short screens */}
             <div className="grid grid-cols-2 gap-3 h-[min(380px,42vh)]">
               <TiltImage
                 src="/ai-images/highlights-friends.png"

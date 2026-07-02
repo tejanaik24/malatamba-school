@@ -1,8 +1,17 @@
 import type { Metadata } from "next";
+import { Fraunces } from "next/font/google";
 import "./globals.css";
 import ClientLayout from "./ClientLayout";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import MobileStickyBar from "@/components/MobileStickyBar";
+
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  variable: "--font-fraunces",
+  display: "swap",
+  weight: ["400", "700", "900"],
+  style: ["normal", "italic"],
+});
 
 export const metadata: Metadata = {
   title: {
@@ -45,7 +54,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={fraunces.variable}>
       <head>
         <script
           type="application/ld+json"
