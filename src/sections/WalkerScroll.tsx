@@ -340,16 +340,19 @@ export default function WalkerScroll() {
                     {v.num}
                   </span>
 
-                  {/* Image — fixed aspect ratio so all cards identical height */}
+                  {/* Image — fixed aspect ratio, zoom on hover */}
                   <div
                     className="relative w-full overflow-hidden"
                     style={{ aspectRatio: "4/5", maxHeight: "clamp(140px, 27vh, 260px)" }}
                   >
-                    <Image
-                      src={v.image} alt={v.title} fill
-                      className="object-cover transition-transform duration-500 ease-out group-hover:scale-110"
-                      quality={90} sizes="25vw" priority={i < 2}
-                    />
+                    {/* Inner wrapper scales — overflow:hidden on parent clips it */}
+                    <div className="absolute inset-0 transition-transform duration-500 ease-out group-hover:scale-110">
+                      <Image
+                        src={v.image} alt={v.title} fill
+                        className="object-cover"
+                        quality={90} sizes="25vw" priority={i < 2}
+                      />
+                    </div>
                   </div>
 
                   {/* Title */}
