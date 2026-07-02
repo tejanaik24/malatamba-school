@@ -327,73 +327,83 @@ export default function WalkerScroll() {
               </span>
             </div>
 
-            {/* 4-column grid — fixed-height cards, GSAP image expand on hover */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-5 items-start">
+            {/* 4-column grid */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
               {values.map((v, i) => (
                 <div
                   key={v.num}
-                  className="vp-card relative overflow-hidden cursor-pointer"
-                  style={{ height: "clamp(290px, 48vh, 420px)" }}
+                  className="vp-card relative overflow-hidden cursor-pointer bg-white"
+                  style={{ height: "clamp(260px, 44vh, 400px)" }}
                   onMouseEnter={(e) => {
                     const card = e.currentTarget;
-                    gsap.to(card.querySelector(".vp-img-wrap"),  { height: "73%", duration: 0.5, ease: "power3.out" });
-                    gsap.to(card.querySelector(".vp-num-above"), { opacity: 0, y: -6, duration: 0.22 });
-                    gsap.to(card.querySelector(".vp-num-img"),   { opacity: 1, duration: 0.28, delay: 0.18 });
+                    gsap.to(card.querySelector(".vp-img-wrap"),    { height: "82%", duration: 0.55, ease: "power3.out" });
+                    gsap.to(card.querySelector(".vp-overlay"),     { opacity: 1,    duration: 0.4 });
+                    gsap.to(card.querySelector(".vp-num-above"),   { opacity: 0, y: -8, duration: 0.2 });
+                    gsap.to(card.querySelector(".vp-num-img"),     { opacity: 1,    duration: 0.3, delay: 0.2 });
                   }}
                   onMouseLeave={(e) => {
                     const card = e.currentTarget;
-                    gsap.to(card.querySelector(".vp-img-wrap"),  { height: "44%", duration: 0.45, ease: "power3.inOut" });
-                    gsap.to(card.querySelector(".vp-num-above"), { opacity: 1, y: 0, duration: 0.3 });
-                    gsap.to(card.querySelector(".vp-num-img"),   { opacity: 0, duration: 0.18 });
+                    gsap.to(card.querySelector(".vp-img-wrap"),    { height: "28%", duration: 0.5, ease: "power3.inOut" });
+                    gsap.to(card.querySelector(".vp-overlay"),     { opacity: 0,    duration: 0.35 });
+                    gsap.to(card.querySelector(".vp-num-above"),   { opacity: 1, y: 0, duration: 0.3 });
+                    gsap.to(card.querySelector(".vp-num-img"),     { opacity: 0,    duration: 0.15 });
                   }}
                 >
-                  {/* Number above image — maroon, fades out on hover */}
+                  {/* Number above — big maroon, fades out on hover */}
                   <span
-                    className="vp-num-above block text-primary font-extrabold leading-none"
-                    style={{ fontSize: "clamp(36px, 4.5vw, 64px)", paddingBottom: "6px" }}
+                    className="vp-num-above block text-primary font-extrabold leading-[1] select-none"
+                    style={{ fontSize: "clamp(40px, 5vw, 72px)", paddingBottom: "4px" }}
                   >
                     {v.num}
                   </span>
 
-                  {/* Image wrapper — starts 44% of card height, grows to 73% on hover */}
-                  <div className="vp-img-wrap relative w-full overflow-hidden" style={{ height: "44%" }}>
+                  {/* Image — starts small (28%), expands to 82% on hover */}
+                  <div
+                    className="vp-img-wrap relative w-full overflow-hidden"
+                    style={{ height: "28%" }}
+                  >
+                    <Image
+                      src={v.image} alt={v.title} fill
+                      className="object-cover object-top"
+                      quality={90} sizes="25vw" priority={i < 2}
+                    />
+                    {/* Dark overlay for number contrast */}
+                    <div
+                      className="vp-overlay absolute inset-0 bg-black/30"
+                      style={{ opacity: 0 }}
+                    />
                     {/* Number on image — white, fades in on hover */}
                     <span
-                      className="vp-num-img absolute top-2 left-3 z-10 text-white font-extrabold leading-none"
+                      className="vp-num-img absolute top-2 left-3 z-10 text-white font-extrabold leading-[1] select-none"
                       style={{
-                        fontSize: "clamp(36px, 4.5vw, 64px)",
+                        fontSize: "clamp(40px, 5vw, 72px)",
                         opacity: 0,
-                        textShadow: "0 2px 14px rgba(0,0,0,0.6)",
+                        textShadow: "0 2px 16px rgba(0,0,0,0.7)",
                       }}
                     >
                       {v.num}
                     </span>
-                    <Image
-                      src={v.image} alt={v.title} fill
-                      className="object-cover"
-                      quality={90} sizes="25vw" priority={i < 2}
-                    />
                   </div>
 
-                  {/* Content below — gets pushed down as image grows */}
-                  <div className="pt-2.5">
+                  {/* Content — title + desc + button, sits below image */}
+                  <div className="pt-2">
                     <h3
-                      className="text-primary font-bold uppercase tracking-[0.12em] mb-1"
-                      style={{ fontSize: "clamp(11px, 1.1vw, 14px)" }}
+                      className="text-primary font-bold uppercase tracking-[0.1em] mb-0.5"
+                      style={{ fontSize: "clamp(11px, 1.1vw, 13px)" }}
                     >
                       {v.title}
                     </h3>
                     <p
-                      className="text-gray-500 leading-relaxed mb-2.5"
-                      style={{ fontSize: "clamp(11px, 1vw, 13px)" }}
+                      className="text-gray-500 leading-snug mb-2"
+                      style={{ fontSize: "clamp(10px, 0.9vw, 12px)" }}
                     >
                       {v.desc}
                     </p>
                     <Link
                       href="/about"
-                      className="bg-dark text-white text-[11px] font-semibold py-2.5 px-3 inline-flex items-center gap-2 uppercase tracking-[0.12em] hover:bg-primary transition-colors duration-300 w-full"
+                      className="bg-dark text-white text-[10px] font-semibold py-2 px-3 inline-flex items-center gap-1.5 uppercase tracking-[0.12em] hover:bg-primary transition-colors duration-300 w-full"
                     >
-                      <span className="text-sm leading-none">›</span>
+                      <span className="text-xs leading-none">›</span>
                       <span>Learn More</span>
                     </Link>
                   </div>
