@@ -327,54 +327,76 @@ export default function WalkerScroll() {
               </span>
             </div>
 
-            {/* 4-column grid — equal height cards */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-5 items-stretch">
+            {/* 4-column grid — fixed-height cards, GSAP image expand on hover */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-5 items-start">
               {values.map((v, i) => (
-                <div key={v.num} className="vp-card flex flex-col group cursor-pointer">
-
-                  {/* Number */}
+                <div
+                  key={v.num}
+                  className="vp-card relative overflow-hidden cursor-pointer"
+                  style={{ height: "clamp(290px, 48vh, 420px)" }}
+                  onMouseEnter={(e) => {
+                    const card = e.currentTarget;
+                    gsap.to(card.querySelector(".vp-img-wrap"),  { height: "73%", duration: 0.5, ease: "power3.out" });
+                    gsap.to(card.querySelector(".vp-num-above"), { opacity: 0, y: -6, duration: 0.22 });
+                    gsap.to(card.querySelector(".vp-num-img"),   { opacity: 1, duration: 0.28, delay: 0.18 });
+                  }}
+                  onMouseLeave={(e) => {
+                    const card = e.currentTarget;
+                    gsap.to(card.querySelector(".vp-img-wrap"),  { height: "44%", duration: 0.45, ease: "power3.inOut" });
+                    gsap.to(card.querySelector(".vp-num-above"), { opacity: 1, y: 0, duration: 0.3 });
+                    gsap.to(card.querySelector(".vp-num-img"),   { opacity: 0, duration: 0.18 });
+                  }}
+                >
+                  {/* Number above image — maroon, fades out on hover */}
                   <span
-                    className="block text-primary font-extrabold leading-none mb-2 tracking-[-0.02em]"
-                    style={{ fontSize: "clamp(36px, 4.5vw, 64px)" }}
+                    className="vp-num-above block text-primary font-extrabold leading-none"
+                    style={{ fontSize: "clamp(36px, 4.5vw, 64px)", paddingBottom: "6px" }}
                   >
                     {v.num}
                   </span>
 
-                  {/* Image — fixed aspect ratio, zoom on hover */}
-                  <div
-                    className="relative w-full overflow-hidden"
-                    style={{ aspectRatio: "4/5", maxHeight: "clamp(140px, 27vh, 260px)" }}
-                  >
-                    {/* Inner wrapper scales — overflow:hidden on parent clips it */}
-                    <div className="absolute inset-0 transition-transform duration-500 ease-out group-hover:scale-110">
-                      <Image
-                        src={v.image} alt={v.title} fill
-                        className="object-cover"
-                        quality={90} sizes="25vw" priority={i < 2}
-                      />
-                    </div>
+                  {/* Image wrapper — starts 44% of card height, grows to 73% on hover */}
+                  <div className="vp-img-wrap relative w-full overflow-hidden" style={{ height: "44%" }}>
+                    {/* Number on image — white, fades in on hover */}
+                    <span
+                      className="vp-num-img absolute top-2 left-3 z-10 text-white font-extrabold leading-none"
+                      style={{
+                        fontSize: "clamp(36px, 4.5vw, 64px)",
+                        opacity: 0,
+                        textShadow: "0 2px 14px rgba(0,0,0,0.6)",
+                      }}
+                    >
+                      {v.num}
+                    </span>
+                    <Image
+                      src={v.image} alt={v.title} fill
+                      className="object-cover"
+                      quality={90} sizes="25vw" priority={i < 2}
+                    />
                   </div>
 
-                  {/* Title */}
-                  <h3 className="text-primary font-bold uppercase tracking-[0.12em] mt-3 mb-1"
-                    style={{ fontSize: "clamp(11px, 1.1vw, 14px)" }}>
-                    {v.title}
-                  </h3>
-
-                  {/* Description — grows to fill space */}
-                  <p className="text-gray-500 leading-relaxed flex-1"
-                    style={{ fontSize: "clamp(11px, 1vw, 13px)" }}>
-                    {v.desc}
-                  </p>
-
-                  {/* Button — always pinned to bottom */}
-                  <Link
-                    href="/about"
-                    className="mt-3 bg-dark text-white text-[11px] font-semibold py-2.5 px-3 flex items-center gap-2 uppercase tracking-[0.12em] hover:bg-primary transition-colors duration-300"
-                  >
-                    <span className="text-sm leading-none">›</span>
-                    <span>Learn More</span>
-                  </Link>
+                  {/* Content below — gets pushed down as image grows */}
+                  <div className="pt-2.5">
+                    <h3
+                      className="text-primary font-bold uppercase tracking-[0.12em] mb-1"
+                      style={{ fontSize: "clamp(11px, 1.1vw, 14px)" }}
+                    >
+                      {v.title}
+                    </h3>
+                    <p
+                      className="text-gray-500 leading-relaxed mb-2.5"
+                      style={{ fontSize: "clamp(11px, 1vw, 13px)" }}
+                    >
+                      {v.desc}
+                    </p>
+                    <Link
+                      href="/about"
+                      className="bg-dark text-white text-[11px] font-semibold py-2.5 px-3 inline-flex items-center gap-2 uppercase tracking-[0.12em] hover:bg-primary transition-colors duration-300 w-full"
+                    >
+                      <span className="text-sm leading-none">›</span>
+                      <span>Learn More</span>
+                    </Link>
+                  </div>
                 </div>
               ))}
             </div>
