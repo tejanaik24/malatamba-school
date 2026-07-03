@@ -659,16 +659,19 @@ export default function WalkerScroll() {
             <div
               className="mp-students absolute bottom-[18%]"
               style={{
-                right: "7.5%",
-                width: "85%",
+                right: "5%",
+                width: "90%",
                 aspectRatio: "2 / 3",
                 zIndex: 10,
+                /* Clip 9% from each side to remove white margins in the image */
+                clipPath: "inset(0 9% 0 9%)",
+                overflow: "hidden",
               }}
             >
-              {/* Desktop: bleed 10% left into text area for editorial overlap */}
+              {/* Desktop: bleed slightly left for editorial overlap */}
               <style>{`
                 @media (min-width: 1024px) {
-                  .mp-students { right: 0 !important; width: 110% !important; }
+                  .mp-students { right: 0 !important; width: 112% !important; }
                 }
               `}</style>
               <Image
@@ -676,11 +679,10 @@ export default function WalkerScroll() {
                 alt="Malatamba Vidyaniketan students in school uniform"
                 fill
                 priority
-                sizes="(max-width: 1023px) 85vw, 50vw"
+                sizes="(max-width: 1023px) 90vw, 55vw"
                 style={{
-                  objectFit: "contain",
-                  objectPosition: "bottom center",
-                  mixBlendMode: "multiply",
+                  objectFit: "cover",
+                  objectPosition: "center 5%",
                 }}
               />
             </div>
