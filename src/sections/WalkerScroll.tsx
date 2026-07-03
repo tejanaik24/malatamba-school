@@ -647,27 +647,29 @@ export default function WalkerScroll() {
             />
 
             {/* Students image — GSAP drops from above via y: -120vh → 0
-                Height is capped in vh so it never exceeds the maroon column.
-                aspectRatio is NOT used — explicit height prevents overflow.   */}
+                Container uses calc(height * 2/3) to match the image's native
+                2:3 ratio exactly → objectFit:contain fills edge-to-edge with
+                no empty space. clipPath then trims the white margins from the
+                AI-generated image on both sides.                              */}
             <div
               className="mp-students absolute bottom-[18%]"
               style={{
-                /* Mobile: maroon column = 50vh, platform = 9vh → 41vh usable */
-                right: "7.5%",
-                width: "85%",
-                height: "38vh",
+                right: "50%",
+                transform: "translateX(50%)",  /* centre inside column on mobile */
+                height: "36vh",
+                width: "calc(36vh * 2 / 3)",   /* locks 2:3 ratio */
                 zIndex: 10,
                 overflow: "hidden",
+                clipPath: "inset(0 9% 0 9%)",  /* trims white margins */
               }}
             >
               <style>{`
                 @media (min-width: 1024px) {
-                  /* Desktop: maroon column = 100vh, platform = 18vh → 82vh usable
-                     Keep height < 80vh so top edge stays within the section      */
                   .mp-students {
-                    right: 0 !important;
-                    width: 100% !important;
+                    right: 2% !important;
+                    transform: none !important;
                     height: 78vh !important;
+                    width: calc(78vh * 2 / 3) !important;  /* locks 2:3 ratio */
                   }
                 }
               `}</style>
@@ -676,9 +678,9 @@ export default function WalkerScroll() {
                 alt="Malatamba Vidyaniketan students in school uniform"
                 fill
                 priority
-                sizes="(max-width: 1023px) 85vw, 45vw"
+                sizes="(max-width: 1023px) 25vw, 35vw"
                 style={{
-                  objectFit: "cover",
+                  objectFit: "contain",        /* 2:3 container + 2:3 image = full fill */
                   objectPosition: "center top",
                 }}
               />
