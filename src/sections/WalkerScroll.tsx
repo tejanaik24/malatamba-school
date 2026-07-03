@@ -164,20 +164,11 @@ export default function WalkerScroll() {
         onEnterBack: () => missTl.restart(),
       });
 
-      // Exit parallax: students drift up as panel scrolls away
-      if (!reducedMotion) {
-        gsap.to(panels[2].querySelector(".mp-students"), {
-          y: "-30px",
-          ease: "none",
-          scrollTrigger: {
-            trigger: panels[2],
-            containerAnimation: mainTween,
-            start: "right right",
-            end:   "right left",
-            scrub: true,
-          },
-        });
-      }
+      // NOTE: exit parallax removed — gsap.to() with scrub records the "from" state
+      // at creation time (when element is at y:-120vh from gsap.set), so the scrub
+      // range becomes -120vh→-30px and overrides the entrance animation the moment
+      // Panel 3 reaches its snap position. If re-adding, use gsap.fromTo({ y:"0px" }, ...)
+      // with a guard that waits for the entrance timeline to complete first.
 
       /* ── Panel 4 (Highlights) entrance ─────────────────────────────── */
       const highTl = gsap.timeline({ paused: true });
