@@ -73,10 +73,36 @@ function TiltImage({ src, alt, label, className }: {
 /* ─── Main component ────────────────────────────────────────────────────── */
 
 export default function WalkerScroll() {
-  const containerRef  = useRef<HTMLDivElement>(null);
-  const heroImgRefs   = useRef<(HTMLDivElement | null)[]>([]);
-  const captionRef    = useRef<HTMLDivElement>(null);
+  const containerRef    = useRef<HTMLDivElement>(null);
+  const heroImgRefs     = useRef<(HTMLDivElement | null)[]>([]);
+  const captionRef      = useRef<HTMLDivElement>(null);
+  const spotlightRef    = useRef<HTMLDivElement>(null);
+  const overlayRef      = useRef<HTMLDivElement>(null);
+  const col1Ref         = useRef<HTMLDivElement>(null);
+  const col2Ref         = useRef<HTMLDivElement>(null);
+  const col3Ref         = useRef<HTMLDivElement>(null);
   const [activeHero, setActiveHero] = useState(0);
+
+  const handleSpotlightMove = useCallback((e: React.MouseEvent) => {
+    if (!spotlightRef.current || !overlayRef.current) return;
+    const rect = spotlightRef.current.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    gsap.to(overlayRef.current, {
+      background: `radial-gradient(circle 300px at ${x}% ${y}%, transparent 0%, rgba(0,0,0,0.18) 100%)`,
+      duration: 0.3,
+      ease: "power2.out",
+    });
+  }, []);
+
+  const handleSpotlightLeave = useCallback(() => {
+    if (!overlayRef.current) return;
+    gsap.to(overlayRef.current, {
+      background: "radial-gradient(circle 300px at 50% 50%, transparent 0%, rgba(0,0,0,0.18) 100%)",
+      duration: 0.3,
+      ease: "power2.out",
+    });
+  }, []);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -129,11 +155,10 @@ export default function WalkerScroll() {
       /* ── Panel 3 (Mission) entrance ─────────────────────────────────── */
       const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-      // GSAP owns ALL initial hidden states — no JSX inline transforms, no conflicts
-      gsap.set(panels[2].querySelector(".mp-subtitle"),                           { opacity: 0, y: 20 });
-      gsap.set(panels[2].querySelectorAll(".mp-word-inner"),                      { y: "110%", opacity: 0 });
-      gsap.set(panels[2].querySelector(".mp-students"),                           { y: "-120vh" });
-      gsap.set(panels[2].querySelectorAll(".mp-body, .mp-divider, .mp-cta"),     { opacity: 0, y: 15 });
+      // Text elements — hidden initially, revealed via paused timeline on enter
+      gsap.set(panels[2].querySelector(".mp-subtitle"),                        { opacity: 0, y: 20 });
+      gsap.set(panels[2].querySelectorAll(".mp-word-inner"),                   { y: "110%", opacity: 0, color: "transparent", webkitTextStroke: "2px #1a1a1a" });
+      gsap.set(panels[2].querySelectorAll(".mp-body, .mp-divider, .mp-cta"),  { opacity: 0, y: 15 });
 
       const missTl = gsap.timeline({ paused: true });
 
@@ -142,13 +167,10 @@ export default function WalkerScroll() {
           .to(panels[2].querySelector(".mp-subtitle"),
             { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 0)
           .to(panels[2].querySelectorAll(".mp-word-inner"),
-            { y: "0%", opacity: 1, stagger: 0.07, duration: 0.75, ease: "power4.out" }, 0.15)
-          .to(panels[2].querySelector(".mp-students"),
-            { y: "0px", duration: 0.9, ease: "back.out(1.2)" }, 0.2)
+            { y: "0%", opacity: 1, color: "#1a1a1a", webkitTextStroke: "0px transparent", stagger: 0.07, duration: 0.75, ease: "power4.out" }, 0.15)
           .to(panels[2].querySelectorAll(".mp-body, .mp-divider, .mp-cta"),
             { opacity: 1, y: 0, stagger: 0.1, duration: 0.5, ease: "power3.out" }, 0.4);
       } else {
-        gsap.set(panels[2].querySelector(".mp-students"), { y: 0 });
         missTl.to(
           panels[2].querySelectorAll(".mp-subtitle, .mp-word-inner, .mp-body, .mp-divider, .mp-cta"),
           { opacity: 1, y: 0, duration: 0.4 }
@@ -164,11 +186,7 @@ export default function WalkerScroll() {
         onEnterBack: () => missTl.restart(),
       });
 
-      // NOTE: exit parallax removed — gsap.to() with scrub records the "from" state
-      // at creation time (when element is at y:-120vh from gsap.set), so the scrub
-      // range becomes -120vh→-30px and overrides the entrance animation the moment
-      // Panel 3 reaches its snap position. If re-adding, use gsap.fromTo({ y:"0px" }, ...)
-      // with a guard that waits for the entrance timeline to complete first.
+      // Image is static — no animation on mp-students per spec.
 
       /* ── Panel 4 (Highlights) entrance ─────────────────────────────── */
       const highTl = gsap.timeline({ paused: true });
@@ -188,6 +206,14 @@ export default function WalkerScroll() {
         onEnter:     () => highTl.play(),
         onEnterBack: () => highTl.play(),
       });
+
+      /* ── Panel 4 — column parallax drift ───────────────────────────── */
+      if (col1Ref.current && col2Ref.current && col3Ref.current) {
+        const driftConfig = { ease: "none", scrollTrigger: { trigger: panels[3], containerAnimation: mainTween, start: "left right", end: "right left", scrub: 1 } };
+        gsap.to(col1Ref.current, { y: -30, ...driftConfig });
+        gsap.to(col2Ref.current, { y: -60, ...driftConfig });
+        gsap.to(col3Ref.current, { y: -90, ...driftConfig });
+      }
 
       /* ── Hero word-reveal — fires on every image crossfade ──────────── */
       if (!captionRef.current) return;
@@ -494,15 +520,13 @@ export default function WalkerScroll() {
         </section>
 
         {/* ════════════════════════════════════════════════════════════════
-            PANEL 3 — MISSION  (editorial redesign)
-            Desktop: text LEFT 55% | maroon+photo RIGHT 45%
-            Mobile:  text TOP 50vh | maroon+photo BOTTOM 50vh
+            PANEL 3 — MISSION
+            Split bleed "LEADERS" across z-layers + spotlight + stroke→fill
         ════════════════════════════════════════════════════════════════ */}
         <section
           className="walk-panel relative w-screen h-screen shrink-0 overflow-hidden"
           style={{ background: "#FAFAF7" }}
         >
-          {/* CTA underline draws left → right on hover */}
           <style>{`
             .mp-cta-link { position: relative; display: inline-block; }
             .mp-cta-link::after {
@@ -516,13 +540,88 @@ export default function WalkerScroll() {
             .mp-cta-link:hover::after { width: 100%; }
           `}</style>
 
-          {/* ── Text block — left on desktop, top on mobile ──────────── */}
+          {/* ═══ LAYER 1 — "LEAD" behind image (z-10) ═══ */}
           <div
-            className="absolute top-0 left-0 right-0 lg:right-[45%] h-[50vh] lg:h-full flex flex-col justify-center"
             style={{
-              paddingLeft: "clamp(32px, 6vw, 96px)",
-              paddingRight: "clamp(20px, 3vw, 48px)",
+              position: "absolute",
+              inset: 0,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              pointerEvents: "none",
+            }}
+          >
+            <span
+              style={{
+                fontFamily: "var(--font-fraunces, Georgia, serif)",
+                fontSize: "clamp(8rem, 14vw, 16rem)",
+                fontWeight: 900,
+                color: "#8B0000",
+                opacity: 0.08,
+                lineHeight: 1,
+                letterSpacing: "0.02em",
+                whiteSpace: "nowrap",
+              }}
+            >
+              <span style={{ position: "relative", zIndex: 10 }}>LEAD</span>
+              <span style={{ position: "relative", zIndex: 30 }}>ERS</span>
+            </span>
+          </div>
+
+          {/* ═══ LAYER 2 — Student image + spotlight (z-20) ═══ */}
+          <div
+            id="spotlight-container"
+            ref={spotlightRef}
+            onMouseMove={handleSpotlightMove}
+            onMouseLeave={handleSpotlightLeave}
+            style={{
+              position: "absolute",
+              right: 0,
+              top: 0,
+              width: "60%",
+              height: "100%",
               zIndex: 20,
+              overflow: "hidden",
+            }}
+          >
+            <Image
+              src="/ai-images/mission-students.png"
+              alt="Malatamba Vidyaniketan students in school uniform"
+              fill
+              priority
+              sizes="60vw"
+              style={{
+                objectFit: "contain",
+                objectPosition: "center bottom",
+              }}
+            />
+            <div
+              ref={overlayRef}
+              style={{
+                position: "absolute",
+                inset: 0,
+                zIndex: 25,
+                pointerEvents: "none",
+                background:
+                  "radial-gradient(circle 300px at 50% 50%, transparent 0%, rgba(0,0,0,0.18) 100%)",
+              }}
+            />
+          </div>
+
+          {/* ═══ LAYER 3 — Text content + "ERS" in front (z-30) ═══ */}
+          <div
+            style={{
+              position: "absolute",
+              left: 0,
+              top: 0,
+              height: "100%",
+              zIndex: 30,
+              paddingLeft: "80px",
+              paddingRight: "40px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              maxWidth: "50%",
             }}
           >
             {/* Eyebrow */}
@@ -536,16 +635,18 @@ export default function WalkerScroll() {
                 color: "#7A1F2B",
                 fontWeight: 600,
                 marginBottom: "clamp(10px, 1.8vh, 18px)",
+                borderLeft: "3px solid #7A1F2B",
+                paddingLeft: "12px",
               }}
             >
               Malatamba Vidyaniketan&nbsp;&middot;&nbsp;Est. 2005
             </p>
 
-            {/* Headline — word-split on desktop, GSAP sets initial y via useEffect */}
+            {/* Headline — stroke→fill + y-reveal via GSAP */}
             <h2
               style={{
                 fontFamily: "var(--font-fraunces, Georgia, serif)",
-                fontSize: "clamp(1.8rem, 3.8vw, 4.2rem)",
+                fontSize: "clamp(3rem, 4.5vw, 5rem)",
                 fontWeight: 700,
                 color: "#1A1A1A",
                 lineHeight: 1.05,
@@ -564,8 +665,14 @@ export default function WalkerScroll() {
                         lineHeight: 1.15,
                       }}
                     >
-                      {/* No inline transform — GSAP sets y via gsap.set() in useEffect */}
-                      <span className="mp-word-inner" style={{ display: "inline-block" }}>
+                      <span
+                        className="mp-word-inner"
+                        style={{
+                          display: "inline-block",
+                          color: "transparent",
+                          WebkitTextStroke: "2px #1a1a1a",
+                        }}
+                      >
                         {word}
                       </span>
                     </span>
@@ -605,7 +712,10 @@ export default function WalkerScroll() {
             />
 
             {/* CTA row */}
-            <div className="mp-cta flex items-center justify-between" style={{ maxWidth: "440px" }}>
+            <div
+              className="mp-cta flex items-center justify-between"
+              style={{ maxWidth: "440px" }}
+            >
               <Link
                 href="/about"
                 className="mp-cta-link"
@@ -630,66 +740,9 @@ export default function WalkerScroll() {
             </div>
           </div>
 
-          {/* ── Maroon column — right on desktop, bottom on mobile ────── */}
-          <div
-            className="absolute bottom-0 lg:top-0 right-0 w-full lg:w-[45%] h-[50vh] lg:h-full"
-            style={{ background: "#7A1F2B", zIndex: 1 }}
-          >
-            {/* Stage platform floor with depth shadow */}
-            <div
-              className="absolute bottom-0 left-0 w-full"
-              style={{
-                height: "18%",
-                background: "#7A1F2B",
-                boxShadow: "0 8px 40px rgba(0,0,0,0.4)",
-                zIndex: 2,
-              }}
-            />
-
-            {/* Students image — GSAP drops from above via y: -120vh → 0
-                Container uses calc(height * 2/3) to match the image's native
-                2:3 ratio exactly → objectFit:contain fills edge-to-edge with
-                no empty space. clipPath then trims the white margins from the
-                AI-generated image on both sides.                              */}
-            <div
-              className="mp-students absolute bottom-[18%]"
-              style={{
-                right: "50%",
-                transform: "translateX(50%)",  /* centre inside column on mobile */
-                height: "36vh",
-                width: "calc(36vh * 2 / 3)",   /* locks 2:3 ratio */
-                zIndex: 10,
-                overflow: "hidden",
-                clipPath: "inset(0 9% 0 9%)",  /* trims white margins */
-              }}
-            >
-              <style>{`
-                @media (min-width: 1024px) {
-                  .mp-students {
-                    right: 2% !important;
-                    transform: none !important;
-                    height: 78vh !important;
-                    width: calc(78vh * 2 / 3) !important;  /* locks 2:3 ratio */
-                  }
-                }
-              `}</style>
-              <Image
-                src="/ai-images/mission-students.png"
-                alt="Malatamba Vidyaniketan students in school uniform"
-                fill
-                priority
-                sizes="(max-width: 1023px) 25vw, 35vw"
-                style={{
-                  objectFit: "contain",        /* 2:3 container + 2:3 image = full fill */
-                  objectPosition: "center top",
-                }}
-              />
-            </div>
-          </div>
-
           {/* Panel counter */}
           <div
-            className="absolute bottom-7 right-8 z-30 text-xs font-mono"
+            className="absolute bottom-7 right-8 z-40 text-xs font-mono"
             style={{ color: "#7A1F2B", opacity: 0.4 }}
           >
             03 / 04
@@ -697,49 +750,84 @@ export default function WalkerScroll() {
         </section>
 
         {/* ════════════════════════════════════════════════════════════════
-            PANEL 4 — HIGHLIGHTS  (unchanged)
+            PANEL 4 — HIGHLIGHTS  (parallax drift columns)
         ════════════════════════════════════════════════════════════════ */}
-        <section className="walk-panel relative w-screen h-screen shrink-0 flex items-center justify-center overflow-hidden bg-light">
-          <div className="w-full max-w-7xl mx-auto px-6 sm:px-12 lg:px-16 grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+        <section className="walk-panel relative w-screen h-screen shrink-0 flex overflow-hidden" style={{ background: "#FAFAF7" }}>
 
-            <div className="hp-text">
-              <span className="text-primary font-semibold text-sm tracking-[0.2em] uppercase">
-                School Highlights
-              </span>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-dark mt-3 leading-tight">
-                Life at Malatamba
-              </h2>
-              <div className="w-16 h-0.5 bg-primary mt-5 mb-5" />
-              <p className="text-gray-600 text-base leading-relaxed mb-6">
-                From vibrant classrooms to sports fields, science labs to cultural events — every day at Malatamba Vidyaniketan is an opportunity for discovery and growth.
-              </p>
-              <Link
-                href="/gallery"
-                className="inline-flex items-center gap-2 px-7 py-3 bg-primary text-white font-semibold rounded-full hover:bg-primary/90 transition-all text-sm"
-              >
-                View Gallery
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </Link>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3 h-[min(380px,42vh)]">
-              <TiltImage
-                src="/ai-images/highlights-friends.png"
-                alt="Campus life" label="Campus Life"
-                className="row-span-2"
-              />
-              <div className="grid grid-cols-2 grid-rows-2 gap-3">
-                <TiltImage src="/ai-images/highlights-sports.png"     alt="Sports"      label="Sports"      />
-                <TiltImage src="/ai-images/highlights-cultural.png"   alt="Cultural"    label="Events"      />
-                <TiltImage src="/ai-images/highlights-library.png"    alt="Library"     label="Library"     />
-                <TiltImage src="/ai-images/highlights-sciencelab.png" alt="Science lab" label="Science Lab" />
-              </div>
-            </div>
+          {/* Left: text content */}
+          <div className="hp-text relative z-30 flex flex-col justify-center shrink-0" style={{ width: "40%", paddingLeft: 80 }}>
+            <span className="text-primary font-semibold text-sm tracking-[0.2em] uppercase">
+              School Highlights
+            </span>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-dark mt-3 leading-tight">
+              Life at Malatamba
+            </h2>
+            <div className="w-16 h-0.5 bg-primary mt-5 mb-5" />
+            <p className="text-gray-600 text-base leading-relaxed mb-6" style={{ maxWidth: 360 }}>
+              From vibrant classrooms to sports fields, science labs to cultural events — every day at Malatamba Vidyaniketan is an opportunity for discovery and growth.
+            </p>
+            <Link
+              href="/gallery"
+              className="inline-flex items-center gap-2 px-7 py-3 bg-primary text-white font-semibold rounded-full hover:bg-primary/90 transition-all text-sm self-start"
+            >
+              View Gallery
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </Link>
           </div>
 
-          <div className="absolute bottom-8 right-8 text-gray-400 text-xs font-mono">04 / 04</div>
+          {/* Right: 3-column parallax drift */}
+          <div className="relative flex-1 overflow-hidden flex gap-4 px-6 py-8">
+
+            {/* Column 1 — slowest */}
+            <div ref={col1Ref} className="flex flex-col gap-4 flex-1" style={{ marginTop: 0, willChange: "transform" }}>
+              {["/ai-images/life-01.png","/ai-images/life-04.png","/ai-images/life-07.png","/ai-images/life-10.png","/ai-images/life-13.png"].map((src) => (
+                <div
+                  key={src}
+                  className="hp-img relative overflow-hidden rounded-lg flex-shrink-0 cursor-pointer"
+                  style={{ width: "100%", aspectRatio: "3/4" }}
+                  onMouseEnter={(e) => gsap.to(e.currentTarget, { scale: 1.04, duration: 0.4, ease: "power2.out" })}
+                  onMouseLeave={(e) => gsap.to(e.currentTarget, { scale: 1,    duration: 0.4, ease: "power2.out" })}
+                >
+                  <Image src={src} alt="School life" fill className="object-cover" sizes="20vw" />
+                </div>
+              ))}
+            </div>
+
+            {/* Column 2 — medium */}
+            <div ref={col2Ref} className="flex flex-col gap-4 flex-1" style={{ marginTop: -60, willChange: "transform" }}>
+              {["/ai-images/life-02.png","/ai-images/life-05.png","/ai-images/life-08.png","/ai-images/life-11.png","/ai-images/highlights-sports.png"].map((src) => (
+                <div
+                  key={src}
+                  className="hp-img relative overflow-hidden rounded-lg flex-shrink-0 cursor-pointer"
+                  style={{ width: "100%", aspectRatio: "3/4" }}
+                  onMouseEnter={(e) => gsap.to(e.currentTarget, { scale: 1.04, duration: 0.4, ease: "power2.out" })}
+                  onMouseLeave={(e) => gsap.to(e.currentTarget, { scale: 1,    duration: 0.4, ease: "power2.out" })}
+                >
+                  <Image src={src} alt="School life" fill className="object-cover" sizes="20vw" />
+                </div>
+              ))}
+            </div>
+
+            {/* Column 3 — fastest */}
+            <div ref={col3Ref} className="flex flex-col gap-4 flex-1" style={{ marginTop: -120, willChange: "transform" }}>
+              {["/ai-images/life-03.png","/ai-images/life-06.png","/ai-images/life-09.png","/ai-images/life-12.png","/ai-images/highlights-cultural.png"].map((src) => (
+                <div
+                  key={src}
+                  className="hp-img relative overflow-hidden rounded-lg flex-shrink-0 cursor-pointer"
+                  style={{ width: "100%", aspectRatio: "3/4" }}
+                  onMouseEnter={(e) => gsap.to(e.currentTarget, { scale: 1.04, duration: 0.4, ease: "power2.out" })}
+                  onMouseLeave={(e) => gsap.to(e.currentTarget, { scale: 1,    duration: 0.4, ease: "power2.out" })}
+                >
+                  <Image src={src} alt="School life" fill className="object-cover" sizes="20vw" />
+                </div>
+              ))}
+            </div>
+
+          </div>
+
+          <div className="absolute bottom-8 right-8 text-gray-400 text-xs font-mono z-40">04 / 04</div>
         </section>
 
       </div>
