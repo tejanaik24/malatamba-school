@@ -38,9 +38,7 @@ export default function WalkerScroll() {
   const captionRef      = useRef<HTMLDivElement>(null);
   const spotlightRef    = useRef<HTMLDivElement>(null);
   const overlayRef      = useRef<HTMLDivElement>(null);
-  const col1Ref         = useRef<HTMLDivElement>(null);
-  const col2Ref         = useRef<HTMLDivElement>(null);
-  const col3Ref         = useRef<HTMLDivElement>(null);
+
   const [activeHero, setActiveHero] = useState(0);
 
   const handleSpotlightMove = useCallback((e: React.MouseEvent) => {
@@ -167,13 +165,6 @@ export default function WalkerScroll() {
         onEnterBack: () => highTl.play(),
       });
 
-      /* ── Panel 4 — column parallax drift ───────────────────────────── */
-      if (col1Ref.current && col2Ref.current && col3Ref.current) {
-        const driftConfig = { ease: "none", scrollTrigger: { trigger: panels[3], containerAnimation: mainTween, start: "left right", end: "right left", scrub: 1 } };
-        gsap.to(col1Ref.current, { y: -30, ...driftConfig });
-        gsap.to(col2Ref.current, { y: -60, ...driftConfig });
-        gsap.to(col3Ref.current, { y: -90, ...driftConfig });
-      }
 
       /* ── Hero word-reveal — fires on every image crossfade ──────────── */
       if (!captionRef.current) return;
@@ -737,53 +728,75 @@ export default function WalkerScroll() {
             </Link>
           </div>
 
-          {/* Right: 3-column parallax drift */}
+          {/* Right: 3-column CSS infinite scroll */}
+          <style>{`
+            @keyframes drift-up { from { transform: translateY(0); } to { transform: translateY(-50%); } }
+            .drift-col:hover .drift-inner { animation-play-state: paused; }
+          `}</style>
           <div className="relative flex-1 overflow-hidden flex gap-4 px-6 py-8">
 
-            {/* Column 1 — slowest */}
-            <div ref={col1Ref} className="flex flex-col gap-4 flex-1" style={{ marginTop: 0, willChange: "transform" }}>
-              {["/ai-images/life-01.png","/ai-images/life-04.png","/ai-images/life-07.png","/ai-images/life-10.png","/ai-images/life-13.png"].map((src) => (
-                <div
-                  key={src}
-                  className="hp-img relative overflow-hidden rounded-lg flex-shrink-0 cursor-pointer"
-                  style={{ width: "100%", aspectRatio: "3/4" }}
-                  onMouseEnter={(e) => gsap.to(e.currentTarget, { scale: 1.04, duration: 0.4, ease: "power2.out" })}
-                  onMouseLeave={(e) => gsap.to(e.currentTarget, { scale: 1,    duration: 0.4, ease: "power2.out" })}
-                >
+            {/* Column 1 — 9 images, 22s */}
+            {(() => {
+              const imgs = [
+                "/ai-images/life-01.png","/ai-images/life-04.png","/ai-images/life-07.png",
+                "/ai-images/life-10.png","/ai-images/life-13.png","/ai-images/highlights-cultural.png",
+                "/ai-images/highlights-friends.png","/ai-images/feature-faculty.png","/ai-images/values-discipline.png",
+              ];
+              const cards = imgs.map((src) => (
+                <div key={src} className="hp-img relative overflow-hidden rounded-lg flex-shrink-0" style={{ width: "100%", aspectRatio: "3/4" }}>
                   <Image src={src} alt="School life" fill className="object-cover" sizes="20vw" />
                 </div>
-              ))}
-            </div>
+              ));
+              return (
+                <div className="drift-col flex-1 overflow-hidden" style={{ marginTop: 0 }}>
+                  <div className="drift-inner flex flex-col gap-4" style={{ animation: "drift-up 22s linear infinite", willChange: "transform" }}>
+                    {cards}{cards}
+                  </div>
+                </div>
+              );
+            })()}
 
-            {/* Column 2 — medium */}
-            <div ref={col2Ref} className="flex flex-col gap-4 flex-1" style={{ marginTop: -60, willChange: "transform" }}>
-              {["/ai-images/life-02.png","/ai-images/life-05.png","/ai-images/life-08.png","/ai-images/life-11.png","/ai-images/highlights-sports.png"].map((src) => (
-                <div
-                  key={src}
-                  className="hp-img relative overflow-hidden rounded-lg flex-shrink-0 cursor-pointer"
-                  style={{ width: "100%", aspectRatio: "3/4" }}
-                  onMouseEnter={(e) => gsap.to(e.currentTarget, { scale: 1.04, duration: 0.4, ease: "power2.out" })}
-                  onMouseLeave={(e) => gsap.to(e.currentTarget, { scale: 1,    duration: 0.4, ease: "power2.out" })}
-                >
+            {/* Column 2 — 8 images, 17s */}
+            {(() => {
+              const imgs = [
+                "/ai-images/life-02.png","/ai-images/life-05.png","/ai-images/life-08.png",
+                "/ai-images/life-11.png","/ai-images/highlights-library.png","/ai-images/highlights-sports.png",
+                "/ai-images/feature-lab.png","/ai-images/values-excellence.png",
+              ];
+              const cards = imgs.map((src) => (
+                <div key={src} className="hp-img relative overflow-hidden rounded-lg flex-shrink-0" style={{ width: "100%", aspectRatio: "3/4" }}>
                   <Image src={src} alt="School life" fill className="object-cover" sizes="20vw" />
                 </div>
-              ))}
-            </div>
+              ));
+              return (
+                <div className="drift-col flex-1 overflow-hidden" style={{ marginTop: -80 }}>
+                  <div className="drift-inner flex flex-col gap-4" style={{ animation: "drift-up 17s linear infinite", willChange: "transform" }}>
+                    {cards}{cards}
+                  </div>
+                </div>
+              );
+            })()}
 
-            {/* Column 3 — fastest */}
-            <div ref={col3Ref} className="flex flex-col gap-4 flex-1" style={{ marginTop: -120, willChange: "transform" }}>
-              {["/ai-images/life-03.png","/ai-images/life-06.png","/ai-images/life-09.png","/ai-images/life-12.png","/ai-images/highlights-cultural.png"].map((src) => (
-                <div
-                  key={src}
-                  className="hp-img relative overflow-hidden rounded-lg flex-shrink-0 cursor-pointer"
-                  style={{ width: "100%", aspectRatio: "3/4" }}
-                  onMouseEnter={(e) => gsap.to(e.currentTarget, { scale: 1.04, duration: 0.4, ease: "power2.out" })}
-                  onMouseLeave={(e) => gsap.to(e.currentTarget, { scale: 1,    duration: 0.4, ease: "power2.out" })}
-                >
+            {/* Column 3 — 8 images, 13s */}
+            {(() => {
+              const imgs = [
+                "/ai-images/life-03.png","/ai-images/life-06.png","/ai-images/life-09.png",
+                "/ai-images/life-12.png","/ai-images/highlights-sciencelab.png","/ai-images/feature-sports.png",
+                "/ai-images/values-innovation.png","/ai-images/values-integrity.png",
+              ];
+              const cards = imgs.map((src) => (
+                <div key={src} className="hp-img relative overflow-hidden rounded-lg flex-shrink-0" style={{ width: "100%", aspectRatio: "3/4" }}>
                   <Image src={src} alt="School life" fill className="object-cover" sizes="20vw" />
                 </div>
-              ))}
-            </div>
+              ));
+              return (
+                <div className="drift-col flex-1 overflow-hidden" style={{ marginTop: -160 }}>
+                  <div className="drift-inner flex flex-col gap-4" style={{ animation: "drift-up 13s linear infinite", willChange: "transform" }}>
+                    {cards}{cards}
+                  </div>
+                </div>
+              );
+            })()}
 
           </div>
 
