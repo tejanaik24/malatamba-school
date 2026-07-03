@@ -129,37 +129,29 @@ export default function WalkerScroll() {
       /* ── Panel 3 (Mission) entrance ─────────────────────────────────── */
       const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-      // Set students' initial position off-screen above before timeline fires
-      gsap.set(panels[2].querySelector(".mp-students"), { y: "-120vh" });
+      // GSAP owns ALL initial hidden states — no JSX inline transforms, no conflicts
+      gsap.set(panels[2].querySelector(".mp-subtitle"),                           { opacity: 0, y: 20 });
+      gsap.set(panels[2].querySelectorAll(".mp-word-inner"),                      { y: "110%", opacity: 0 });
+      gsap.set(panels[2].querySelector(".mp-students"),                           { y: "-120vh" });
+      gsap.set(panels[2].querySelectorAll(".mp-body, .mp-divider, .mp-cta"),     { opacity: 0, y: 15 });
 
       const missTl = gsap.timeline({ paused: true });
 
       if (!reducedMotion) {
         missTl
-          // Eyebrow: fade + rise
-          .from(panels[2].querySelector(".mp-subtitle"), {
-            opacity: 0, y: 20, duration: 0.5, ease: "power3.out", immediateRender: false,
-          }, 0)
-          // Headline words: clip-path reveal (each .mp-word-inner rises from its mask)
-          .from(panels[2].querySelectorAll(".mp-word-inner"), {
-            y: "110%", stagger: 0.07, duration: 0.75, ease: "power4.out", immediateRender: false,
-          }, 0.15)
-          // Students: drop in from above with slight overshoot
-          .fromTo(
-            panels[2].querySelector(".mp-students"),
-            { y: "-120vh" },
-            { y: "0px", duration: 0.9, ease: "back.out(1.2)", immediateRender: false },
-            0.2
-          )
-          // Body copy + divider + CTA: stagger fade up
-          .from(panels[2].querySelectorAll(".mp-body, .mp-divider, .mp-cta"), {
-            opacity: 0, y: 15, stagger: 0.1, duration: 0.5, ease: "power3.out", immediateRender: false,
-          }, 0.4);
+          .to(panels[2].querySelector(".mp-subtitle"),
+            { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 0)
+          .to(panels[2].querySelectorAll(".mp-word-inner"),
+            { y: "0%", opacity: 1, stagger: 0.07, duration: 0.75, ease: "power4.out" }, 0.15)
+          .to(panels[2].querySelector(".mp-students"),
+            { y: "0px", duration: 0.9, ease: "back.out(1.2)" }, 0.2)
+          .to(panels[2].querySelectorAll(".mp-body, .mp-divider, .mp-cta"),
+            { opacity: 1, y: 0, stagger: 0.1, duration: 0.5, ease: "power3.out" }, 0.4);
       } else {
-        // prefers-reduced-motion: simple fade, no motion
-        missTl.from(
-          panels[2].querySelectorAll(".mp-subtitle, .mp-word-inner, .mp-body, .mp-divider, .mp-cta, .mp-students"),
-          { opacity: 0, duration: 0.4, immediateRender: false }
+        gsap.set(panels[2].querySelector(".mp-students"), { y: 0 });
+        missTl.to(
+          panels[2].querySelectorAll(".mp-subtitle, .mp-word-inner, .mp-body, .mp-divider, .mp-cta"),
+          { opacity: 1, y: 0, duration: 0.4 }
         );
       }
 
@@ -169,10 +161,10 @@ export default function WalkerScroll() {
         start: "left center",
         end: "right center",
         onEnter:     () => missTl.play(),
-        onEnterBack: () => missTl.play(),
+        onEnterBack: () => missTl.restart(),
       });
 
-      // Subtle exit parallax: students drift up -30px as panel scrolls off
+      // Exit parallax: students drift up as panel scrolls away
       if (!reducedMotion) {
         gsap.to(panels[2].querySelector(".mp-students"), {
           y: "-30px",
@@ -512,8 +504,8 @@ export default function WalkerScroll() {
 
         {/* ════════════════════════════════════════════════════════════════
             PANEL 3 — MISSION  (editorial redesign)
-            Desktop: 38% maroon L-column | 62% text
-            Mobile:  maroon top 50vh, text below
+            Desktop: text LEFT 55% | maroon+photo RIGHT 45%
+            Mobile:  text TOP 50vh | maroon+photo BOTTOM 50vh
         ════════════════════════════════════════════════════════════════ */}
         <section
           className="walk-panel relative w-screen h-screen shrink-0 overflow-hidden"
@@ -533,60 +525,12 @@ export default function WalkerScroll() {
             .mp-cta-link:hover::after { width: 100%; }
           `}</style>
 
-          {/* ── Maroon L-column / top block ──────────────────────────── */}
+          {/* ── Text block — left on desktop, top on mobile ──────────── */}
           <div
-            className="absolute top-0 left-0 w-full lg:w-[38%] h-[50vh] lg:h-full"
-            style={{ background: "#7A1F2B", zIndex: 1 }}
-          >
-            {/* Floor platform — drop shadow beneath creates the stage edge */}
-            <div
-              className="absolute bottom-0 left-0 w-full"
-              style={{
-                height: "18%",
-                background: "#7A1F2B",
-                boxShadow: "0 8px 32px rgba(0,0,0,0.35)",
-                zIndex: 2,
-              }}
-            />
-
-            {/* Students image — drops from above, feet land on platform top */}
-            <div
-              className="mp-students absolute bottom-[18%]"
-              style={{
-                /* Mobile: centred inside column */
-                left: "7.5%",
-                width: "85%",
-                aspectRatio: "2 / 3",
-                zIndex: 10,
-              }}
-            >
-              {/* Desktop: left-flush, bleeds 10% into text area for editorial overlap */}
-              <style>{`
-                @media (min-width: 1024px) {
-                  .mp-students { left: 0 !important; width: 110% !important; }
-                }
-              `}</style>
-              <Image
-                src="/ai-images/mission-students.png"
-                alt="Malatamba Vidyaniketan students in school uniform"
-                fill
-                priority
-                sizes="(max-width: 1023px) 85vw, 45vw"
-                style={{
-                  objectFit: "contain",
-                  objectPosition: "bottom center",
-                  mixBlendMode: "multiply",
-                }}
-              />
-            </div>
-          </div>
-
-          {/* ── Editorial text block ─────────────────────────────────── */}
-          <div
-            className="absolute left-0 lg:left-[38%] right-0 top-[50vh] lg:top-0 bottom-0 flex flex-col justify-center"
+            className="absolute top-0 left-0 right-0 lg:right-[45%] h-[50vh] lg:h-full flex flex-col justify-center"
             style={{
-              paddingLeft: "clamp(24px, 5.5vw, 80px)",
-              paddingRight: "clamp(24px, 4vw, 60px)",
+              paddingLeft: "clamp(32px, 6vw, 96px)",
+              paddingRight: "clamp(20px, 3vw, 48px)",
               zIndex: 20,
             }}
           >
@@ -595,23 +539,22 @@ export default function WalkerScroll() {
               className="mp-subtitle"
               style={{
                 fontFamily: "'Inter', system-ui, sans-serif",
-                fontSize: "0.75rem",
+                fontSize: "0.72rem",
                 letterSpacing: "0.2em",
                 textTransform: "uppercase",
-                fontVariant: "small-caps",
                 color: "#7A1F2B",
                 fontWeight: 600,
-                marginBottom: "clamp(12px, 2vh, 20px)",
+                marginBottom: "clamp(10px, 1.8vh, 18px)",
               }}
             >
               Malatamba Vidyaniketan&nbsp;&middot;&nbsp;Est. 2005
             </p>
 
-            {/* Headline */}
+            {/* Headline — word-split on desktop, GSAP sets initial y via useEffect */}
             <h2
               style={{
                 fontFamily: "var(--font-fraunces, Georgia, serif)",
-                fontSize: "clamp(2rem, 4vw, 4.5rem)",
+                fontSize: "clamp(1.8rem, 3.8vw, 4.2rem)",
                 fontWeight: 700,
                 color: "#1A1A1A",
                 lineHeight: 1.05,
@@ -619,7 +562,6 @@ export default function WalkerScroll() {
                 margin: 0,
               }}
             >
-              {/* Desktop: each word in an overflow:hidden mask for clip-path reveal */}
               <span className="hidden lg:inline">
                 {["BUILT", "FOR", "THE", "LEADERS", "OF", "TOMORROW"].map((word, i, arr) => (
                   <span key={i} style={{ display: "inline" }}>
@@ -631,10 +573,8 @@ export default function WalkerScroll() {
                         lineHeight: 1.15,
                       }}
                     >
-                      <span
-                        className="mp-word-inner"
-                        style={{ display: "inline-block", transform: "translateY(110%)" }}
-                      >
+                      {/* No inline transform — GSAP sets y via gsap.set() in useEffect */}
+                      <span className="mp-word-inner" style={{ display: "inline-block" }}>
                         {word}
                       </span>
                     </span>
@@ -644,7 +584,6 @@ export default function WalkerScroll() {
                   </span>
                 ))}
               </span>
-              {/* Mobile: plain — no word-split needed without mask animation */}
               <span className="lg:hidden">BUILT FOR THE LEADERS OF TOMORROW</span>
             </h2>
 
@@ -652,10 +591,10 @@ export default function WalkerScroll() {
             <p
               className="mp-body"
               style={{
-                fontSize: "clamp(0.95rem, 1.1vw, 1.1rem)",
+                fontSize: "clamp(0.9rem, 1.05vw, 1.05rem)",
                 color: "#555",
-                maxWidth: "480px",
-                marginTop: "clamp(14px, 2.5vh, 24px)",
+                maxWidth: "440px",
+                marginTop: "clamp(12px, 2.2vh, 22px)",
                 lineHeight: 1.75,
               }}
             >
@@ -669,25 +608,21 @@ export default function WalkerScroll() {
               style={{
                 border: "none",
                 borderTop: "1px solid #E0E0E0",
-                maxWidth: "480px",
-                margin: "clamp(20px, 4vh, 40px) 0",
+                maxWidth: "440px",
+                margin: "clamp(18px, 3.5vh, 36px) 0",
               }}
             />
 
             {/* CTA row */}
-            <div
-              className="mp-cta flex items-center justify-between"
-              style={{ maxWidth: "480px" }}
-            >
+            <div className="mp-cta flex items-center justify-between" style={{ maxWidth: "440px" }}>
               <Link
                 href="/about"
                 className="mp-cta-link"
                 style={{
                   fontFamily: "'Inter', system-ui, sans-serif",
-                  fontSize: "0.78rem",
+                  fontSize: "0.75rem",
                   letterSpacing: "0.18em",
                   textTransform: "uppercase",
-                  fontVariant: "small-caps",
                   color: "#7A1F2B",
                   fontWeight: 600,
                   textDecoration: "none",
@@ -701,6 +636,53 @@ export default function WalkerScroll() {
               >
                 +
               </span>
+            </div>
+          </div>
+
+          {/* ── Maroon column — right on desktop, bottom on mobile ────── */}
+          <div
+            className="absolute bottom-0 lg:top-0 right-0 w-full lg:w-[45%] h-[50vh] lg:h-full"
+            style={{ background: "#7A1F2B", zIndex: 1 }}
+          >
+            {/* Stage platform floor with depth shadow */}
+            <div
+              className="absolute bottom-0 left-0 w-full"
+              style={{
+                height: "18%",
+                background: "#7A1F2B",
+                boxShadow: "0 8px 40px rgba(0,0,0,0.4)",
+                zIndex: 2,
+              }}
+            />
+
+            {/* Students image — GSAP drops from above via y: -120vh → 0 */}
+            <div
+              className="mp-students absolute bottom-[18%]"
+              style={{
+                right: "7.5%",
+                width: "85%",
+                aspectRatio: "2 / 3",
+                zIndex: 10,
+              }}
+            >
+              {/* Desktop: bleed 10% left into text area for editorial overlap */}
+              <style>{`
+                @media (min-width: 1024px) {
+                  .mp-students { right: 0 !important; width: 110% !important; }
+                }
+              `}</style>
+              <Image
+                src="/ai-images/mission-students.png"
+                alt="Malatamba Vidyaniketan students in school uniform"
+                fill
+                priority
+                sizes="(max-width: 1023px) 85vw, 50vw"
+                style={{
+                  objectFit: "contain",
+                  objectPosition: "bottom center",
+                  mixBlendMode: "multiply",
+                }}
+              />
             </div>
           </div>
 
