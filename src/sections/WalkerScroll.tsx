@@ -29,46 +29,6 @@ const heroCaptions = [
   { subtitle: "Embracing Growth",    lines: ["NURTURING", "POTENTIAL", "CELEBRATING GROWTH"],      description: "A vibrant campus where every child discovers their passion."              },
 ];
 
-/* ─── TiltImage (highlights panel) ─────────────────────────────────────── */
-
-function TiltImage({ src, alt, label, className }: {
-  src: string; alt: string; label: string; className?: string;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-
-  const onMove = useCallback((e: React.MouseEvent) => {
-    const el = ref.current;
-    if (!el) return;
-    const r = el.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width  - 0.5;
-    const y = (e.clientY - r.top)  / r.height - 0.5;
-    el.style.transform = `perspective(600px) rotateY(${x * 10}deg) rotateX(${-y * 10}deg) scale(1.05)`;
-  }, []);
-
-  const onLeave = useCallback(() => {
-    if (ref.current) ref.current.style.transform = "";
-  }, []);
-
-  return (
-    <div
-      ref={ref}
-      onMouseMove={onMove}
-      onMouseLeave={onLeave}
-      className={`${className} hp-img relative overflow-hidden rounded-xl group cursor-pointer`}
-      style={{ transformStyle: "preserve-3d", willChange: "transform" }}
-    >
-      <Image
-        src={src} alt={alt} fill
-        className="object-cover transition-transform duration-500 group-hover:scale-105"
-        quality={90} sizes="25vw"
-      />
-      <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/20 transition-colors duration-300" />
-      <span className="absolute bottom-3 left-3 text-white text-xs font-semibold bg-black/40 px-2 py-1 rounded">
-        {label}
-      </span>
-    </div>
-  );
-}
 
 /* ─── Main component ────────────────────────────────────────────────────── */
 
