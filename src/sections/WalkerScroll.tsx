@@ -646,23 +646,29 @@ export default function WalkerScroll() {
               }}
             />
 
-            {/* Students image — GSAP drops from above via y: -120vh → 0 */}
+            {/* Students image — GSAP drops from above via y: -120vh → 0
+                Height is capped in vh so it never exceeds the maroon column.
+                aspectRatio is NOT used — explicit height prevents overflow.   */}
             <div
               className="mp-students absolute bottom-[18%]"
               style={{
-                right: "5%",
-                width: "90%",
-                aspectRatio: "2 / 3",
+                /* Mobile: maroon column = 50vh, platform = 9vh → 41vh usable */
+                right: "7.5%",
+                width: "85%",
+                height: "38vh",
                 zIndex: 10,
-                /* Clip 9% from each side to remove white margins in the image */
-                clipPath: "inset(0 9% 0 9%)",
                 overflow: "hidden",
               }}
             >
-              {/* Desktop: bleed slightly left for editorial overlap */}
               <style>{`
                 @media (min-width: 1024px) {
-                  .mp-students { right: 0 !important; width: 112% !important; }
+                  /* Desktop: maroon column = 100vh, platform = 18vh → 82vh usable
+                     Keep height < 80vh so top edge stays within the section      */
+                  .mp-students {
+                    right: 0 !important;
+                    width: 100% !important;
+                    height: 78vh !important;
+                  }
                 }
               `}</style>
               <Image
@@ -670,10 +676,10 @@ export default function WalkerScroll() {
                 alt="Malatamba Vidyaniketan students in school uniform"
                 fill
                 priority
-                sizes="(max-width: 1023px) 90vw, 55vw"
+                sizes="(max-width: 1023px) 85vw, 45vw"
                 style={{
                   objectFit: "cover",
-                  objectPosition: "center 5%",
+                  objectPosition: "center top",
                 }}
               />
             </div>
