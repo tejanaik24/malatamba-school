@@ -51,37 +51,41 @@ export default function AboutClient() {
   const timelineRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from(".ha-child", {
-        y: 40, opacity: 0, stagger: 0.12, duration: 0.7, ease: "power2.out", delay: 0.1,
+    const mm = gsap.matchMedia();
+    mm.add("(min-width: 768px)", () => {
+      const ctx = gsap.context(() => {
+        gsap.from(".ha-child", {
+          y: 40, opacity: 0, stagger: 0.12, duration: 0.7, ease: "power2.out", delay: 0.1,
+        });
+        if (chairRef.current) {
+          gsap.from(chairRef.current.querySelector(".cr-img"), {
+            x: -50, opacity: 0, scale: 0.95, duration: 0.9, ease: "power2.out",
+            scrollTrigger: { trigger: chairRef.current, start: "top 75%", toggleActions: "play none none reverse" },
+          });
+          gsap.from(chairRef.current.querySelectorAll(".cr-text > *"), {
+            y: 30, opacity: 0, stagger: 0.1, duration: 0.6, ease: "power2.out",
+            scrollTrigger: { trigger: chairRef.current, start: "top 70%", toggleActions: "play none none reverse" },
+          });
+        }
+        if (missionRef.current) {
+          gsap.fromTo(missionRef.current.querySelectorAll(".mv-card"),
+            { y: 40, opacity: 0 },
+            { y: 0, opacity: 1, stagger: 0.15, duration: 0.6, ease: "power2.out",
+              scrollTrigger: { trigger: missionRef.current, start: "top 85%", toggleActions: "play none none none" },
+            }
+          );
+        }
+        if (timelineRef.current) {
+          gsap.from(timelineRef.current.querySelectorAll(".tl-item"), {
+            y: 30, opacity: 0, stagger: 0.15, duration: 0.5, ease: "power2.out",
+            scrollTrigger: { trigger: timelineRef.current, start: "top 78%", toggleActions: "play none none reverse" },
+          });
+        }
+        ScrollTrigger.refresh();
       });
-      if (chairRef.current) {
-        gsap.from(chairRef.current.querySelector(".cr-img"), {
-          x: -50, opacity: 0, scale: 0.95, duration: 0.9, ease: "power2.out",
-          scrollTrigger: { trigger: chairRef.current, start: "top 75%", toggleActions: "play none none reverse" },
-        });
-        gsap.from(chairRef.current.querySelectorAll(".cr-text > *"), {
-          y: 30, opacity: 0, stagger: 0.1, duration: 0.6, ease: "power2.out",
-          scrollTrigger: { trigger: chairRef.current, start: "top 70%", toggleActions: "play none none reverse" },
-        });
-      }
-      if (missionRef.current) {
-        gsap.fromTo(missionRef.current.querySelectorAll(".mv-card"),
-          { y: 40, opacity: 0 },
-          { y: 0, opacity: 1, stagger: 0.15, duration: 0.6, ease: "power2.out",
-            scrollTrigger: { trigger: missionRef.current, start: "top 85%", toggleActions: "play none none none" },
-          }
-        );
-      }
-      if (timelineRef.current) {
-        gsap.from(timelineRef.current.querySelectorAll(".tl-item"), {
-          y: 30, opacity: 0, stagger: 0.15, duration: 0.5, ease: "power2.out",
-          scrollTrigger: { trigger: timelineRef.current, start: "top 78%", toggleActions: "play none none reverse" },
-        });
-      }
-      ScrollTrigger.refresh();
+      return () => ctx.revert();
     });
-    return () => ctx.revert();
+    return () => mm.revert();
   }, []);
 
   return (

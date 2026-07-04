@@ -73,29 +73,33 @@ export default function FacultyClient() {
   const deptRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from(".fh-child", {
-        y: 40, opacity: 0, stagger: 0.12, duration: 0.7, ease: "power2.out", delay: 0.1,
+    const mm = gsap.matchMedia();
+    mm.add("(min-width: 768px)", () => {
+      const ctx = gsap.context(() => {
+        gsap.from(".fh-child", {
+          y: 40, opacity: 0, stagger: 0.12, duration: 0.7, ease: "power2.out", delay: 0.1,
+        });
+        if (principalRef.current) {
+          gsap.fromTo(principalRef.current,
+            { y: 40, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.7, ease: "power2.out",
+              scrollTrigger: { trigger: principalRef.current, start: "top 85%", toggleActions: "play none none none" },
+            }
+          );
+        }
+        if (deptRef.current) {
+          gsap.fromTo(deptRef.current.querySelectorAll(".dept-card"),
+            { y: 40, opacity: 0 },
+            { y: 0, opacity: 1, stagger: 0.08, duration: 0.55, ease: "power2.out",
+              scrollTrigger: { trigger: deptRef.current, start: "top 85%", toggleActions: "play none none none" },
+            }
+          );
+        }
+        ScrollTrigger.refresh();
       });
-      if (principalRef.current) {
-        gsap.fromTo(principalRef.current,
-          { y: 40, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.7, ease: "power2.out",
-            scrollTrigger: { trigger: principalRef.current, start: "top 85%", toggleActions: "play none none none" },
-          }
-        );
-      }
-      if (deptRef.current) {
-        gsap.fromTo(deptRef.current.querySelectorAll(".dept-card"),
-          { y: 40, opacity: 0 },
-          { y: 0, opacity: 1, stagger: 0.08, duration: 0.55, ease: "power2.out",
-            scrollTrigger: { trigger: deptRef.current, start: "top 85%", toggleActions: "play none none none" },
-          }
-        );
-      }
-      ScrollTrigger.refresh();
+      return () => ctx.revert();
     });
-    return () => ctx.revert();
+    return () => mm.revert();
   }, []);
 
   return (
