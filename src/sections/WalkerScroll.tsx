@@ -346,7 +346,7 @@ export default function WalkerScroll() {
               .vp-grid:hover .vp-card:not(:hover) { filter: none !important; opacity: 1 !important; }
             }
           `}</style>
-          <div className="w-full h-full max-w-7xl mx-auto px-6 sm:px-12 lg:px-16 flex flex-col justify-center pt-16 pb-4 sm:pt-20 sm:pb-12">
+          <div className="w-full h-full max-w-7xl mx-auto px-4 sm:px-12 lg:px-16 flex flex-col justify-center pt-12 pb-3 sm:pt-20 sm:pb-12">
 
             {/* Section header */}
             <div className="mb-3 sm:mb-8 lg:mb-10">
@@ -489,36 +489,6 @@ export default function WalkerScroll() {
               transition: width 0.3s ease;
             }
             .mp-cta-link:hover::after { width: 100%; }
-            @media (max-width: 1023px) {
-              .mp-bleed-layer { display: none !important; }
-              #spotlight-container {
-                top: auto !important;
-                bottom: 0 !important;
-                width: 100% !important;
-                height: 55% !important;
-              }
-              #spotlight-container::before {
-                content: '';
-                position: absolute;
-                top: 0; left: 0; right: 0;
-                height: 80px;
-                background: linear-gradient(to bottom, #FAFAF7, transparent);
-                z-index: 26;
-                pointer-events: none;
-              }
-              .mp-text-layer {
-                width: 100% !important;
-                max-width: 100% !important;
-                height: 50% !important;
-                top: 0 !important;
-                padding: 56px 24px 12px !important;
-                justify-content: flex-end !important;
-              }
-              .mp-text-layer h2 { font-size: 1.5rem !important; line-height: 1.15 !important; }
-              .mp-body { margin-top: 8px !important; font-size: 0.8rem !important; max-width: 100% !important; }
-              .mp-divider { margin: 10px 0 !important; max-width: 100% !important; }
-              .mp-cta { max-width: 100% !important; }
-            }
           `}</style>
 
           {/* ═══ LAYER 1 — "LEAD" behind image (z-10) ═══ */}
@@ -627,6 +597,7 @@ export default function WalkerScroll() {
 
             {/* Headline — stroke→fill + y-reveal via GSAP */}
             <h2
+              className="mp-heading"
               style={{
                 fontFamily: "var(--font-fraunces, Georgia, serif)",
                 fontSize: "clamp(3rem, 4.5vw, 5rem)",
@@ -764,10 +735,6 @@ export default function WalkerScroll() {
           <style>{`
             @keyframes drift-up { from { transform: translateY(0); } to { transform: translateY(-50%); } }
             .drift-col:hover .drift-inner { animation-play-state: paused; }
-            @media (max-width: 1023px) {
-              .hp-text { width: 100% !important; padding-left: 24px !important; padding-right: 24px !important; }
-              .hp-drift-area { display: none !important; }
-            }
           `}</style>
           <div className="hp-drift-area relative flex-1 overflow-hidden flex gap-4 px-6 py-8">
 

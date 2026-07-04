@@ -228,7 +228,7 @@ function StickyImage({ feat }: { feat: Feature }) {
         borderRadius: "1.5rem",
         boxShadow: `16px 20px 0px ${feat.shadowColor}, 0 32px 64px ${feat.shadowColor}`,
       }}
-      className="sticky z-0 overflow-hidden"
+      className="feat-sticky-img sticky z-0 overflow-hidden"
     >
       {/* Photo */}
       <div className="absolute inset-0">

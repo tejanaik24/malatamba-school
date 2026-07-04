@@ -219,3 +219,66 @@ body::after {
 .text-balance {
   text-wrap: balance;
 }
+
+/* ══════════════════════════════════════════════════════
+   MOBILE OVERRIDES — all ≤1023px, desktop untouched
+══════════════════════════════════════════════════════ */
+
+/* Panel 2 Values — shrink heading so 2×2 grid fits h-screen */
+@media (max-width: 1023px) {
+  .vp-subtitle { font-size: 0.6rem !important; letter-spacing: 0.16em !important; }
+  .vp-title    { font-size: 1.75rem !important; line-height: 1 !important; }
+}
+
+/* Panel 3 Mission — stack text (top 48%) + image (bottom 55%) */
+@media (max-width: 1023px) {
+  .mp-bleed-layer { display: none !important; }
+
+  #spotlight-container {
+    top: auto !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 55% !important;
+  }
+  #spotlight-container::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 80px;
+    background: linear-gradient(to bottom, #FAFAF7, transparent);
+    z-index: 26;
+    pointer-events: none;
+  }
+
+  .mp-text-layer {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 48% !important;
+    top: 0 !important;
+    padding: 12px 20px 8px !important;
+    justify-content: flex-end !important;
+  }
+  .mp-heading  { font-size: 1.3rem !important; line-height: 1.2 !important; }
+  .mp-subtitle { font-size: 0.6rem !important; }
+  .mp-body     { margin-top: 6px !important; font-size: 0.78rem !important; max-width: 100% !important; }
+  .mp-divider  { margin: 8px 0 !important; max-width: 100% !important; }
+  .mp-cta      { max-width: 100% !important; }
+}
+
+/* Panel 4 Highlights — hide drift columns, text full-width */
+@media (max-width: 1023px) {
+  .hp-drift-area { display: none !important; }
+  .hp-text {
+    width: 100% !important;
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+}
+
+/* FeaturesGrid — reduce 100vh sticky images to 65vh on mobile */
+@media (max-width: 1023px) {
+  .feat-sticky-img {
+    height: calc(65vh - 24px) !important;
+    top: 8px !important;
+  }
+}
