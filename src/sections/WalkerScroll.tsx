@@ -346,7 +346,7 @@ export default function WalkerScroll() {
               .vp-grid:hover .vp-card:not(:hover) { filter: none !important; opacity: 1 !important; }
             }
           `}</style>
-          <div className="w-full h-full max-w-7xl mx-auto px-4 sm:px-12 lg:px-16 flex flex-col justify-center pt-12 pb-3 sm:pt-20 sm:pb-12">
+          <div className="vp-panel-inner w-full h-full max-w-7xl mx-auto px-4 sm:px-12 lg:px-16 flex flex-col justify-center pt-12 pb-3 sm:pt-20 sm:pb-12">
 
             {/* Section header */}
             <div className="mb-3 sm:mb-8 lg:mb-10">
@@ -802,6 +802,29 @@ export default function WalkerScroll() {
             })()}
 
           </div>
+
+          {/* Mobile-only horizontal photo strip — fills empty space below text */}
+          {(() => {
+            const slidePhotos = [
+              "/ai-images/life-01.png", "/ai-images/life-02.png", "/ai-images/life-03.png",
+              "/ai-images/life-04.png", "/ai-images/life-05.png", "/ai-images/highlights-cultural.png",
+              "/ai-images/highlights-sports.png", "/ai-images/feature-lab.png",
+            ];
+            return (
+              <div className="lg:hidden absolute bottom-[68px] left-0 right-0 overflow-hidden">
+                <div className="hp-slide-track">
+                  {[...slidePhotos, ...slidePhotos].map((src, i) => (
+                    <div
+                      key={i}
+                      style={{ width: "110px", height: "76px", borderRadius: "10px", overflow: "hidden", position: "relative", flexShrink: 0 }}
+                    >
+                      <Image src={src} alt="School life" fill className="object-cover" sizes="110px" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })()}
 
           <div className="absolute bottom-8 right-8 text-gray-400 text-xs font-mono z-40">04 / 04</div>
         </section>

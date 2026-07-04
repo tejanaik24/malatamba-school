@@ -282,3 +282,63 @@ body::after {
     top: 8px !important;
   }
 }
+
+/* ═══════════════════════════════════════════════
+   MOBILE POLISH ROUND 3 — 5 remaining issues
+═══════════════════════════════════════════════ */
+
+/* Panel 2 Values — push content below navbar, remove dead top space */
+@media (max-width: 1023px) {
+  .vp-panel-inner {
+    justify-content: flex-start !important;
+    padding-top: 68px !important;
+    padding-bottom: 0 !important;
+  }
+}
+
+/* Panel 3 Mission — push text below navbar, slightly bigger student image */
+@media (max-width: 1023px) {
+  .mp-text-layer {
+    justify-content: flex-start !important;
+    padding-top: 72px !important;
+  }
+  #spotlight-container {
+    height: 62% !important;
+  }
+}
+
+/* Panel 4 Highlights — text anchored below navbar */
+@media (max-width: 1023px) {
+  .hp-text {
+    justify-content: flex-start !important;
+    padding-top: 68px !important;
+  }
+}
+
+/* Panel 4 — mobile horizontal photo marquee */
+@keyframes marquee-slide {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.hp-slide-track {
+  display: flex;
+  gap: 10px;
+  animation: marquee-slide 22s linear infinite;
+  width: max-content;
+}
+
+/* VideoSection (Find Us) — kill min-height gap below map iframe */
+@media (max-width: 1023px) {
+  .find-us-map-col {
+    min-height: 0 !important;
+  }
+}
+
+/* Academics Teaching Approach — GSAP starts cards at opacity:0;
+   force visible on mobile so ScrollTrigger timing never hides them */
+@media (max-width: 1023px) {
+  .method-card {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+  }
+}
