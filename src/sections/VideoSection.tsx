@@ -1,102 +1,263 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
-import Image from "next/image";
+import { useRef, useEffect } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ImageData } from "@/lib/images";
 
+gsap.registerPlugin(ScrollTrigger);
+
+// prop kept for page.tsx compatibility — not used in this section
 interface VideoSectionProps {
   images: ImageData[];
 }
 
+const INFO_ROWS = [
+  { icon: "📍", text: "Sadguru Towers, Malatamba Road,\nP.M.Palem, Visakhapatnam – 530041" },
+  { icon: "📞", text: "083743 55556" },
+  { icon: "📞", text: "092997 52543" },
+  { icon: "✉️", text: "principalmalatambaschools@gmail.com" },
+  { icon: "🕐", text: "Mon–Sat · 8:00 AM – 4:00 PM" },
+];
+
+const BUTTONS = [
+  {
+    label: "📞 Call Us",
+    href: "tel:08374355556",
+    bg: "transparent",
+    color: "white",
+    border: "1px solid #334155",
+    hoverBg: "#334155",
+  },
+  {
+    label: "💬 WhatsApp",
+    href: "https://wa.me/918374355556",
+    bg: "#25D366",
+    color: "white",
+    border: "none",
+    hoverBg: "#1fb558",
+  },
+  {
+    label: "🗺️ Get Directions",
+    href: "https://maps.google.com/?q=Sadguru+Towers+Malatamba+Road+PM+Palem+Visakhapatnam",
+    bg: "#c9a84c",
+    color: "#0f172a",
+    border: "none",
+    hoverBg: "#b8973e",
+  },
+];
+
 export default function VideoSection({ images }: VideoSectionProps) {
-  const [playing, setPlaying] = useState(false);
-  const thumb = images.find((img) => img.section === "video-thumbnail");
+  void images;
+
+  const sectionRef = useRef<HTMLElement>(null);
+  const headingRef = useRef<HTMLDivElement>(null);
+  const mapRef    = useRef<HTMLDivElement>(null);
+  const cardRef   = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.from(headingRef.current, {
+        opacity: 0, y: 30, duration: 0.7, ease: "power2.out",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 82%",
+          toggleActions: "play none none reverse",
+        },
+      });
+      gsap.from(mapRef.current, {
+        opacity: 0, x: -30, duration: 0.8, ease: "power2.out", delay: 0.2,
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 78%",
+          toggleActions: "play none none reverse",
+        },
+      });
+      gsap.from(cardRef.current, {
+        opacity: 0, x: 30, duration: 0.8, ease: "power2.out", delay: 0.4,
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 78%",
+          toggleActions: "play none none reverse",
+        },
+      });
+    }, sectionRef);
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <section className="relative py-20 sm:py-28 overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-primary via-dark to-primary" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(201,168,76,0.08),transparent_50%),radial-gradient(ellipse_at_bottom_right,rgba(255,255,255,0.05),transparent_50%)]" />
+    <section
+      ref={sectionRef}
+      id="find-us"
+      style={{ background: "#0f172a", overflow: "hidden" }}
+    >
+      <style>{`
+        .find-us-inner {
+          max-width: 1280px;
+          margin: 0 auto;
+          padding: 72px 80px;
+        }
+        .find-us-cols {
+          display: flex;
+          flex-direction: row;
+          gap: 24px;
+          align-items: stretch;
+        }
+        .find-us-map-col {
+          flex: 0 0 60%;
+        }
+        .find-us-card-col {
+          flex: 1;
+          min-width: 0;
+        }
+        .fu-btn {
+          display: block;
+          width: 100%;
+          padding: 12px 20px;
+          border-radius: 8px;
+          font-size: 14px;
+          font-weight: 600;
+          text-align: center;
+          text-decoration: none;
+          cursor: pointer;
+          transition: background 0.2s, opacity 0.2s;
+        }
+        @media (max-width: 1023px) {
+          .find-us-inner { padding: 48px 24px; }
+          .find-us-cols  { flex-direction: column; }
+          .find-us-map-col,
+          .find-us-card-col { flex: unset; width: 100%; }
+        }
+      `}</style>
 
-      {/* moving gradient line */}
-      <motion.div
-        className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent"
-        animate={{ x: ["-100%", "100%"] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-      />
+      <div className="find-us-inner">
 
-      <div className="relative z-10 max-w-4xl mx-auto px-6 sm:px-12 lg:px-16 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <span className="text-gold font-semibold text-sm tracking-[0.2em] uppercase">
-            Take a Tour
-          </span>
-          <h2 className="text-3xl sm:text-5xl font-bold text-white mt-3 mb-4">
-            See Malatamba in Action
-          </h2>
-          <p className="text-white/60 max-w-lg mx-auto text-base sm:text-lg mb-10">
-            Watch our campus tour to experience the vibrant learning environment we have created for
-            your children.
+        {/* Label + Heading */}
+        <div ref={headingRef} style={{ textAlign: "center", marginBottom: "48px" }}>
+          <p style={{
+            color: "#c9a84c",
+            letterSpacing: "0.2em",
+            fontSize: "11px",
+            fontFamily: "monospace",
+            textTransform: "uppercase",
+            marginBottom: "16px",
+          }}>
+            VISIT US
           </p>
-        </motion.div>
+          <h2 style={{
+            color: "white",
+            fontSize: "clamp(1.75rem, 4vw, 3rem)",
+            fontFamily: "var(--font-fraunces, Georgia, serif)",
+            fontWeight: 700,
+            lineHeight: 1.1,
+            margin: 0,
+          }}>
+            Find Malatamba Vidyaniketan
+          </h2>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl bg-dark/50 cursor-pointer group mx-auto max-w-3xl"
-          onClick={() => setPlaying(true)}
-        >
-          {!playing ? (
-            <>
-              {thumb && (
-                <Image
-                  src={thumb.url}
-                  alt="School campus tour video thumbnail"
-                  fill
-                  className="object-cover transition-all duration-500 group-hover:scale-105"
-                />
-              )}
-              <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-                <motion.div
-                  animate={{
-                    scale: [1, 1.08, 1],
-                    boxShadow: [
-                      "0 0 0 0 rgba(201,168,76,0.7)",
-                      "0 0 0 20px rgba(201,168,76,0)",
-                      "0 0 0 0 rgba(201,168,76,0)",
-                    ],
-                  }}
-                  transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-                  className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gold flex items-center justify-center"
-                >
-                  <svg className="w-7 h-7 sm:w-8 sm:h-8 text-dark ml-1" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                </motion.div>
-              </div>
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-6 text-left">
-                <p className="text-white font-semibold text-base sm:text-lg">
-                  Campus Tour & Overview
-                </p>
-                <p className="text-white/50 text-sm">2:34 min</p>
-              </div>
-            </>
-          ) : (
+        {/* Two-column layout */}
+        <div className="find-us-cols">
+
+          {/* LEFT — Google Maps embed */}
+          <div
+            ref={mapRef}
+            className="find-us-map-col"
+            style={{
+              border: "1px solid #1e293b",
+              borderRadius: "16px",
+              overflow: "hidden",
+              minHeight: "480px",
+            }}
+          >
             <iframe
-              src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
-              title="School campus tour"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3800.123456789!2d83.3120!3d17.7270!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sMalatamba+Vidyaniketan!5e0!3m2!1sen!2sin!4v1699900000000!5m2!1sen!2sin"
+              width="100%"
+              height="480"
+              style={{ border: "none", display: "block" }}
               allowFullScreen
-              className="absolute inset-0 w-full h-full"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Malatamba Vidyaniketan on Google Maps"
             />
-          )}
-        </motion.div>
+          </div>
+
+          {/* RIGHT — Contact card */}
+          <div
+            ref={cardRef}
+            className="find-us-card-col"
+            style={{
+              background: "#1e293b",
+              borderRadius: "16px",
+              padding: "40px",
+              border: "1px solid #334155",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            {/* School identity */}
+            <div>
+              <h3 style={{
+                color: "white",
+                fontSize: "24px",
+                fontWeight: 700,
+                margin: "0 0 6px 0",
+                lineHeight: 1.2,
+              }}>
+                Malatamba Vidyaniketan
+              </h3>
+              <p style={{ color: "#c9a84c", fontSize: "14px", margin: 0 }}>
+                Premier School in Visakhapatnam
+              </p>
+            </div>
+
+            {/* Divider */}
+            <div style={{ borderTop: "1px solid #334155", margin: "24px 0" }} />
+
+            {/* Info rows */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "16px", flex: 1 }}>
+              {INFO_ROWS.map((row, i) => (
+                <div key={i} style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
+                  <span style={{ fontSize: "15px", lineHeight: "1.6", flexShrink: 0 }}>
+                    {row.icon}
+                  </span>
+                  <p style={{
+                    color: "#94a3b8",
+                    fontSize: "14px",
+                    lineHeight: 1.8,
+                    margin: 0,
+                    whiteSpace: "pre-line",
+                  }}>
+                    {row.text}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            {/* CTA buttons */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginTop: "32px" }}>
+              {BUTTONS.map((btn) => (
+                <a
+                  key={btn.label}
+                  href={btn.href}
+                  target={btn.href.startsWith("http") ? "_blank" : undefined}
+                  rel={btn.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                  className="fu-btn"
+                  style={{
+                    background: btn.bg,
+                    color: btn.color,
+                    border: btn.border,
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = btn.hoverBg; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = btn.bg; }}
+                >
+                  {btn.label}
+                </a>
+              ))}
+            </div>
+          </div>
+
+        </div>
       </div>
     </section>
   );
