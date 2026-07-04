@@ -143,16 +143,21 @@ export default function LeadershipMessage() {
         &ldquo;
       </span>
 
-      {/* z-20 — Full-bleed photo left side */}
+      {/* z-20 — Photo left side (inset with depth border) */}
       <div
         ref={imageRef}
         style={{
           position: "absolute",
-          top: 0,
-          left: 0,
-          width: "45%",
-          height: "100%",
+          top: "5%",
+          left: "3%",
+          width: "40%",
+          height: "88%",
           zIndex: 20,
+          borderRadius: 4,
+          overflow: "hidden",
+          /* Depth border: main shadow + offset duplicate for layered effect */
+          boxShadow:
+            "6px 6px 0px 0px #8B0000, 12px 12px 0px 0px rgba(139,0,0,0.18), 0 24px 60px rgba(0,0,0,0.22)",
         }}
         className="lm-photo"
       >
@@ -161,7 +166,7 @@ export default function LeadershipMessage() {
           alt="Mr. Suneel Mahanty — Chairman, Malatamba Vidyaniketan"
           fill
           className="object-cover object-top"
-          sizes="(max-width: 768px) 100vw, 45vw"
+          sizes="(max-width: 768px) 100vw, 42vw"
           quality={90}
           priority
         />
@@ -263,8 +268,11 @@ export default function LeadershipMessage() {
         @media (max-width: 768px) {
           .lm-photo {
             position: relative !important;
-            width: 100% !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 88% !important;
             height: 50vh !important;
+            margin: 24px auto 0 !important;
           }
           .lm-text {
             position: relative !important;
