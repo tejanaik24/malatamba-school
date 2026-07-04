@@ -48,7 +48,7 @@ const features = [
     num: "04",
     title: "Smart Classrooms",
     desc: "Interactive smart boards, projectors, and digital tools that make every lesson engaging.",
-    imageKey: "features-smart-class",
+    localImage: "/ai-images/feature-smartclass.png",
     alt: "Smart classroom with interactive board",
     accent: "#2e6b3e",
     span: "col-span-1 row-span-1",
@@ -58,7 +58,7 @@ const features = [
     num: "05",
     title: "Library — 5,000+ Books",
     desc: "A rich library with books, magazines, newspapers, and a quiet reading room for curious minds.",
-    imageKey: "features-library",
+    localImage: "/ai-images/feature-library.png",
     alt: "School library interior",
     accent: "#5a3a7e",
     span: "col-span-2 row-span-1",
@@ -68,7 +68,7 @@ const features = [
     num: "06",
     title: "Safe GPS Transport",
     desc: "GPS-tracked buses with trained drivers and female attendants — covering all of Visakhapatnam.",
-    imageKey: "features-transport",
+    localImage: "/ai-images/feature-transport.png",
     alt: "School bus",
     accent: "#6b3a1e",
     span: "col-span-1 row-span-1",
@@ -178,6 +178,7 @@ function BentoCard({
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function FeaturesGrid({ images }: FeaturesGridProps) {
   const sectionRef = useRef<HTMLElement>(null);
 
@@ -229,23 +230,13 @@ export default function FeaturesGrid({ images }: FeaturesGridProps) {
           <BentoCard feat={features[2]} imgSrc={features[2].localImage} />
 
           {/* Card 4 — normal */}
-          <BentoCard
-            feat={features[3]}
-            imgSrc={images.find((img) => img.section === features[3].imageKey)?.url}
-          />
+          <BentoCard feat={features[3]} imgSrc={features[3].localImage} />
 
           {/* Card 5 — wide (2 cols on lg) */}
-          <BentoCard
-            feat={features[4]}
-            imgSrc={images.find((img) => img.section === features[4].imageKey)?.url}
-            className="col-span-2 lg:col-span-2"
-          />
+          <BentoCard feat={features[4]} imgSrc={features[4].localImage} className="col-span-2 lg:col-span-2" />
 
           {/* Card 6 — normal */}
-          <BentoCard
-            feat={features[5]}
-            imgSrc={images.find((img) => img.section === features[5].imageKey)?.url}
-          />
+          <BentoCard feat={features[5]} imgSrc={features[5].localImage} />
         </div>
 
       </div>
