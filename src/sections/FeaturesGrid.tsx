@@ -1,245 +1,259 @@
 "use client";
 
-import { useRef, useEffect } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useRef } from "react";
+import {
+  motion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { ImageData } from "@/lib/images";
 
-gsap.registerPlugin(ScrollTrigger);
+/* ─── Types ─────────────────────────────────────────────────────────────── */
 
 interface FeaturesGridProps {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   images: ImageData[];
 }
 
-const features = [
+interface Feature {
+  subheading: string;
+  heading: string;
+  img: string;
+  title: string;
+  desc: string;
+}
+
+/* ─── Data ───────────────────────────────────────────────────────────────── */
+
+const features: Feature[] = [
   {
-    num: "01",
+    subheading: "Our Educators",
+    heading: "Experienced Faculty",
+    img: "/ai-images/feature-faculty.png",
     title: "Experienced Faculty",
-    desc: "Qualified educators with years of experience and a passion for teaching — giving every child personalized attention.",
-    localImage: "/ai-images/feature-faculty.png",
-    alt: "Experienced faculty member teaching",
-    accent: "#762123",
-    span: "col-span-2 row-span-2",
-    textSize: "text-2xl sm:text-3xl",
+    desc: "Qualified educators with years of experience and a passion for teaching — giving every child personalised attention and mentorship that goes beyond the textbook.",
   },
   {
-    num: "02",
+    subheading: "Future Ready",
+    heading: "Science & Computer Labs",
+    img: "/ai-images/feature-lab.png",
     title: "Science & Computer Labs",
-    desc: "Physics, Chemistry, Biology labs + 2 computer labs with 40 PCs each and high-speed internet.",
-    localImage: "/ai-images/feature-lab.png",
-    alt: "Students in science laboratory",
-    accent: "#c9a84c",
-    span: "col-span-1 row-span-1",
-    textSize: "text-lg",
+    desc: "Physics, Chemistry, Biology labs plus two dedicated computer labs with 40 PCs each and high-speed internet — practical learning at the heart of every subject.",
   },
   {
-    num: "03",
+    subheading: "Active Living",
+    heading: "Sports & Athletics",
+    img: "/ai-images/feature-sports.png",
     title: "Sports & Athletics",
-    desc: "Cricket, football, athletics, basketball and indoor games — for fitness and teamwork.",
-    localImage: "/ai-images/feature-sports.png",
-    alt: "Students playing sports",
-    accent: "#1e4a8a",
-    span: "col-span-1 row-span-1",
-    textSize: "text-lg",
+    desc: "Cricket, football, athletics, basketball and indoor games — a full sports programme that builds fitness, teamwork, and the resilience to compete and succeed.",
   },
   {
-    num: "04",
+    subheading: "Tech Enabled",
+    heading: "Smart Classrooms",
+    img: "/ai-images/feature-smartclass.png",
     title: "Smart Classrooms",
-    desc: "Interactive smart boards, projectors, and digital tools that make every lesson engaging.",
-    localImage: "/ai-images/feature-smartclass.png",
-    alt: "Smart classroom with interactive board",
-    accent: "#2e6b3e",
-    span: "col-span-1 row-span-1",
-    textSize: "text-lg",
+    desc: "Interactive smart boards, projectors, and digital learning tools that make every lesson vivid and engaging — bringing concepts to life for every learner.",
   },
   {
-    num: "05",
+    subheading: "Knowledge Hub",
+    heading: "Library — 5,000+ Books",
+    img: "/ai-images/feature-library.png",
     title: "Library — 5,000+ Books",
-    desc: "A rich library with books, magazines, newspapers, and a quiet reading room for curious minds.",
-    localImage: "/ai-images/feature-library.png",
-    alt: "School library interior",
-    accent: "#5a3a7e",
-    span: "col-span-2 row-span-1",
-    textSize: "text-xl",
+    desc: "A rich library stocked with books, magazines, newspapers, and reference material — plus a quiet reading room that nurtures curious, independent minds.",
   },
   {
-    num: "06",
+    subheading: "Safe Commute",
+    heading: "Safe GPS Transport",
+    img: "/ai-images/feature-transport.png",
     title: "Safe GPS Transport",
-    desc: "GPS-tracked buses with trained drivers and female attendants — covering all of Visakhapatnam.",
-    localImage: "/ai-images/feature-transport.png",
-    alt: "School bus",
-    accent: "#6b3a1e",
-    span: "col-span-1 row-span-1",
-    textSize: "text-lg",
+    desc: "GPS-tracked buses with trained drivers and female attendants covering all of Visakhapatnam — so parents have complete peace of mind every single day.",
   },
 ];
 
-function BentoCard({
-  feat,
-  imgSrc,
-  className,
+const IMG_PADDING = 12;
+
+/* ─── TextParallaxContent wrapper ───────────────────────────────────────── */
+
+function TextParallaxContent({
+  imgUrl,
+  subheading,
+  heading,
+  children,
 }: {
-  feat: typeof features[number];
-  imgSrc: string | undefined;
-  className?: string;
+  imgUrl: string;
+  subheading: string;
+  heading: string;
+  children: React.ReactNode;
 }) {
-  const cardRef = useRef<HTMLDivElement>(null);
-
-  const onMove = (e: React.MouseEvent) => {
-    const el = cardRef.current;
-    if (!el || window.matchMedia("(hover: none)").matches) return;
-    const r = el.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width - 0.5;
-    const y = (e.clientY - r.top) / r.height - 0.5;
-    el.style.transform = `perspective(900px) rotateY(${x * 5}deg) rotateX(${-y * 5}deg) scale(1.015)`;
-  };
-
-  const onLeave = () => {
-    if (cardRef.current) cardRef.current.style.transform = "";
-  };
-
   return (
-    <div
-      ref={cardRef}
-      onMouseMove={onMove}
-      onMouseLeave={onLeave}
-      className={`feat-card relative rounded-2xl overflow-hidden group cursor-default ${className ?? ""}`}
-      style={{
-        transformStyle: "preserve-3d",
-        willChange: "transform",
-        transition: "transform 0.25s ease, box-shadow 0.25s ease",
-        boxShadow: "0 4px 24px rgba(0,0,0,0.08)",
-        minHeight: "180px",
-      }}
-    >
-      {/* Background image */}
-      {imgSrc ? (
-        <Image
-          src={imgSrc}
-          alt={feat.alt}
-          fill
-          className="object-cover transition-transform duration-700 group-hover:scale-105"
-          quality={85}
-          sizes="(max-width: 768px) 100vw, 50vw"
-        />
-      ) : (
-        <div style={{ backgroundColor: feat.accent, opacity: 0.15 }} className="absolute inset-0" />
-      )}
-
-      {/* Dark gradient overlay */}
-      <div
-        className="absolute inset-0 transition-opacity duration-300"
-        style={{
-          background: `linear-gradient(160deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.72) 100%)`,
-        }}
-      />
-
-      {/* Accent top border */}
-      <div
-        className="absolute top-0 left-0 right-0 h-0.5"
-        style={{ background: feat.accent }}
-      />
-
-      {/* Content */}
-      <div className="absolute inset-0 p-5 sm:p-6 flex flex-col justify-end">
-        <span
-          className="text-[40px] sm:text-[56px] font-black leading-none select-none absolute top-4 right-5 opacity-10 text-white"
-          aria-hidden="true"
-        >
-          {feat.num}
-        </span>
-        <h3 className={`${feat.textSize} font-bold text-white mb-1.5 leading-tight text-balance`}>
-          {feat.title}
-        </h3>
-        <p className="text-white/60 text-xs sm:text-sm leading-relaxed line-clamp-2 group-hover:text-white/80 transition-colors duration-300">
-          {feat.desc}
-        </p>
+    <div style={{ paddingLeft: IMG_PADDING, paddingRight: IMG_PADDING }}>
+      <div className="relative h-[150vh]">
+        <StickyImage imgUrl={imgUrl} />
+        <OverlayCopy subheading={subheading} heading={heading} />
       </div>
-
-      {/* Hover reveal: Learn More */}
-      <div
-        className="absolute bottom-0 left-0 right-0 h-10 flex items-center justify-center translate-y-full group-hover:translate-y-0 transition-transform duration-300"
-        style={{ background: feat.accent }}
-      >
-        <Link
-          href="/infrastructure"
-          className="text-white text-xs font-bold tracking-wider uppercase flex items-center gap-1.5"
-          onClick={(e) => e.stopPropagation()}
-        >
-          Learn More
-          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-            <path d="M17 8l4 4m0 0l-4 4m4-4H3" />
-          </svg>
-        </Link>
-      </div>
+      {children}
     </div>
   );
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default function FeaturesGrid({ images }: FeaturesGridProps) {
-  const sectionRef = useRef<HTMLElement>(null);
+/* ─── Sticky image with scale + overlay ─────────────────────────────────── */
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from(".feat-card", {
-        y: 40, opacity: 0, stagger: { amount: 0.5, from: "start" },
-        duration: 0.65, ease: "power2.out",
-        scrollTrigger: { trigger: sectionRef.current, start: "top 80%", toggleActions: "play none none reverse" },
-      });
-      gsap.from(".fg-heading", {
-        y: 30, opacity: 0, duration: 0.7, ease: "power2.out",
-        scrollTrigger: { trigger: sectionRef.current, start: "top 85%", toggleActions: "play none none reverse" },
-      });
-    }, sectionRef);
-    return () => ctx.revert();
-  }, []);
+function StickyImage({ imgUrl }: { imgUrl: string }) {
+  const targetRef = useRef<HTMLDivElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: targetRef,
+    offset: ["end end", "end start"],
+  });
+
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.85]);
 
   return (
-    <section ref={sectionRef} className="py-20 sm:py-28 bg-white" id="features">
-      <div className="max-w-7xl mx-auto px-6 sm:px-12 lg:px-16">
-
-        <div className="fg-heading text-center mb-14">
-          <span className="text-primary font-semibold text-xs tracking-[0.25em] uppercase">
-            Why Choose Us
-          </span>
-          <h2 className="text-3xl sm:text-5xl font-bold text-dark mt-3 mb-4">
-            Everything Your Child Needs
-          </h2>
-          <p className="text-gray-500 max-w-xl mx-auto text-sm sm:text-base">
-            From modern infrastructure to a nurturing environment — the complete ecosystem for academic and personal growth.
-          </p>
-        </div>
-
-        {/* Bento grid */}
-        <div
-          className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 auto-rows-[minmax(160px,auto)]"
-          style={{ gridTemplateRows: "auto" }}
-        >
-          {/* Card 1 — big (2×2 on lg) */}
-          <BentoCard
-            feat={features[0]}
-            imgSrc={features[0].localImage}
-            className="lg:col-span-2 lg:row-span-2"
-          />
-
-          {/* Cards 2 & 3 — normal */}
-          <BentoCard feat={features[1]} imgSrc={features[1].localImage} />
-          <BentoCard feat={features[2]} imgSrc={features[2].localImage} />
-
-          {/* Card 4 — normal */}
-          <BentoCard feat={features[3]} imgSrc={features[3].localImage} />
-
-          {/* Card 5 — wide (2 cols on lg) */}
-          <BentoCard feat={features[4]} imgSrc={features[4].localImage} className="col-span-2 lg:col-span-2" />
-
-          {/* Card 6 — normal */}
-          <BentoCard feat={features[5]} imgSrc={features[5].localImage} />
-        </div>
-
+    <motion.div
+      style={{
+        backgroundImage: `url(${imgUrl})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        height: `calc(100vh - ${IMG_PADDING * 2}px)`,
+        top: IMG_PADDING,
+        scale,
+        borderRadius: "1.5rem",
+      }}
+      ref={targetRef}
+      className="sticky z-0 overflow-hidden"
+    >
+      {/* Next/Image for proper optimisation */}
+      <div className="absolute inset-0">
+        <Image
+          src={imgUrl}
+          alt=""
+          fill
+          className="object-cover"
+          sizes="100vw"
+          quality={85}
+        />
       </div>
+
+      {/* Dark overlay fades in as image scales down */}
+      <motion.div
+        className="absolute inset-0 bg-neutral-950/70"
+        style={{ opacity: useTransform(scrollYProgress, [0, 1], [0.35, 0.85]) }}
+      />
+    </motion.div>
+  );
+}
+
+/* ─── Floating text overlay with parallax y ─────────────────────────────── */
+
+function OverlayCopy({
+  subheading,
+  heading,
+}: {
+  subheading: string;
+  heading: string;
+}) {
+  const targetRef = useRef<HTMLDivElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: targetRef,
+    offset: ["start end", "end start"],
+  });
+
+  const y = useTransform(scrollYProgress, [0, 1], [250, -250]);
+  const opacity = useTransform(scrollYProgress, [0.25, 0.5, 0.75], [0, 1, 0]);
+
+  return (
+    <motion.div
+      style={{ y, opacity }}
+      ref={targetRef}
+      className="absolute left-0 top-0 flex h-screen w-full flex-col items-center justify-center text-white z-10 pointer-events-none"
+    >
+      <p className="mb-2 text-center text-xl font-light italic md:mb-4 md:text-3xl" style={{ color: "rgba(255,255,255,0.72)" }}>
+        {subheading}
+      </p>
+      <p className="text-center text-4xl font-bold md:text-7xl" style={{ fontFamily: "var(--font-fraunces, Georgia, serif)", letterSpacing: "-0.02em" }}>
+        {heading}
+      </p>
+    </motion.div>
+  );
+}
+
+/* ─── Content block below each sticky image ─────────────────────────────── */
+
+function FeatureContent({ feature }: { feature: Feature }) {
+  return (
+    <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 px-4 py-12 md:grid-cols-12" style={{ background: "#FAFAF7" }}>
+
+      {/* Left: feature title */}
+      <div className="md:col-span-4 flex items-start">
+        <h3
+          style={{
+            fontFamily: "var(--font-fraunces, Georgia, serif)",
+            fontSize: "clamp(1.5rem, 3vw, 2.25rem)",
+            fontWeight: 700,
+            color: "#8B0000",
+            lineHeight: 1.2,
+          }}
+        >
+          {feature.title}
+        </h3>
+      </div>
+
+      {/* Right: description + CTA */}
+      <div className="md:col-span-8 flex flex-col justify-start gap-4">
+        <p className="text-base leading-relaxed" style={{ color: "#444" }}>
+          {feature.desc}
+        </p>
+        <Link
+          href="/infrastructure"
+          className="self-start text-sm font-semibold flex items-center gap-1.5 transition-opacity hover:opacity-70"
+          style={{ color: "#8B0000" }}
+        >
+          Learn More
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+            <path d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+        </Link>
+      </div>
+
+    </div>
+  );
+}
+
+/* ─── Main export ────────────────────────────────────────────────────────── */
+
+export default function FeaturesGrid({ images }: FeaturesGridProps) {
+  void images; // prop kept for page.tsx compatibility
+  return (
+    <section className="bg-white" id="features">
+
+      {/* Section header */}
+      <div className="text-center pt-20 pb-4 px-6">
+        <span className="text-primary font-semibold text-xs tracking-[0.25em] uppercase">
+          Why Choose Us
+        </span>
+        <h2 className="text-3xl sm:text-5xl font-bold text-dark mt-3 mb-4">
+          Everything Your Child Needs
+        </h2>
+        <p className="text-gray-500 max-w-xl mx-auto text-sm sm:text-base">
+          From modern infrastructure to a nurturing environment — the complete ecosystem for academic and personal growth.
+        </p>
+      </div>
+
+      {/* Parallax feature sections */}
+      {features.map((feat) => (
+        <TextParallaxContent
+          key={feat.heading}
+          imgUrl={feat.img}
+          subheading={feat.subheading}
+          heading={feat.heading}
+        >
+          <FeatureContent feature={feat} />
+        </TextParallaxContent>
+      ))}
+
     </section>
   );
 }
