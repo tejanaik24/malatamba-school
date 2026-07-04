@@ -1,10 +1,12 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import {
   motion,
   useScroll,
   useTransform,
+  useMotionValueEvent,
+  AnimatePresence,
 } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,7 +15,6 @@ import { ImageData } from "@/lib/images";
 /* ─── Types ─────────────────────────────────────────────────────────────── */
 
 interface FeaturesGridProps {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   images: ImageData[];
 }
 
@@ -23,6 +24,9 @@ interface Feature {
   img: string;
   title: string;
   desc: string;
+  accentColor: string;
+  stampText: string;
+  stat: string;
 }
 
 /* ─── Data ───────────────────────────────────────────────────────────────── */
@@ -34,6 +38,9 @@ const features: Feature[] = [
     img: "/ai-images/feature-faculty.png",
     title: "Experienced Faculty",
     desc: "Qualified educators with years of experience and a passion for teaching — giving every child personalised attention and mentorship that goes beyond the textbook.",
+    accentColor: "#762123",
+    stampText: "FACULTY",
+    stat: "30+ Teachers",
   },
   {
     subheading: "Future Ready",
@@ -41,6 +48,9 @@ const features: Feature[] = [
     img: "/ai-images/feature-lab.png",
     title: "Science & Computer Labs",
     desc: "Physics, Chemistry, Biology labs plus two dedicated computer labs with 40 PCs each and high-speed internet — practical learning at the heart of every subject.",
+    accentColor: "#b08a28",
+    stampText: "LABS",
+    stat: "40 PCs / Lab",
   },
   {
     subheading: "Active Living",
@@ -48,6 +58,9 @@ const features: Feature[] = [
     img: "/ai-images/feature-sports.png",
     title: "Sports & Athletics",
     desc: "Cricket, football, athletics, basketball and indoor games — a full sports programme that builds fitness, teamwork, and the resilience to compete and succeed.",
+    accentColor: "#1e4a8a",
+    stampText: "SPORTS",
+    stat: "8 Sports",
   },
   {
     subheading: "Tech Enabled",
@@ -55,6 +68,9 @@ const features: Feature[] = [
     img: "/ai-images/feature-smartclass.png",
     title: "Smart Classrooms",
     desc: "Interactive smart boards, projectors, and digital learning tools that make every lesson vivid and engaging — bringing concepts to life for every learner.",
+    accentColor: "#2e6b3e",
+    stampText: "SMART CLASS",
+    stat: "Smart Boards",
   },
   {
     subheading: "Knowledge Hub",
@@ -62,6 +78,9 @@ const features: Feature[] = [
     img: "/ai-images/feature-library.png",
     title: "Library — 5,000+ Books",
     desc: "A rich library stocked with books, magazines, newspapers, and reference material — plus a quiet reading room that nurtures curious, independent minds.",
+    accentColor: "#5a3a7e",
+    stampText: "LIBRARY",
+    stat: "5,000+ Books",
   },
   {
     subheading: "Safe Commute",
@@ -69,66 +88,146 @@ const features: Feature[] = [
     img: "/ai-images/feature-transport.png",
     title: "Safe GPS Transport",
     desc: "GPS-tracked buses with trained drivers and female attendants covering all of Visakhapatnam — so parents have complete peace of mind every single day.",
+    accentColor: "#6b3a1e",
+    stampText: "TRANSPORT",
+    stat: "GPS Tracked",
   },
 ];
 
 const IMG_PADDING = 12;
 
-/* ─── TextParallaxContent wrapper ───────────────────────────────────────── */
+/* ════════════════════════════════════════════════════════════════════════════
+   1. FIXED TICKER — slot-machine counter on right edge
+════════════════════════════════════════════════════════════════════════════ */
 
-function TextParallaxContent({
-  imgUrl,
-  subheading,
-  heading,
-  children,
+function FixedTicker({
+  activeIndex,
+  visible,
 }: {
-  imgUrl: string;
-  subheading: string;
-  heading: string;
-  children: React.ReactNode;
+  activeIndex: number;
+  visible: boolean;
 }) {
   return (
-    <div style={{ paddingLeft: IMG_PADDING, paddingRight: IMG_PADDING }}>
-      <div className="relative h-[150vh]">
-        <StickyImage imgUrl={imgUrl} />
-        <OverlayCopy subheading={subheading} heading={heading} />
+    <motion.div
+      animate={{ opacity: visible ? 1 : 0 }}
+      transition={{ duration: 0.4, ease: "easeInOut" }}
+      style={{
+        position: "fixed",
+        right: 20,
+        top: "50%",
+        translateY: "-50%",
+        zIndex: 100,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: 8,
+        pointerEvents: "none",
+      }}
+      className="hidden md:flex"
+    >
+      {/* Slot-machine number */}
+      <div style={{ overflow: "hidden", height: "5.5rem", display: "flex", alignItems: "center" }}>
+        <AnimatePresence mode="popLayout">
+          <motion.span
+            key={activeIndex}
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -50, opacity: 0 }}
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            style={{
+              display: "block",
+              fontFamily: "var(--font-fraunces, Georgia, serif)",
+              fontSize: "4.5rem",
+              fontWeight: 900,
+              lineHeight: 1,
+              color: features[activeIndex].accentColor,
+              letterSpacing: "-0.04em",
+            }}
+          >
+            {String(activeIndex + 1).padStart(2, "0")}
+          </motion.span>
+        </AnimatePresence>
       </div>
-      {children}
-    </div>
+
+      {/* Track dots */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+        {features.map((feat, i) => (
+          <motion.div
+            key={i}
+            animate={{
+              height: i === activeIndex ? 22 : 4,
+              backgroundColor:
+                i === activeIndex ? feat.accentColor : "#d1d5db",
+            }}
+            transition={{ duration: 0.3 }}
+            style={{ width: 3, borderRadius: 9999 }}
+          />
+        ))}
+      </div>
+    </motion.div>
   );
 }
 
-/* ─── Sticky image with scale + overlay ─────────────────────────────────── */
+/* ════════════════════════════════════════════════════════════════════════════
+   2. STICKY IMAGE — scale exit + clip-path entry + stamp + pill + accent bar
+════════════════════════════════════════════════════════════════════════════ */
 
-function StickyImage({ imgUrl }: { imgUrl: string }) {
+function StickyImage({ feat }: { feat: Feature }) {
   const targetRef = useRef<HTMLDivElement>(null);
 
-  const { scrollYProgress } = useScroll({
+  /* Exit scroll: drives scale-down + overlay + stamp + pill fade */
+  const { scrollYProgress: exitProgress } = useScroll({
     target: targetRef,
     offset: ["end end", "end start"],
   });
 
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.85]);
+  /* Entry scroll: drives clip-path wipe from bottom */
+  const { scrollYProgress: entryProgress } = useScroll({
+    target: targetRef,
+    offset: ["start end", "start center"],
+  });
+
+  /* Scale */
+  const scale = useTransform(exitProgress, [0, 1], [1, 0.85]);
+
+  /* Dark overlay: fades from 35% → 85% as image scales out */
+  const overlayOpacity = useTransform(exitProgress, [0, 1], [0.35, 0.85]);
+
+  /* 4. Clip-path wipe: inset from bottom on entry */
+  const clipPath = useTransform(
+    entryProgress,
+    [0, 1],
+    ["inset(100% 0 0 0 round 24px)", "inset(0% 0 0 0 round 24px)"]
+  );
+
+  /* 1. Magazine stamp: fades in as section is active, disappears on exit */
+  const stampOpacity = useTransform(
+    exitProgress,
+    [0, 0.15, 0.7, 1],
+    [0, 1, 1, 0]
+  );
+  const stampScale = useTransform(exitProgress, [0, 0.15], [0.88, 1]);
+
+  /* 5. Stat pill: fades in after entry, fades out with exit */
+  const pillOpacity = useTransform(entryProgress, [0.5, 1], [0, 1]);
 
   return (
     <motion.div
+      ref={targetRef}
       style={{
-        backgroundImage: `url(${imgUrl})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
         height: `calc(100vh - ${IMG_PADDING * 2}px)`,
         top: IMG_PADDING,
         scale,
+        clipPath,
         borderRadius: "1.5rem",
       }}
-      ref={targetRef}
       className="sticky z-0 overflow-hidden"
     >
-      {/* Next/Image for proper optimisation */}
+      {/* Photo */}
       <div className="absolute inset-0">
         <Image
-          src={imgUrl}
-          alt=""
+          src={feat.img}
+          alt={feat.heading}
           fill
           className="object-cover"
           sizes="100vw"
@@ -136,16 +235,110 @@ function StickyImage({ imgUrl }: { imgUrl: string }) {
         />
       </div>
 
-      {/* Dark overlay fades in as image scales down */}
+      {/* Dark overlay */}
       <motion.div
-        className="absolute inset-0 bg-neutral-950/70"
-        style={{ opacity: useTransform(scrollYProgress, [0, 1], [0.35, 0.85]) }}
+        className="absolute inset-0"
+        style={{ backgroundColor: "rgba(10,10,10,0.7)", opacity: overlayOpacity }}
       />
+
+      {/* Accent top bar */}
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 4,
+          background: feat.accentColor,
+          zIndex: 20,
+        }}
+      />
+
+      {/* 1. Magazine stamp — outlined bleed text */}
+      <motion.div
+        style={{
+          position: "absolute",
+          inset: 0,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          opacity: stampOpacity,
+          scale: stampScale,
+          zIndex: 10,
+          pointerEvents: "none",
+        }}
+      >
+        <span
+          style={{
+            fontFamily: "var(--font-fraunces, Georgia, serif)",
+            fontSize: "clamp(5rem, 18vw, 20rem)",
+            fontWeight: 900,
+            lineHeight: 0.85,
+            color: "transparent",
+            WebkitTextStroke: `2px ${feat.accentColor}`,
+            textAlign: "center",
+            letterSpacing: "-0.02em",
+            userSelect: "none",
+            opacity: 0.55,
+          }}
+        >
+          {feat.stampText}
+        </span>
+      </motion.div>
+
+      {/* 5. Floating stat pill — frosted glass, bottom-right */}
+      <motion.div
+        style={{
+          position: "absolute",
+          bottom: 32,
+          right: 32,
+          zIndex: 20,
+          opacity: pillOpacity,
+        }}
+      >
+        <div
+          style={{
+            backdropFilter: "blur(14px)",
+            WebkitBackdropFilter: "blur(14px)",
+            background: "rgba(255,255,255,0.12)",
+            border: `1px solid ${feat.accentColor}`,
+            borderRadius: 9999,
+            padding: "10px 22px",
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+          }}
+        >
+          <span
+            style={{
+              display: "inline-block",
+              width: 8,
+              height: 8,
+              borderRadius: "50%",
+              background: feat.accentColor,
+              flexShrink: 0,
+            }}
+          />
+          <span
+            style={{
+              color: "white",
+              fontSize: 14,
+              fontWeight: 600,
+              letterSpacing: "0.05em",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {feat.stat}
+          </span>
+        </div>
+      </motion.div>
     </motion.div>
   );
 }
 
-/* ─── Floating text overlay with parallax y ─────────────────────────────── */
+/* ════════════════════════════════════════════════════════════════════════════
+   Floating subheading + heading with y parallax
+════════════════════════════════════════════════════════════════════════════ */
 
 function OverlayCopy({
   subheading,
@@ -155,53 +348,66 @@ function OverlayCopy({
   heading: string;
 }) {
   const targetRef = useRef<HTMLDivElement>(null);
-
   const { scrollYProgress } = useScroll({
     target: targetRef,
     offset: ["start end", "end start"],
   });
-
   const y = useTransform(scrollYProgress, [0, 1], [250, -250]);
   const opacity = useTransform(scrollYProgress, [0.25, 0.5, 0.75], [0, 1, 0]);
 
   return (
     <motion.div
-      style={{ y, opacity }}
       ref={targetRef}
-      className="absolute left-0 top-0 flex h-screen w-full flex-col items-center justify-center text-white z-10 pointer-events-none"
+      style={{ y, opacity }}
+      className="absolute left-0 top-0 flex h-screen w-full flex-col items-center justify-center text-white z-10 pointer-events-none px-4"
     >
-      <p className="mb-2 text-center text-xl font-light italic md:mb-4 md:text-3xl" style={{ color: "rgba(255,255,255,0.72)" }}>
+      <p
+        className="mb-2 text-center text-xl font-light italic md:mb-4 md:text-3xl"
+        style={{ color: "rgba(255,255,255,0.72)" }}
+      >
         {subheading}
       </p>
-      <p className="text-center text-4xl font-bold md:text-7xl" style={{ fontFamily: "var(--font-fraunces, Georgia, serif)", letterSpacing: "-0.02em" }}>
+      <p
+        className="text-center text-4xl font-bold md:text-7xl"
+        style={{
+          fontFamily: "var(--font-fraunces, Georgia, serif)",
+          letterSpacing: "-0.02em",
+        }}
+      >
         {heading}
       </p>
     </motion.div>
   );
 }
 
-/* ─── Content block below each sticky image ─────────────────────────────── */
+/* ════════════════════════════════════════════════════════════════════════════
+   3. Content block — accent color bleeds as left border per feature
+════════════════════════════════════════════════════════════════════════════ */
 
 function FeatureContent({ feature }: { feature: Feature }) {
   return (
-    <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 px-4 py-12 md:grid-cols-12" style={{ background: "#FAFAF7" }}>
-
-      {/* Left: feature title */}
+    <div
+      className="grid grid-cols-1 gap-8 py-12 md:grid-cols-12"
+      style={{
+        background: "#FAFAF7",
+        borderLeft: `5px solid ${feature.accentColor}`,
+        paddingLeft: 32,
+        paddingRight: 32,
+      }}
+    >
       <div className="md:col-span-4 flex items-start">
         <h3
           style={{
             fontFamily: "var(--font-fraunces, Georgia, serif)",
             fontSize: "clamp(1.5rem, 3vw, 2.25rem)",
             fontWeight: 700,
-            color: "#8B0000",
+            color: feature.accentColor,
             lineHeight: 1.2,
           }}
         >
           {feature.title}
         </h3>
       </div>
-
-      {/* Right: description + CTA */}
       <div className="md:col-span-8 flex flex-col justify-start gap-4">
         <p className="text-base leading-relaxed" style={{ color: "#444" }}>
           {feature.desc}
@@ -209,25 +415,69 @@ function FeatureContent({ feature }: { feature: Feature }) {
         <Link
           href="/infrastructure"
           className="self-start text-sm font-semibold flex items-center gap-1.5 transition-opacity hover:opacity-70"
-          style={{ color: "#8B0000" }}
+          style={{ color: feature.accentColor }}
         >
           Learn More
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth="2.5"
+          >
             <path d="M17 8l4 4m0 0l-4 4m4-4H3" />
           </svg>
         </Link>
       </div>
-
     </div>
   );
 }
 
-/* ─── Main export ────────────────────────────────────────────────────────── */
+/* ════════════════════════════════════════════════════════════════════════════
+   TextParallaxContent wrapper
+════════════════════════════════════════════════════════════════════════════ */
+
+function TextParallaxContent({
+  feat,
+  children,
+}: {
+  feat: Feature;
+  children: React.ReactNode;
+}) {
+  return (
+    <div style={{ paddingLeft: IMG_PADDING, paddingRight: IMG_PADDING }}>
+      <div className="relative h-[150vh]">
+        <StickyImage feat={feat} />
+        <OverlayCopy subheading={feat.subheading} heading={feat.heading} />
+      </div>
+      {children}
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   Main export
+════════════════════════════════════════════════════════════════════════════ */
 
 export default function FeaturesGrid({ images }: FeaturesGridProps) {
-  void images; // prop kept for page.tsx compatibility
+  void images;
+
+  const featSectionRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [tickerVisible, setTickerVisible] = useState(false);
+
+  const { scrollYProgress } = useScroll({ target: featSectionRef });
+
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    setTickerVisible(latest > 0.01 && latest < 0.995);
+    setActiveIndex(Math.min(features.length - 1, Math.floor(latest * features.length)));
+  });
+
   return (
     <section className="bg-white" id="features">
+
+      {/* 2. Fixed slot-machine ticker */}
+      <FixedTicker activeIndex={activeIndex} visible={tickerVisible} />
 
       {/* Section header */}
       <div className="text-center pt-20 pb-4 px-6">
@@ -238,21 +488,19 @@ export default function FeaturesGrid({ images }: FeaturesGridProps) {
           Everything Your Child Needs
         </h2>
         <p className="text-gray-500 max-w-xl mx-auto text-sm sm:text-base">
-          From modern infrastructure to a nurturing environment — the complete ecosystem for academic and personal growth.
+          From modern infrastructure to a nurturing environment — the complete
+          ecosystem for academic and personal growth.
         </p>
       </div>
 
-      {/* Parallax feature sections */}
-      {features.map((feat) => (
-        <TextParallaxContent
-          key={feat.heading}
-          imgUrl={feat.img}
-          subheading={feat.subheading}
-          heading={feat.heading}
-        >
-          <FeatureContent feature={feat} />
-        </TextParallaxContent>
-      ))}
+      {/* All 6 parallax feature sections */}
+      <div ref={featSectionRef}>
+        {features.map((feat) => (
+          <TextParallaxContent key={feat.heading} feat={feat}>
+            <FeatureContent feature={feat} />
+          </TextParallaxContent>
+        ))}
+      </div>
 
     </section>
   );
