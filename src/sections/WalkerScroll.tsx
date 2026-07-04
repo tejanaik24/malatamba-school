@@ -741,11 +741,8 @@ export default function WalkerScroll() {
                 <div className="lg:hidden mt-6 overflow-hidden" style={{ marginLeft: "-24px", marginRight: "-24px" }}>
                   <div className="hp-slide-track">
                     {[...slidePhotos, ...slidePhotos].map((src, i) => (
-                      <div
-                        key={i}
-                        style={{ width: "130px", height: "115px", borderRadius: "12px", overflow: "hidden", position: "relative", flexShrink: 0 }}
-                      >
-                        <Image src={src} alt="School life" fill className="object-cover" sizes="130px" />
+                      <div key={i} className="hp-slide-photo">
+                        <Image src={src} alt="School life" fill className="object-cover" sizes="150px" />
                       </div>
                     ))}
                   </div>

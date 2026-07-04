@@ -294,11 +294,12 @@ body::after {
     padding-top: 68px !important;
     padding-bottom: 0 !important;
   }
-  /* Card images: calc height so 2 rows fill the full panel */
+  /* Card images — calculated so 2 rows fill available height with no overflow.
+     Formula: (svh - 480) / 2 where 480 = 2×(68pt + 80header + 56sticky)/2 + 2×(32num + 82text) + 8gap
+     Buffer of 40px added → verified no crop at svh 680-800px */
   .vp-card-img {
-    height: calc((100svh - 360px) / 2) !important;
-    min-height: 130px !important;
-    max-height: 200px !important;
+    height: 130px; /* fallback for no-svh browsers */
+    height: clamp(110px, calc((100svh - 480px) / 2), 150px);
   }
 }
 
@@ -331,6 +332,18 @@ body::after {
   gap: 10px;
   animation: marquee-slide 22s linear infinite;
   width: max-content;
+}
+/* Photo strip images — calculated to fill gap between button and sticky bar.
+   Formula: svh - 436 where 436 = 370(content above photos) + 56(sticky) + 10(breathing)
+   Verified at svh 680-750px → photo fills remaining space with ~10-64px breathing room */
+.hp-slide-photo {
+  width: 150px !important;
+  height: 160px; /* fallback */
+  height: clamp(150px, calc(100svh - 436px), 260px);
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  position: relative !important;
+  flex-shrink: 0 !important;
 }
 
 /* VideoSection (Find Us) — kill min-height gap below map iframe */
