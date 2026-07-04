@@ -124,7 +124,6 @@ function FixedTicker({
         top: "50%",
         translateY: "-50%",
         zIndex: 100,
-        display: "flex",
         flexDirection: "column",
         alignItems: "center",
         gap: 8,

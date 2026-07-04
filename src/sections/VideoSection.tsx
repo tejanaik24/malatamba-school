@@ -138,6 +138,9 @@ export default function VideoSection({ images }: VideoSectionProps) {
           .find-us-card-col { flex: unset; width: 100%; }
           .find-us-inner { padding: 48px 24px !important; }
         }
+        @media (max-width: 639px) {
+          .find-us-iframe { height: 280px !important; }
+        }
       `}</style>
 
       <div className="find-us-inner">
@@ -184,6 +187,7 @@ export default function VideoSection({ images }: VideoSectionProps) {
               src="https://maps.google.com/maps?q=PM+Palem+Visakhapatnam+530041&output=embed&z=15"
               width="100%"
               height="480"
+              className="find-us-iframe"
               style={{ border: "none", display: "block" }}
               allowFullScreen
               loading="lazy"
@@ -237,6 +241,8 @@ export default function VideoSection({ images }: VideoSectionProps) {
                     lineHeight: 1.8,
                     margin: 0,
                     whiteSpace: "pre-line",
+                    wordBreak: "break-all",
+                    overflowWrap: "break-word",
                   }}>
                     {row.text}
                   </p>
