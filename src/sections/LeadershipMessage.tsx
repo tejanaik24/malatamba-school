@@ -116,15 +116,6 @@ export default function LeadershipMessage() {
     return () => ctx.revert();
   }, []);
 
-  /* ── Photo hover: grayscale ↔ color ── */
-  const handleImageEnter = () => {
-    if (imageRef.current)
-      gsap.to(imageRef.current, { filter: "grayscale(0%) contrast(1)", duration: 0.6, ease: "power2.out" });
-  };
-  const handleImageLeave = () => {
-    if (imageRef.current)
-      gsap.to(imageRef.current, { filter: "grayscale(100%) contrast(1.1)", duration: 0.6, ease: "power2.out" });
-  };
 
   return (
     <section
@@ -155,8 +146,6 @@ export default function LeadershipMessage() {
       {/* z-20 — Full-bleed photo left side */}
       <div
         ref={imageRef}
-        onMouseEnter={handleImageEnter}
-        onMouseLeave={handleImageLeave}
         style={{
           position: "absolute",
           top: 0,
@@ -164,9 +153,6 @@ export default function LeadershipMessage() {
           width: "45%",
           height: "100%",
           zIndex: 20,
-          filter: "grayscale(100%) contrast(1.1)",
-          cursor: "pointer",
-          /* Mobile: static, full width, 50vh */
         }}
         className="lm-photo"
       >
@@ -212,13 +198,11 @@ export default function LeadershipMessage() {
           ref={nameRef}
           style={{
             fontFamily: "var(--font-fraunces, Georgia, serif)",
-            fontSize: "clamp(3.5rem, 7vw, 9rem)",
+            fontSize: "clamp(2.5rem, 4.5vw, 5.5rem)",
             fontWeight: 900,
             color: "#1a1a1a",
-            lineHeight: 0.95,
+            lineHeight: 1.05,
             letterSpacing: "-0.02em",
-            overflow: "visible",
-            whiteSpace: "nowrap",
             margin: 0,
           }}
         >
