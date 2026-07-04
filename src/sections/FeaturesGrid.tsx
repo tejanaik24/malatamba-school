@@ -25,6 +25,7 @@ interface Feature {
   title: string;
   desc: string;
   accentColor: string;
+  shadowColor: string;
   stampText: string;
   stat: string;
 }
@@ -39,6 +40,7 @@ const features: Feature[] = [
     title: "Experienced Faculty",
     desc: "Qualified educators with years of experience and a passion for teaching — giving every child personalised attention and mentorship that goes beyond the textbook.",
     accentColor: "#762123",
+    shadowColor: "rgba(118,33,35,0.30)",
     stampText: "FACULTY",
     stat: "30+ Teachers",
   },
@@ -49,6 +51,7 @@ const features: Feature[] = [
     title: "Science & Computer Labs",
     desc: "Physics, Chemistry, Biology labs plus two dedicated computer labs with 40 PCs each and high-speed internet — practical learning at the heart of every subject.",
     accentColor: "#b08a28",
+    shadowColor: "rgba(176,138,40,0.30)",
     stampText: "LABS",
     stat: "40 PCs / Lab",
   },
@@ -59,6 +62,7 @@ const features: Feature[] = [
     title: "Sports & Athletics",
     desc: "Cricket, football, athletics, basketball and indoor games — a full sports programme that builds fitness, teamwork, and the resilience to compete and succeed.",
     accentColor: "#1e4a8a",
+    shadowColor: "rgba(30,74,138,0.30)",
     stampText: "SPORTS",
     stat: "8 Sports",
   },
@@ -69,6 +73,7 @@ const features: Feature[] = [
     title: "Smart Classrooms",
     desc: "Interactive smart boards, projectors, and digital learning tools that make every lesson vivid and engaging — bringing concepts to life for every learner.",
     accentColor: "#2e6b3e",
+    shadowColor: "rgba(46,107,62,0.30)",
     stampText: "SMART CLASS",
     stat: "Smart Boards",
   },
@@ -79,6 +84,7 @@ const features: Feature[] = [
     title: "Library — 5,000+ Books",
     desc: "A rich library stocked with books, magazines, newspapers, and reference material — plus a quiet reading room that nurtures curious, independent minds.",
     accentColor: "#5a3a7e",
+    shadowColor: "rgba(90,58,126,0.30)",
     stampText: "LIBRARY",
     stat: "5,000+ Books",
   },
@@ -89,6 +95,7 @@ const features: Feature[] = [
     title: "Safe GPS Transport",
     desc: "GPS-tracked buses with trained drivers and female attendants covering all of Visakhapatnam — so parents have complete peace of mind every single day.",
     accentColor: "#6b3a1e",
+    shadowColor: "rgba(107,58,30,0.30)",
     stampText: "TRANSPORT",
     stat: "GPS Tracked",
   },
@@ -220,6 +227,7 @@ function StickyImage({ feat }: { feat: Feature }) {
         scale,
         clipPath,
         borderRadius: "1.5rem",
+        boxShadow: `16px 20px 0px ${feat.shadowColor}, 0 32px 64px ${feat.shadowColor}`,
       }}
       className="sticky z-0 overflow-hidden"
     >
@@ -389,10 +397,12 @@ function FeatureContent({ feature }: { feature: Feature }) {
     <div
       className="grid grid-cols-1 gap-8 py-12 md:grid-cols-12"
       style={{
-        background: "#FAFAF7",
+        background: "#ffffff",
         borderLeft: `5px solid ${feature.accentColor}`,
         paddingLeft: 32,
         paddingRight: 32,
+        boxShadow: `10px 12px 0px ${feature.shadowColor}`,
+        margin: `0 ${IMG_PADDING}px`,
       }}
     >
       <div className="md:col-span-4 flex items-start">
