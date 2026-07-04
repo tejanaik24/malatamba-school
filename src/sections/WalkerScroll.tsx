@@ -435,7 +435,7 @@ export default function WalkerScroll() {
                   >
                     {v.num}
                   </span>
-                  <div className="relative w-full h-[100px] overflow-hidden">
+                  <div className="vp-card-img relative w-full overflow-hidden">
                     <Image
                       src={v.image} alt={v.title} fill
                       className="object-cover object-top"
@@ -729,6 +729,29 @@ export default function WalkerScroll() {
                 <path d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
             </Link>
+
+            {/* Mobile photo strip — directly below button, full-bleed */}
+            {(() => {
+              const slidePhotos = [
+                "/ai-images/life-01.png", "/ai-images/life-02.png", "/ai-images/life-03.png",
+                "/ai-images/life-04.png", "/ai-images/life-05.png", "/ai-images/highlights-cultural.png",
+                "/ai-images/highlights-sports.png", "/ai-images/feature-lab.png",
+              ];
+              return (
+                <div className="lg:hidden mt-6 overflow-hidden" style={{ marginLeft: "-24px", marginRight: "-24px" }}>
+                  <div className="hp-slide-track">
+                    {[...slidePhotos, ...slidePhotos].map((src, i) => (
+                      <div
+                        key={i}
+                        style={{ width: "130px", height: "115px", borderRadius: "12px", overflow: "hidden", position: "relative", flexShrink: 0 }}
+                      >
+                        <Image src={src} alt="School life" fill className="object-cover" sizes="130px" />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })()}
           </div>
 
           {/* Right: 3-column CSS infinite scroll */}
@@ -802,29 +825,6 @@ export default function WalkerScroll() {
             })()}
 
           </div>
-
-          {/* Mobile-only horizontal photo strip — fills empty space below text */}
-          {(() => {
-            const slidePhotos = [
-              "/ai-images/life-01.png", "/ai-images/life-02.png", "/ai-images/life-03.png",
-              "/ai-images/life-04.png", "/ai-images/life-05.png", "/ai-images/highlights-cultural.png",
-              "/ai-images/highlights-sports.png", "/ai-images/feature-lab.png",
-            ];
-            return (
-              <div className="lg:hidden absolute bottom-[68px] left-0 right-0 overflow-hidden">
-                <div className="hp-slide-track">
-                  {[...slidePhotos, ...slidePhotos].map((src, i) => (
-                    <div
-                      key={i}
-                      style={{ width: "110px", height: "76px", borderRadius: "10px", overflow: "hidden", position: "relative", flexShrink: 0 }}
-                    >
-                      <Image src={src} alt="School life" fill className="object-cover" sizes="110px" />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            );
-          })()}
 
           <div className="absolute bottom-8 right-8 text-gray-400 text-xs font-mono z-40">04 / 04</div>
         </section>
