@@ -228,6 +228,7 @@ export default function LeadershipMessage() {
         {/* 5. Quote in two editorial columns */}
         <div
           ref={quoteRef}
+          className="lm-quote"
           style={{
             columnCount: 2,
             columnGap: 32,
@@ -244,7 +245,7 @@ export default function LeadershipMessage() {
         </div>
 
         {/* 6. Stats row */}
-        <div style={{ display: "flex", alignItems: "center", gap: 32, marginTop: 8 }}>
+        <div className="lm-stats" style={{ display: "flex", alignItems: "center", gap: 32, marginTop: 8 }}>
           <div style={{ textAlign: "center" }}>
             <span style={{ display: "block", fontSize: "1.75rem", fontWeight: 700, color: "#8B0000" }}>20+</span>
             <span style={{ fontSize: 11, color: "#666", textTransform: "uppercase", letterSpacing: "0.1em" }}>Years</span>
@@ -279,6 +280,13 @@ export default function LeadershipMessage() {
             width: 100% !important;
             height: auto !important;
             padding: 40px 24px !important;
+          }
+          .lm-quote {
+            column-count: 1 !important;
+          }
+          .lm-stats {
+            gap: 20px !important;
+            flex-wrap: wrap;
           }
         }
       `}</style>
