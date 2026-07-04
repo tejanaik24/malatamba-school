@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
+import { motion } from "framer-motion";
 import Image from "next/image";
 import { gsap } from "gsap";
 
@@ -262,12 +263,19 @@ export default function GalleryClient({ events }: { events: EventData[] }) {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {events.map((event) => (
-            <EventCard
+          {events.map((event, i) => (
+            <motion.div
               key={event.folder}
-              event={event}
-              onClick={() => setLightbox({ event })}
-            />
+              initial={{ clipPath: "inset(100% 0 0 0 round 12px)", opacity: 0 }}
+              whileInView={{ clipPath: "inset(0% 0 0 0 round 12px)", opacity: 1 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.7, delay: (i % 3) * 0.1, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <EventCard
+                event={event}
+                onClick={() => setLightbox({ event })}
+              />
+            </motion.div>
           ))}
         </div>
       </div>

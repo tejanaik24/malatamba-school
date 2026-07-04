@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import GalleryClient, { EventData } from "./GalleryClient";
 
 const EVENTS = [
+  { folder: "school-life-2026", name: "School Life 2026",     cover: "mar16-01.png" },
   { folder: "annual-day-2023",  name: "Annual Day 2023",      cover: "dsc-7509-506x337.webp" },
   { folder: "awareness-program", name: "Awareness Program",   cover: "img-873-506x285.webp" },
   { folder: "childrens-day",    name: "Children's Day",        cover: "dsc04217-4240x2400.webp" },
