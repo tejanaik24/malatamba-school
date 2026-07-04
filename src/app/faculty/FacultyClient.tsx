@@ -78,17 +78,22 @@ export default function FacultyClient() {
         y: 40, opacity: 0, stagger: 0.12, duration: 0.7, ease: "power2.out", delay: 0.1,
       });
       if (principalRef.current) {
-        gsap.from(principalRef.current, {
-          y: 40, opacity: 0, duration: 0.7, ease: "power2.out",
-          scrollTrigger: { trigger: principalRef.current, start: "top 78%", toggleActions: "play none none reverse" },
-        });
+        gsap.fromTo(principalRef.current,
+          { y: 40, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.7, ease: "power2.out",
+            scrollTrigger: { trigger: principalRef.current, start: "top 85%", toggleActions: "play none none none" },
+          }
+        );
       }
       if (deptRef.current) {
-        gsap.from(deptRef.current.querySelectorAll(".dept-card"), {
-          y: 40, opacity: 0, stagger: 0.08, duration: 0.55, ease: "power2.out",
-          scrollTrigger: { trigger: deptRef.current, start: "top 78%", toggleActions: "play none none reverse" },
-        });
+        gsap.fromTo(deptRef.current.querySelectorAll(".dept-card"),
+          { y: 40, opacity: 0 },
+          { y: 0, opacity: 1, stagger: 0.08, duration: 0.55, ease: "power2.out",
+            scrollTrigger: { trigger: deptRef.current, start: "top 85%", toggleActions: "play none none none" },
+          }
+        );
       }
+      ScrollTrigger.refresh();
     });
     return () => ctx.revert();
   }, []);

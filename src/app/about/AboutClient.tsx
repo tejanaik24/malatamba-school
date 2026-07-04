@@ -66,10 +66,12 @@ export default function AboutClient() {
         });
       }
       if (missionRef.current) {
-        gsap.from(missionRef.current.querySelectorAll(".mv-card"), {
-          y: 40, opacity: 0, stagger: 0.15, duration: 0.6, ease: "power2.out",
-          scrollTrigger: { trigger: missionRef.current, start: "top 78%", toggleActions: "play none none reverse" },
-        });
+        gsap.fromTo(missionRef.current.querySelectorAll(".mv-card"),
+          { y: 40, opacity: 0 },
+          { y: 0, opacity: 1, stagger: 0.15, duration: 0.6, ease: "power2.out",
+            scrollTrigger: { trigger: missionRef.current, start: "top 85%", toggleActions: "play none none none" },
+          }
+        );
       }
       if (timelineRef.current) {
         gsap.from(timelineRef.current.querySelectorAll(".tl-item"), {
@@ -77,6 +79,7 @@ export default function AboutClient() {
           scrollTrigger: { trigger: timelineRef.current, start: "top 78%", toggleActions: "play none none reverse" },
         });
       }
+      ScrollTrigger.refresh();
     });
     return () => ctx.revert();
   }, []);
