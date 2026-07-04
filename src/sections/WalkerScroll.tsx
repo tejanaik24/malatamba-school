@@ -68,18 +68,22 @@ export default function WalkerScroll() {
       if (!panels.length || !containerRef.current) return;
 
       /* ── GSAP horizontal-scroll-snap ────────────────────────────────── */
+      // On mobile: lower scrub lag (0.4s) so the panel follows touch quickly;
+      // longer snap delay (0.4s) so panel settles before snapping fires.
+      // On desktop: original 1s scrub feels smooth with mouse wheel.
+      const isMobile = window.innerWidth < 1024;
       const mainTween = gsap.to(panels, {
         xPercent: -100 * (panels.length - 1),
         ease: "none",
         scrollTrigger: {
           trigger: containerRef.current,
           pin: true,
-          scrub: 1,
+          scrub: isMobile ? 0.4 : 1,
           snap: {
             snapTo: 1 / (panels.length - 1),
-            duration: 0.5,
-            delay: 0.1,
-            ease: "power1.inOut",
+            duration: { min: 0.4, max: 0.8 },
+            delay: isMobile ? 0.4 : 0.1,
+            ease: "power2.inOut",
             inertia: false,
           },
           end: () => "+=" + (containerRef.current!.offsetWidth * (panels.length - 1)),

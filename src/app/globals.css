@@ -294,12 +294,10 @@ body::after {
     padding-top: 68px !important;
     padding-bottom: 0 !important;
   }
-  /* Card images — calculated so 2 rows fill available height with no overflow.
-     Formula: (svh - 480) / 2 where 480 = 2×(68pt + 80header + 56sticky)/2 + 2×(32num + 82text) + 8gap
-     Buffer of 40px added → verified no crop at svh 680-800px */
+  /* Card images — fixed 130px so 2 rows fit exactly in 700px total:
+     68(pt) + 80(header) + 2×(32num + 130img + 82text) + 8(gap) = 700px */
   .vp-card-img {
-    height: 130px; /* fallback for no-svh browsers */
-    height: clamp(110px, calc((100svh - 480px) / 2), 150px);
+    height: 130px !important;
   }
 }
 
