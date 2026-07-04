@@ -57,30 +57,39 @@ export default function VideoSection({ images }: VideoSectionProps) {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from(headingRef.current, {
-        opacity: 0, y: 30, duration: 0.7, ease: "power2.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 82%",
-          toggleActions: "play none none reverse",
-        },
-      });
-      gsap.from(mapRef.current, {
-        opacity: 0, x: -30, duration: 0.8, ease: "power2.out", delay: 0.2,
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 78%",
-          toggleActions: "play none none reverse",
-        },
-      });
-      gsap.from(cardRef.current, {
-        opacity: 0, x: 30, duration: 0.8, ease: "power2.out", delay: 0.4,
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 78%",
-          toggleActions: "play none none reverse",
-        },
-      });
+      gsap.fromTo(headingRef.current,
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1, y: 0, duration: 0.7, ease: "power2.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+      gsap.fromTo(mapRef.current,
+        { opacity: 0, x: -30 },
+        {
+          opacity: 1, x: 0, duration: 0.8, ease: "power2.out", delay: 0.2,
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 80%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+      gsap.fromTo(cardRef.current,
+        { opacity: 0, x: 30 },
+        {
+          opacity: 1, x: 0, duration: 0.8, ease: "power2.out", delay: 0.4,
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 80%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
     }, sectionRef);
     return () => ctx.revert();
   }, []);
@@ -89,13 +98,13 @@ export default function VideoSection({ images }: VideoSectionProps) {
     <section
       ref={sectionRef}
       id="find-us"
-      style={{ background: "#0f172a", overflow: "hidden" }}
+      style={{ background: "#0f172a" }}
     >
       <style>{`
         .find-us-inner {
           max-width: 1280px;
           margin: 0 auto;
-          padding: 72px 80px;
+          padding: 80px 80px 72px;
         }
         .find-us-cols {
           display: flex;
@@ -127,13 +136,14 @@ export default function VideoSection({ images }: VideoSectionProps) {
           .find-us-cols  { flex-direction: column; }
           .find-us-map-col,
           .find-us-card-col { flex: unset; width: 100%; }
+          .find-us-inner { padding: 48px 24px !important; }
         }
       `}</style>
 
       <div className="find-us-inner">
 
         {/* Label + Heading */}
-        <div ref={headingRef} style={{ textAlign: "center", marginBottom: "48px" }}>
+        <div ref={headingRef} style={{ textAlign: "center", marginBottom: "48px", position: "relative", zIndex: 10 }}>
           <p style={{
             color: "#c9a84c",
             letterSpacing: "0.2em",
@@ -171,7 +181,7 @@ export default function VideoSection({ images }: VideoSectionProps) {
             }}
           >
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3800.123456789!2d83.3120!3d17.7270!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sMalatamba+Vidyaniketan!5e0!3m2!1sen!2sin!4v1699900000000!5m2!1sen!2sin"
+              src="https://maps.google.com/maps?q=PM+Palem+Visakhapatnam+530041&output=embed&z=15"
               width="100%"
               height="480"
               style={{ border: "none", display: "block" }}
