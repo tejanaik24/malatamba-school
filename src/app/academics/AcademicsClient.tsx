@@ -22,7 +22,7 @@ const STAGES = [
     classes: "Class I to V",
     age: "Ages 6–10",
     desc: "Building the academic foundation with focus on reading, writing, and arithmetic, alongside science, social studies, and values education.",
-    subjects: ["English", "Telugu", "Hindi", "Mathematics", "Environmental Science", "Drawing", "Moral Science"],
+    subjects: ["English", "Telugu", "Hindi", "Mathematics", "Science", "Social", "General Knowledge", "Drawing", "Moral Science"],
     color: "border-blue-400 bg-blue-50",
     badge: "bg-blue-100 text-blue-700",
   },
