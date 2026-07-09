@@ -333,7 +333,9 @@ export default function WalkerScroll() {
             PANEL 2 — VALUES  (Walker School expanding-column style)
         ════════════════════════════════════════════════════════════════ */}
         <section className="walk-panel relative w-screen h-screen shrink-0 overflow-hidden bg-[#FAFAF7]">
-          <style>{`
+          <style
+            dangerouslySetInnerHTML={{
+              __html: `
             .vp-img-wrap {
               transition: top 0.5s cubic-bezier(0.4, 0, 0.2, 1);
               will-change: top;
@@ -349,7 +351,9 @@ export default function WalkerScroll() {
               .vp-card .vp-img-wrap { top: 0 !important; position: relative !important; }
               .vp-grid:hover .vp-card:not(:hover) { filter: none !important; opacity: 1 !important; }
             }
-          `}</style>
+          `,
+            }}
+          />
           <div className="vp-panel-inner w-full h-full max-w-7xl mx-auto px-4 sm:px-12 lg:px-16 flex flex-col justify-center pt-12 pb-3 sm:pt-20 sm:pb-12">
 
             {/* Section header */}
@@ -482,7 +486,9 @@ export default function WalkerScroll() {
           className="walk-panel relative w-screen h-screen shrink-0 overflow-hidden"
           style={{ background: "#FAFAF7" }}
         >
-          <style>{`
+          <style
+            dangerouslySetInnerHTML={{
+              __html: `
             .mp-cta-link { position: relative; display: inline-block; }
             .mp-cta-link::after {
               content: '';
@@ -493,7 +499,9 @@ export default function WalkerScroll() {
               transition: width 0.3s ease;
             }
             .mp-cta-link:hover::after { width: 100%; }
-          `}</style>
+          `,
+            }}
+          />
 
           {/* ═══ LAYER 1 — "LEAD" behind image (z-10) ═══ */}
           <div

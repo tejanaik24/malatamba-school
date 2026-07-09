@@ -100,7 +100,9 @@ export default function VideoSection({ images }: VideoSectionProps) {
       id="find-us"
       style={{ background: "#0f172a" }}
     >
-      <style>{`
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
         .find-us-inner {
           max-width: 1280px;
           margin: 0 auto;
@@ -141,7 +143,9 @@ export default function VideoSection({ images }: VideoSectionProps) {
         @media (max-width: 639px) {
           .find-us-iframe { height: 280px !important; }
         }
-      `}</style>
+      `,
+        }}
+      />
 
       <div className="find-us-inner">
 

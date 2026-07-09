@@ -167,7 +167,9 @@ export default function CampusMap() {
       style={{ background: "#FAFAF7" }}
       id="campus-map"
     >
-      <style>{`
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
         @keyframes dotPulse1 {
           0%   { transform: scale(1); opacity: 0.35; }
           100% { transform: scale(2.4); opacity: 0; }
@@ -176,7 +178,9 @@ export default function CampusMap() {
           0%   { transform: scale(1); opacity: 0.2; }
           100% { transform: scale(3.2); opacity: 0; }
         }
-      `}</style>
+      `,
+        }}
+      />
 
       <div className="max-w-7xl mx-auto px-6 sm:px-12 lg:px-16">
 

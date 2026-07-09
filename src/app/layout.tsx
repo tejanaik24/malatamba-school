@@ -28,6 +28,10 @@ export const metadata: Metadata = {
   alternates: {
     canonical: SITE_URL,
   },
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
   openGraph: {
     siteName: "Malatamba Vidyaniketan",
     locale: "en_IN",
