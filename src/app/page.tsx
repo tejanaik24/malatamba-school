@@ -25,7 +25,7 @@ export default async function Home() {
   return (
     <>
       <Navbar />
-      <main>
+      <main id="main-content">
         <WalkerScroll />
         <TrustBar />
         <LeadershipMessage />

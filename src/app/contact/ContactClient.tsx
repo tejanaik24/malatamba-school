@@ -82,7 +82,7 @@ export default function ContactClient() {
   const inp = "w-full px-4 py-3 rounded-xl border border-gray-200 text-dark bg-white text-sm outline-none transition-all focus:ring-2 focus:ring-primary/30 focus:border-primary";
 
   return (
-    <main>
+    <main id="main-content">
       {/* Hero */}
       <section className="relative bg-primary pt-28 pb-20 overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(201,168,76,0.12),transparent_55%)]" />

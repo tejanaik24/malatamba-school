@@ -78,7 +78,7 @@ export default function AboutClient() {
   }, []);
 
   return (
-    <main>
+    <main id="main-content">
       {/* Hero */}
       <section className="relative bg-primary pt-28 pb-20 overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(201,168,76,0.12),transparent_55%)]" />

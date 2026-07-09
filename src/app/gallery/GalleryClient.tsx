@@ -248,7 +248,7 @@ export default function GalleryClient({ events }: { events: EventData[] }) {
   }, [lightbox]);
 
   return (
-    <main className="min-h-screen bg-light pt-24 pb-20">
+    <main id="main-content" className="min-h-screen bg-light pt-24 pb-20">
       <div className="max-w-7xl mx-auto px-6 sm:px-12 lg:px-16">
         <div className="text-center mb-16">
           <span className="text-primary font-semibold text-sm tracking-[0.2em] uppercase">

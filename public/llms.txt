@@ -1,0 +1,32 @@
+# Malatamba Vidyaniketan — School in Visakhapatnam
+> Premier co-educational English medium school established 2002, PM Palem, Visakhapatnam, AP.
+
+## About
+- Founded: 2002
+- Affiliation: APSCERT, AP Government Recognized
+- Location: Sadguru Towers, Malatamba Road, PM Palem, Visakhapatnam 530041
+- Classes: Nursery to Class X
+- Chairman: Mr. Suneel Mahanty
+
+## Facilities
+- Smart Classrooms (20+ rooms with smart boards)
+- Science & Computer Labs (40 computers)
+- Library (3,000+ books)
+- Safe Transport (city-wide routes, male & female attendants)
+- Sports: Cricket Ground, Football Field, Athletics Track, Volleyball, Throwball, Indoor Games, Outdoor Games
+- Campus: Yoga Room, Library Room, Conference Room, Digital Classroom, Auditorium Stage, Art Room, Music Room, Landscaped Grounds
+
+## Contact
+- Phone: 8985674670
+- Email: principalmalatambaschools@gmail.com
+- Website: https://www.malatambavidyaniketan.ac.in
+
+## Pages
+- Home: /
+- About: /about
+- Academics: /academics
+- Faculty: /faculty
+- Infrastructure: /infrastructure
+- Gallery: /gallery
+- Admissions: /admissions
+- Contact: /contact

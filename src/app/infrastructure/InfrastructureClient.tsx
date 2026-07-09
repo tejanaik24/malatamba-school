@@ -265,7 +265,7 @@ function MobileScroll() {
 
 export default function InfrastructureClient() {
   return (
-    <>
+    <main id="main-content">
       {/* Hero banner */}
       <div className="relative h-56 sm:h-72 lg:h-screen lg:hidden flex items-end bg-dark overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/70 to-dark" />
@@ -285,6 +285,6 @@ export default function InfrastructureClient() {
 
       {/* Mobile vertical scroll */}
       <MobileScroll />
-    </>
+    </main>
   );
 }

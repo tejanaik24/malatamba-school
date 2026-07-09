@@ -448,7 +448,7 @@ export default function AdmissionsClient() {
   ];
 
   return (
-    <main className="min-h-screen bg-light">
+    <main id="main-content" className="min-h-screen bg-light">
 
       {/* Hero */}
       <div className="relative bg-primary overflow-hidden pt-24 pb-16 sm:pt-32 sm:pb-20">
