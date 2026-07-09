@@ -77,7 +77,9 @@ export default function Navbar() {
               <span className="text-white font-extrabold text-lg sm:text-xl leading-tight tracking-tight">
                 Malatamba
               </span>
-              <span className="text-gold text-xs sm:text-sm leading-tight">Vidyaniketan</span>
+              <span className="text-gold font-bold text-sm sm:text-base leading-tight tracking-tight">
+                Vidyaniketan
+              </span>
             </div>
           </Link>
 
