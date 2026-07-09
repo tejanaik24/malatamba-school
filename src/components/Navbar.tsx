@@ -105,22 +105,27 @@ export default function Navbar() {
                     )}
                   </Link>
                   {link.dropdown && openDropdown === link.label && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -6 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -6 }}
-                      className="absolute top-full left-0 mt-1 w-52 bg-white rounded-xl shadow-2xl py-2 border border-gray-100"
-                    >
-                      {link.dropdown.map((item) => (
-                        <Link
-                          key={item.label}
-                          href={item.href}
-                          className="block px-4 py-2.5 text-sm text-dark hover:bg-crimson-50 hover:text-primary transition-colors"
-                        >
-                          {item.label}
-                        </Link>
-                      ))}
-                    </motion.div>
+                    // Flush wrapper + pt-1 bridge (instead of mt-1 gap) keeps the hover
+                    // hit-area contiguous with the trigger so the mouse never crosses a
+                    // dead zone that would fire onMouseLeave before a link can be clicked.
+                    <div className="absolute top-full left-0 w-52 pt-1">
+                      <motion.div
+                        initial={{ opacity: 0, y: -6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -6 }}
+                        className="bg-white rounded-xl shadow-2xl py-2 border border-gray-100"
+                      >
+                        {link.dropdown.map((item) => (
+                          <Link
+                            key={item.label}
+                            href={item.href}
+                            className="block px-4 py-2.5 text-sm text-dark hover:bg-crimson-50 hover:text-primary transition-colors"
+                          >
+                            {item.label}
+                          </Link>
+                        ))}
+                      </motion.div>
+                    </div>
                   )}
                 </div>
               );
