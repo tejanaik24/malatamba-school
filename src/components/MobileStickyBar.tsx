@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
+import { useEnquiryPopup } from "@/components/EnquiryPopup";
 
 export default function MobileStickyBar() {
   const [visible, setVisible] = useState(false);
+  const { open: openEnquiryPopup } = useEnquiryPopup();
 
   useEffect(() => {
     const onScroll = () => setVisible(window.scrollY > 300);
@@ -30,15 +31,15 @@ export default function MobileStickyBar() {
           </svg>
           Call Now
         </a>
-        <Link
-          href="/admissions"
+        <button
+          onClick={openEnquiryPopup}
           className="flex items-center justify-center gap-2 py-4 bg-primary text-white font-bold text-sm active:bg-primary/90 transition-colors"
         >
           Enquire Now
           <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
             <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
           </svg>
-        </Link>
+        </button>
       </div>
     </div>
   );

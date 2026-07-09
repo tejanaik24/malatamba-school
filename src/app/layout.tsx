@@ -3,7 +3,9 @@ import { Fraunces } from "next/font/google";
 import "./globals.css";
 import ClientLayout from "./ClientLayout";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import CallButton from "@/components/CallButton";
 import MobileStickyBar from "@/components/MobileStickyBar";
+import { EnquiryPopupProvider } from "@/components/EnquiryPopup";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -193,9 +195,12 @@ export default function RootLayout({
         >
           Skip to content
         </a>
-        <ClientLayout>{children}</ClientLayout>
-        <WhatsAppButton />
-        <MobileStickyBar />
+        <EnquiryPopupProvider>
+          <ClientLayout>{children}</ClientLayout>
+          <WhatsAppButton />
+          <CallButton />
+          <MobileStickyBar />
+        </EnquiryPopupProvider>
       </body>
     </html>
   );

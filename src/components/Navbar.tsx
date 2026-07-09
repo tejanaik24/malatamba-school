@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { useEnquiryPopup } from "@/components/EnquiryPopup";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -39,6 +40,7 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const pathname = usePathname();
+  const { open: openEnquiryPopup } = useEnquiryPopup();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -61,21 +63,21 @@ export default function Navbar() {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 lg:h-20">
+        <div className="flex items-center justify-between h-20 lg:h-24">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 shrink-0">
+          <Link href="/" className="flex items-center gap-3 shrink-0">
             <Image
               src="/real-photos/logo/logo-main.png"
               alt="Malatamba Vidyaniketan logo"
-              width={48}
-              height={48}
+              width={64}
+              height={64}
               className="rounded-full"
             />
             <div className="flex flex-col">
-              <span className="text-white font-bold text-sm sm:text-base leading-tight">
+              <span className="text-white font-extrabold text-lg sm:text-xl leading-tight tracking-tight">
                 Malatamba
               </span>
-              <span className="text-gold text-xs leading-tight">Vidyaniketan</span>
+              <span className="text-gold text-xs sm:text-sm leading-tight">Vidyaniketan</span>
             </div>
           </Link>
 
@@ -131,12 +133,12 @@ export default function Navbar() {
                 </div>
               );
             })}
-            <Link
-              href="/admissions"
+            <button
+              onClick={openEnquiryPopup}
               className="ml-3 px-5 py-2 bg-gold text-dark font-bold text-sm rounded-full hover:opacity-90 transition-all hover:shadow-md"
             >
               Enquire Now
-            </Link>
+            </button>
           </div>
 
           {/* Mobile hamburger */}
@@ -207,13 +209,15 @@ export default function Navbar() {
                 </div>
               ))}
               <div className="pt-3 border-t border-white/10">
-                <Link
-                  href="/admissions"
-                  onClick={() => setMobileOpen(false)}
+                <button
+                  onClick={() => {
+                    setMobileOpen(false);
+                    openEnquiryPopup();
+                  }}
                   className="block w-full text-center px-5 py-3 bg-gold text-dark font-bold text-sm rounded-full"
                 >
                   Enquire Now
-                </Link>
+                </button>
               </div>
             </div>
           </motion.div>
