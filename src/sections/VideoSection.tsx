@@ -15,7 +15,7 @@ interface VideoSectionProps {
 const INFO_ROWS = [
   { icon: "📍", text: "Sadguru Towers, Malatamba Road,\nP.M.Palem, Visakhapatnam – 530041" },
   { icon: "📞", text: "083743 55556" },
-  { icon: "📞", text: "092997 52543" },
+  { icon: "📞", text: "8985674670" },
   { icon: "✉️", text: "principalmalatambaschools@gmail.com" },
   { icon: "🕐", text: "Mon–Sat · 8:00 AM – 4:00 PM" },
 ];

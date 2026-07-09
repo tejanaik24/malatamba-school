@@ -47,7 +47,7 @@ const DEPARTMENTS = [
   {
     dept: "Arts & Culture",
     icon: "🎨",
-    subjects: "Drawing, Music, Dance, Craft",
+    subjects: "Drawing, Dance, Craft",
     staff: 6,
     desc: "Nurturing creative expression. Our arts faculty ensures every child discovers and develops their artistic side.",
   },

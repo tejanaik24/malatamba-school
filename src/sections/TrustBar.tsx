@@ -3,13 +3,13 @@
 const badges = [
   { icon: "🏛️", text: "AP Government Recognized" },
   { icon: "📚", text: "APSCERT Board Affiliated" },
-  { icon: "🏅", text: "Est. 2005 — 20 Years Strong" },
+  { icon: "🏅", text: "Est. 2002 — 20 Years Strong" },
   { icon: "👨‍👩‍👧", text: "1000+ Students" },
   { icon: "👩‍🏫", text: "50+ Qualified Faculty" },
   { icon: "⭐", text: "4.9★ Google Rating" },
-  { icon: "🚌", text: "GPS-Tracked Safe Transport" },
+  { icon: "🚌", text: "Safe School Transport" },
   { icon: "🧪", text: "Modern Science Labs" },
-  { icon: "📖", text: "5,000+ Book Library" },
+  { icon: "📖", text: "3,000+ Book Library" },
   { icon: "🏆", text: "Award-Winning Education" },
 ];
 

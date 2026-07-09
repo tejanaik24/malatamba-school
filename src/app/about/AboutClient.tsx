@@ -3,8 +3,8 @@
 import { useRef, useEffect, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Image from "next/image";
 import Link from "next/link";
+import LeadershipMessage from "@/sections/LeadershipMessage";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -46,7 +46,6 @@ function CountUp({ target, suffix, duration = 2 }: { target: number; suffix: str
 
 export default function AboutClient() {
   const heroRef = useRef<HTMLDivElement>(null);
-  const chairRef = useRef<HTMLDivElement>(null);
   const missionRef = useRef<HTMLDivElement>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
 
@@ -57,16 +56,6 @@ export default function AboutClient() {
         gsap.from(".ha-child", {
           y: 40, opacity: 0, stagger: 0.12, duration: 0.7, ease: "power2.out", delay: 0.1,
         });
-        if (chairRef.current) {
-          gsap.from(chairRef.current.querySelector(".cr-img"), {
-            x: -50, opacity: 0, scale: 0.95, duration: 0.9, ease: "power2.out",
-            scrollTrigger: { trigger: chairRef.current, start: "top 75%", toggleActions: "play none none reverse" },
-          });
-          gsap.from(chairRef.current.querySelectorAll(".cr-text > *"), {
-            y: 30, opacity: 0, stagger: 0.1, duration: 0.6, ease: "power2.out",
-            scrollTrigger: { trigger: chairRef.current, start: "top 70%", toggleActions: "play none none reverse" },
-          });
-        }
         if (missionRef.current) {
           gsap.fromTo(missionRef.current.querySelectorAll(".mv-card"),
             { y: 40, opacity: 0 },
@@ -95,7 +84,7 @@ export default function AboutClient() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(201,168,76,0.12),transparent_55%)]" />
         <div ref={heroRef} className="relative z-10 max-w-4xl mx-auto px-6 text-center">
           <span className="ha-child inline-block text-gold text-xs font-semibold tracking-[0.25em] uppercase mb-4">
-            Est. 2005 — PM Palem, Visakhapatnam
+            Est. 2002 — PM Palem, Visakhapatnam
           </span>
           <h1 className="ha-child text-4xl sm:text-6xl font-bold text-white leading-tight mb-6">
             Our Story
@@ -121,60 +110,7 @@ export default function AboutClient() {
       </section>
 
       {/* Chairman's Message */}
-      <section ref={chairRef} className="py-20 sm:py-28 bg-light">
-        <div className="max-w-6xl mx-auto px-6 grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          <div className="cr-img relative">
-            <div className="relative w-full max-w-sm mx-auto lg:mx-0">
-              <div className="absolute -top-3 -left-3 w-full h-full rounded-2xl border-2 border-gold/40" />
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/5]">
-                <Image
-                  src="/real-photos/people/chairman.webp"
-                  alt="Mr. Suneel Mahanty — Chairman, Malatamba Vidyaniketan"
-                  fill
-                  className="object-cover object-top"
-                  sizes="(max-width:1024px) 90vw, 40vw"
-                  quality={90}
-                />
-              </div>
-            </div>
-            <div className="mt-4 text-center lg:text-left">
-              <p className="font-bold text-dark text-lg">Mr. Suneel Mahanty</p>
-              <p className="text-primary text-sm font-medium">Chairman, Malatamba Vidyaniketan</p>
-            </div>
-          </div>
-
-          <div className="cr-text">
-            <span className="block text-primary text-xs font-semibold tracking-[0.2em] uppercase mb-3">
-              Chairman&apos;s Message
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-bold text-dark mb-6 leading-tight">
-              Education That Goes Beyond the Classroom
-            </h2>
-            <div className="relative">
-              <span className="absolute -top-4 -left-2 text-9xl text-primary/8 font-serif leading-none select-none">&ldquo;</span>
-              <div className="space-y-4 text-gray-600 text-sm sm:text-base leading-relaxed pl-2 relative z-10">
-                <p>
-                  When I founded Malatamba Vidyaniketan in 2005, my vision was simple — to create a school where every child feels seen, valued, and inspired to reach their fullest potential. Twenty years later, that vision remains the heartbeat of everything we do.
-                </p>
-                <p>
-                  We believe education is not just about marks on a report card. It is about building character, nurturing curiosity, and giving children the confidence to face the world. Our teachers are not just instructors — they are mentors who care deeply about each student they serve.
-                </p>
-                <p>
-                  To every parent who trusts us with their child&apos;s future: we take that responsibility seriously. Our commitment is to give your child the strongest possible foundation — academically, socially, and personally.
-                </p>
-              </div>
-            </div>
-            <div className="mt-8 flex gap-6">
-              {[{ n: "20+", l: "Years" }, { n: "1000+", l: "Students" }, { n: "50+", l: "Faculty" }].map((s) => (
-                <div key={s.l}>
-                  <p className="text-2xl font-bold text-primary">{s.n}</p>
-                  <p className="text-gray-500 text-xs">{s.l}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      <LeadershipMessage />
 
       {/* Mission & Vision */}
       <section ref={missionRef} className="py-20 sm:py-28 bg-dark">
@@ -229,7 +165,7 @@ export default function AboutClient() {
           </div>
           <ol className="relative border-l-2 border-primary/20 space-y-10 pl-8">
             {[
-              { year: "2005", title: "Founded", desc: "Malatamba Vidyaniketan opens its doors at PM Palem, Visakhapatnam, with 3 classrooms and 80 students." },
+              { year: "2002", title: "Founded", desc: "Malatamba Vidyaniketan opens its doors at PM Palem, Visakhapatnam, with 3 classrooms and 80 students." },
               { year: "2009", title: "Infrastructure Expansion", desc: "New science labs, library, and computer centre added. Student strength crosses 300." },
               { year: "2013", title: "Sports Complex", desc: "Expanded grounds with dedicated cricket and football fields. First inter-district sports championship won." },
               { year: "2017", title: "Smart Classrooms", desc: "All classrooms upgraded with interactive smart boards. Digital learning integrated across all grades." },

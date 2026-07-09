@@ -39,7 +39,7 @@ export default function Footer() {
             </div>
             <p className="text-gray-400 text-sm leading-relaxed">
               Providing quality education with modern infrastructure and experienced
-              faculty since 2005. Nurturing young minds for a brighter tomorrow.
+              faculty since 2002. Nurturing young minds for a brighter tomorrow.
             </p>
           </div>
 
@@ -89,7 +89,7 @@ export default function Footer() {
                 </svg>
                 <div>
                   <a href="tel:08374355556" className="block hover:text-gold transition-colors">083743 55556</a>
-                  <a href="tel:09299752543" className="block hover:text-gold transition-colors">092997 52543</a>
+                  <a href="tel:8985674670" className="block hover:text-gold transition-colors">8985674670</a>
                 </div>
               </li>
               <li className="flex items-start gap-3">

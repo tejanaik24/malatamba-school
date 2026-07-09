@@ -441,10 +441,10 @@ export default function AdmissionsClient() {
   };
 
   const WHY = [
-    { icon: "🎓", label: "20+ Years", sub: "Of excellence since 2005" },
+    { icon: "🎓", label: "20+ Years", sub: "Of excellence since 2002" },
     { icon: "👩‍🏫", label: "50+ Faculty", sub: "Dedicated teachers" },
     { icon: "🏫", label: "1000+ Students", sub: "Thriving community" },
-    { icon: "🚌", label: "Safe Transport", sub: "GPS-tracked buses" },
+    { icon: "🚌", label: "Safe Transport", sub: "school buses" },
   ];
 
   return (
@@ -488,7 +488,7 @@ export default function AdmissionsClient() {
               { icon: "✅", text: "APSCERT Board curriculum" },
               { icon: "✅", text: "Experienced, caring faculty" },
               { icon: "✅", text: "Smart classrooms & science labs" },
-              { icon: "✅", text: "GPS-tracked safe transport" },
+              { icon: "✅", text: "Safe school bus transport" },
             ].map((item) => (
               <div key={item.text} className="flex items-start gap-2.5">
                 <span className="shrink-0 mt-0.5">{item.icon}</span>
@@ -522,7 +522,7 @@ export default function AdmissionsClient() {
           <div className="mt-10 p-6 bg-primary/5 rounded-2xl border border-primary/10">
             <p className="text-sm font-bold text-dark mb-3">Prefer to call?</p>
             <div className="flex flex-col sm:flex-row gap-3">
-              {["08374355556", "09299752543"].map((num) => (
+              {["08374355556", "8985674670"].map((num) => (
                 <a
                   key={num}
                   href={`tel:${num}`}

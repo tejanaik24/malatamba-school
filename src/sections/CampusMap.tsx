@@ -35,7 +35,7 @@ const HOTSPOTS: Hotspot[] = [
     icon: "🔬",
     color: "#c9a84c",
     detail: "Physics, Chemistry, Biology labs + 2 computer labs with 40 PCs each and high-speed internet.",
-    stats: "80 Computers",
+    stats: "40 Computers",
   },
   {
     id: "library",
@@ -43,8 +43,8 @@ const HOTSPOTS: Hotspot[] = [
     label: "Library & Reading Room",
     icon: "📚",
     color: "#2e6b3e",
-    detail: "Over 5,000 books, reference materials, newspapers, and magazines with dedicated reading space.",
-    stats: "5,000+ Books",
+    detail: "Over 3,000 books, reference materials, newspapers, and magazines with dedicated reading space.",
+    stats: "3,000+ Books",
   },
   {
     id: "auditorium",
@@ -53,7 +53,7 @@ const HOTSPOTS: Hotspot[] = [
     icon: "🏛️",
     color: "#762123",
     detail: "Administrative offices, auditorium for events, art room, and music hall in the heart of campus.",
-    stats: "Est. 2005",
+    stats: "Est. 2002",
   },
   {
     id: "transport",
@@ -61,7 +61,7 @@ const HOTSPOTS: Hotspot[] = [
     label: "Transport Hub",
     icon: "🚌",
     color: "#6b3a1e",
-    detail: "Fleet of GPS-tracked buses with trained drivers and female attendants covering all of Visakhapatnam.",
+    detail: "Fleet of school buses with trained drivers and male and female attendants covering all of Visakhapatnam.",
     stats: "City-Wide Routes",
   },
 ];

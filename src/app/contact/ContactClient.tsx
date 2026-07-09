@@ -35,8 +35,8 @@ const CONTACT_ITEMS = [
       </svg>
     ),
     label: "Alternate",
-    value: "092997 52543",
-    href: "tel:09299752543",
+    value: "8985674670",
+    href: "tel:8985674670",
   },
   {
     icon: (
@@ -133,10 +133,6 @@ export default function ContactClient() {
               <div className="flex justify-between">
                 <span className="text-gray-500">Monday – Friday</span>
                 <span className="font-semibold text-dark">8:00 AM – 5:00 PM</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-500">Saturday</span>
-                <span className="font-semibold text-dark">8:00 AM – 1:00 PM</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-500">Sunday / Holidays</span>

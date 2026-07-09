@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     template: "%s | Malatamba Vidyaniketan",
   },
   description:
-    "Malatamba Vidyaniketan — Quality education with experienced faculty, modern labs, library and transport since 2005. Located in P.M.Palem, Visakhapatnam.",
+    "Malatamba Vidyaniketan — Quality education with experienced faculty, modern labs, library and transport since 2002. Located in P.M.Palem, Visakhapatnam.",
   keywords:
     "Malatamba Vidyaniketan, school Visakhapatnam, PM Palem school, CBSE school Vizag, best school Visakhapatnam",
   openGraph: {
@@ -36,7 +36,7 @@ const schemaOrg = {
   url: "https://malatamba-school.vercel.app",
   logo: "https://malatamba-school.vercel.app/real-photos/logo/logo-main.png",
   description:
-    "Malatamba Vidyaniketan provides quality education with modern infrastructure since 2005, located in P.M.Palem, Visakhapatnam.",
+    "Malatamba Vidyaniketan provides quality education with modern infrastructure since 2002, located in P.M.Palem, Visakhapatnam.",
   address: {
     "@type": "PostalAddress",
     streetAddress: "Sadguru Towers, Malatamba Road, P.M.Palem",
@@ -47,7 +47,7 @@ const schemaOrg = {
   },
   telephone: "+918374355556",
   email: "principalmalatambaschools@gmail.com",
-  foundingDate: "2005",
+  foundingDate: "2002",
 };
 
 export default function RootLayout({

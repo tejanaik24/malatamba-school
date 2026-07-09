@@ -7,7 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 const STATS = [
-  { value: 20,   suffix: "+", label: "Years of Excellence", sub: "Est. 2005, PM Palem" },
+  { value: 20,   suffix: "+", label: "Years of Excellence", sub: "Est. 2002, PM Palem" },
   { value: 1000, suffix: "+", label: "Students Enrolled",   sub: "Across Nursery to Class X" },
   { value: 50,   suffix: "+", label: "Expert Faculty",      sub: "Dedicated educators" },
   { value: 4.9,  suffix: "★", label: "Google Rating",       sub: "Parent verified reviews", decimal: 1 },

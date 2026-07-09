@@ -24,7 +24,7 @@ const heroImages = [
 ];
 
 const heroCaptions = [
-  { subtitle: "Building Excellence", lines: ["YOUR CHILDREN'S", "FUTURE", "STARTS HERE"],         description: "Where tradition meets innovation in education since 2005."                },
+  { subtitle: "Building Excellence", lines: ["YOUR CHILDREN'S", "FUTURE", "STARTS HERE"],         description: "Where tradition meets innovation in education since 2002."                },
   { subtitle: "Inspiring Minds",     lines: ["WHERE EVERY", "LESSON BUILDS", "TOMORROW"],          description: "Smart classrooms and dedicated teachers shaping young minds."             },
   { subtitle: "Embracing Growth",    lines: ["NURTURING", "POTENTIAL", "CELEBRATING GROWTH"],      description: "A vibrant campus where every child discovers their passion."              },
 ];
@@ -596,7 +596,7 @@ export default function WalkerScroll() {
                 paddingLeft: "12px",
               }}
             >
-              Malatamba Vidyaniketan&nbsp;&middot;&nbsp;Est. 2005
+              Malatamba Vidyaniketan&nbsp;&middot;&nbsp;Est. 2002
             </p>
 
             {/* Headline — stroke→fill + y-reveal via GSAP */}
