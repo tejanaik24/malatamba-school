@@ -69,9 +69,9 @@ export default function Navbar() {
             <Image
               src="/real-photos/logo/logo-badge.png"
               alt="Malatamba Vidyaniketan logo"
-              width={88}
-              height={88}
-              className="rounded-full w-14 h-14 sm:w-16 sm:h-16 lg:w-[88px] lg:h-[88px]"
+              width={110}
+              height={110}
+              className="rounded-full w-16 h-16 sm:w-20 sm:h-20 lg:w-[110px] lg:h-[110px]"
             />
             <div className="flex flex-col">
               <span className="text-white font-extrabold text-lg sm:text-xl leading-tight tracking-tight">
