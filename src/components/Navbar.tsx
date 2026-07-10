@@ -67,7 +67,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 shrink-0">
             <Image
-              src="/real-photos/logo/logo-main.png"
+              src="/real-photos/logo/logo-badge.png"
               alt="Malatamba Vidyaniketan logo"
               width={88}
               height={88}
