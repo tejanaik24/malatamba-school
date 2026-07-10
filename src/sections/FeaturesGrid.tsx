@@ -36,7 +36,7 @@ const features: Feature[] = [
   {
     subheading: "Our Educators",
     heading: "Experienced Faculty",
-    img: "/ai-images/feature-faculty.png",
+    img: "/ai-images/feature-faculty.webp",
     title: "Experienced Faculty",
     desc: "Qualified educators with years of experience and a passion for teaching — giving every child personalised attention and mentorship that goes beyond the textbook.",
     accentColor: "#762123",
@@ -47,7 +47,7 @@ const features: Feature[] = [
   {
     subheading: "Future Ready",
     heading: "Science & Computer Labs",
-    img: "/ai-images/feature-lab.png",
+    img: "/ai-images/feature-lab.webp",
     title: "Science & Computer Labs",
     desc: "Physics, Chemistry, Biology labs plus two dedicated computer labs with 40 PCs each and high-speed internet — practical learning at the heart of every subject.",
     accentColor: "#b08a28",
@@ -58,7 +58,7 @@ const features: Feature[] = [
   {
     subheading: "Active Living",
     heading: "Sports & Athletics",
-    img: "/ai-images/feature-sports.png",
+    img: "/ai-images/feature-sports.webp",
     title: "Sports & Athletics",
     desc: "Cricket, football, athletics, basketball and indoor games — a full sports programme that builds fitness, teamwork, and the resilience to compete and succeed.",
     accentColor: "#1e4a8a",
@@ -69,7 +69,7 @@ const features: Feature[] = [
   {
     subheading: "Tech Enabled",
     heading: "Smart Classrooms",
-    img: "/ai-images/feature-smartclass.png",
+    img: "/ai-images/feature-smartclass.webp",
     title: "Smart Classrooms",
     desc: "Interactive smart boards, projectors, and digital learning tools that make every lesson vivid and engaging — bringing concepts to life for every learner.",
     accentColor: "#2e6b3e",
@@ -80,7 +80,7 @@ const features: Feature[] = [
   {
     subheading: "Knowledge Hub",
     heading: "Library — 3,000+ Books",
-    img: "/ai-images/feature-library.png",
+    img: "/ai-images/feature-library.webp",
     title: "Library — 3,000+ Books",
     desc: "A rich library stocked with books, magazines, newspapers, and reference material — plus a quiet reading room that nurtures curious, independent minds.",
     accentColor: "#5a3a7e",
@@ -91,7 +91,7 @@ const features: Feature[] = [
   {
     subheading: "Safe Commute",
     heading: "Safe School Transport",
-    img: "/ai-images/feature-transport.png",
+    img: "/ai-images/feature-transport.webp",
     title: "Safe School Transport",
     desc: "Safe school buses with trained drivers and male and female attendants covering all of Visakhapatnam — so parents have complete peace of mind every single day.",
     accentColor: "#6b3a1e",

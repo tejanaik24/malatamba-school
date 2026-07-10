@@ -73,7 +73,7 @@ export default function LeadershipMessage() {
               style={{ boxShadow: "0 30px 70px rgba(0,0,0,0.55), 0 0 0 1px rgba(201,168,76,0.15)" }}
             >
               <Image
-                src="/real-photos/people/chairman.jpg"
+                src="/real-photos/people/chairman.webp"
                 alt="Mr. Suneel Mahanty — Chairman, Malatamba Vidyaniketan"
                 fill
                 className="object-cover object-top"

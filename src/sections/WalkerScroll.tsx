@@ -11,16 +11,16 @@ gsap.registerPlugin(ScrollTrigger);
 /* ─── Data ──────────────────────────────────────────────────────────────── */
 
 const values = [
-  { num: "01", title: "Discipline",  desc: "Building character through structure and self-regulation.", image: "/ai-images/values-discipline.png"  },
-  { num: "02", title: "Excellence",  desc: "Pursuing the highest standards in academics and beyond.",   image: "/ai-images/values-excellence.png"  },
-  { num: "03", title: "Innovation",  desc: "Fostering creativity and critical thinking every day.",     image: "/ai-images/values-innovation.png"  },
-  { num: "04", title: "Integrity",   desc: "Instilling honesty and moral values for life.",             image: "/ai-images/values-integrity.png"   },
+  { num: "01", title: "Discipline",  desc: "Building character through structure and self-regulation.", image: "/ai-images/values-discipline.webp"  },
+  { num: "02", title: "Excellence",  desc: "Pursuing the highest standards in academics and beyond.",   image: "/ai-images/values-excellence.webp"  },
+  { num: "03", title: "Innovation",  desc: "Fostering creativity and critical thinking every day.",     image: "/ai-images/values-innovation.webp"  },
+  { num: "04", title: "Integrity",   desc: "Instilling honesty and moral values for life.",             image: "/ai-images/values-integrity.webp"   },
 ];
 
 const heroImages = [
-  "/ai-images/hero-1.png",
-  "/ai-images/hero-2.png",
-  "/ai-images/hero-3.png",
+  "/ai-images/hero-1.webp",
+  "/ai-images/hero-2.webp",
+  "/ai-images/hero-3.webp",
 ];
 
 const heroCaptions = [
@@ -549,7 +549,7 @@ export default function WalkerScroll() {
             }}
           >
             <Image
-              src="/ai-images/mission-students.png"
+              src="/ai-images/mission-students.webp"
               alt="Malatamba Vidyaniketan students in school uniform"
               fill
               priority
@@ -745,9 +745,9 @@ export default function WalkerScroll() {
             {/* Mobile photo strip — directly below button, full-bleed */}
             {(() => {
               const slidePhotos = [
-                "/ai-images/life-01.png", "/ai-images/life-02.png", "/ai-images/life-03.png",
-                "/ai-images/life-04.png", "/ai-images/life-05.png", "/ai-images/highlights-cultural.png",
-                "/ai-images/highlights-sports.png", "/ai-images/feature-lab.png",
+                "/ai-images/life-01.webp", "/ai-images/life-02.webp", "/ai-images/life-03.webp",
+                "/ai-images/life-04.webp", "/ai-images/life-05.webp", "/ai-images/highlights-cultural.webp",
+                "/ai-images/highlights-sports.webp", "/ai-images/feature-lab.webp",
               ];
               return (
                 <div className="lg:hidden mt-6 overflow-hidden" style={{ marginLeft: "-24px", marginRight: "-24px" }}>
@@ -773,9 +773,9 @@ export default function WalkerScroll() {
             {/* Column 1 — 9 images, 22s */}
             {(() => {
               const imgs = [
-                "/ai-images/life-01.png","/ai-images/life-04.png","/ai-images/life-07.png",
-                "/ai-images/life-10.png","/ai-images/life-13.png","/ai-images/highlights-cultural.png",
-                "/ai-images/highlights-friends.png","/ai-images/feature-faculty.png","/ai-images/values-discipline.png",
+                "/ai-images/life-01.webp","/ai-images/life-04.webp","/ai-images/life-07.webp",
+                "/ai-images/life-10.webp","/ai-images/life-13.webp","/ai-images/highlights-cultural.webp",
+                "/ai-images/highlights-friends.webp","/ai-images/feature-faculty.webp","/ai-images/values-discipline.webp",
               ];
               const cards = imgs.map((src) => (
                 <div key={src} className="hp-img relative overflow-hidden rounded-lg flex-shrink-0" style={{ width: "100%", aspectRatio: "3/4" }}>
@@ -794,9 +794,9 @@ export default function WalkerScroll() {
             {/* Column 2 — 8 images, 17s */}
             {(() => {
               const imgs = [
-                "/ai-images/life-02.png","/ai-images/life-05.png","/ai-images/life-08.png",
-                "/ai-images/life-11.png","/ai-images/highlights-library.png","/ai-images/highlights-sports.png",
-                "/ai-images/feature-lab.png","/ai-images/values-excellence.png",
+                "/ai-images/life-02.webp","/ai-images/life-05.webp","/ai-images/life-08.webp",
+                "/ai-images/life-11.webp","/ai-images/highlights-library.webp","/ai-images/highlights-sports.webp",
+                "/ai-images/feature-lab.webp","/ai-images/values-excellence.webp",
               ];
               const cards = imgs.map((src) => (
                 <div key={src} className="hp-img relative overflow-hidden rounded-lg flex-shrink-0" style={{ width: "100%", aspectRatio: "3/4" }}>
@@ -815,9 +815,9 @@ export default function WalkerScroll() {
             {/* Column 3 — 8 images, 13s */}
             {(() => {
               const imgs = [
-                "/ai-images/life-03.png","/ai-images/life-06.png","/ai-images/life-09.png",
-                "/ai-images/life-12.png","/ai-images/highlights-sciencelab.png","/ai-images/feature-sports.png",
-                "/ai-images/values-innovation.png","/ai-images/values-integrity.png",
+                "/ai-images/life-03.webp","/ai-images/life-06.webp","/ai-images/life-09.webp",
+                "/ai-images/life-12.webp","/ai-images/highlights-sciencelab.webp","/ai-images/feature-sports.webp",
+                "/ai-images/values-innovation.webp","/ai-images/values-integrity.webp",
               ];
               const cards = imgs.map((src) => (
                 <div key={src} className="hp-img relative overflow-hidden rounded-lg flex-shrink-0" style={{ width: "100%", aspectRatio: "3/4" }}>

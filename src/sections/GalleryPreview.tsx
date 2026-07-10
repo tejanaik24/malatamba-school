@@ -11,19 +11,19 @@ const FAST_TRANSITION = "opacity 0.4s ease, transform 0.4s ease";
 
 const galleryItems = [
   {
-    src:   "/real-photos/events/school-life-2026/mar16-01.png",
+    src:   "/real-photos/events/school-life-2026/mar16-01.webp",
     label: "School Life",
     tall:  true,
     wide:  false,
   },
   {
-    src:   "/real-photos/events/school-life-2026/mar17-02.png",
+    src:   "/real-photos/events/school-life-2026/mar17-02.webp",
     label: "Student Activities",
     tall:  false,
     wide:  false,
   },
   {
-    src:   "/real-photos/events/school-life-2026/mar25-01.png",
+    src:   "/real-photos/events/school-life-2026/mar25-01.webp",
     label: "Campus Moments",
     tall:  false,
     wide:  false,

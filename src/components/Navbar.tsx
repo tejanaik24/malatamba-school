@@ -69,15 +69,15 @@ export default function Navbar() {
             <Image
               src="/real-photos/logo/logo-main.png"
               alt="Malatamba Vidyaniketan logo"
-              width={64}
-              height={64}
-              className="rounded-full"
+              width={88}
+              height={88}
+              className="rounded-full w-14 h-14 sm:w-16 sm:h-16 lg:w-[88px] lg:h-[88px]"
             />
             <div className="flex flex-col">
               <span className="text-white font-extrabold text-lg sm:text-xl leading-tight tracking-tight">
                 Malatamba
               </span>
-              <span className="text-gold font-bold text-sm sm:text-base leading-tight tracking-tight">
+              <span className="text-white font-bold text-sm sm:text-base leading-tight tracking-tight">
                 Vidyaniketan
               </span>
             </div>

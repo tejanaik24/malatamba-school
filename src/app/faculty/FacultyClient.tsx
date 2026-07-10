@@ -127,7 +127,7 @@ export default function FacultyClient() {
             <div className="grid sm:grid-cols-[240px_1fr]">
               <div className="relative bg-primary/5 h-64 sm:h-auto">
                 <Image
-                  src="/ai-images/feature-faculty.png"
+                  src="/ai-images/feature-faculty.webp"
                   alt="School Principal"
                   fill
                   className="object-cover"

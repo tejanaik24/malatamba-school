@@ -67,10 +67,10 @@ const HOTSPOTS: Hotspot[] = [
 ];
 
 const HOTSPOT_IMAGES: Record<string, string> = {
-  classrooms: "/ai-images/feature-smartclass.png",
-  labs:        "/ai-images/feature-lab.png",
-  library:     "/ai-images/feature-library.png",
-  transport:   "/ai-images/feature-transport.png",
+  classrooms: "/ai-images/feature-smartclass.webp",
+  labs:        "/ai-images/feature-lab.webp",
+  library:     "/ai-images/feature-library.webp",
+  transport:   "/ai-images/feature-transport.webp",
 };
 
 function PulsingDot({ spot, isActive, onClick }: {

@@ -131,7 +131,7 @@ export default function ContactClient() {
             <h3 className="font-bold text-dark text-sm mb-3">Office Hours</h3>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-gray-500">Monday – Friday</span>
+                <span className="text-gray-500">Monday – Saturday</span>
                 <span className="font-semibold text-dark">8:00 AM – 5:00 PM</span>
               </div>
               <div className="flex justify-between">
